@@ -39,12 +39,26 @@ const postWebHook = (req, res) => {
 
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
-      if (webhook_event.message) {
-        handleMessagex(sender_psid, webhook_event.message);
-        // receivedMessage(webhook_event);
-      } else if (webhook_event.postback) {
-        handlePostback(sender_psid, webhook_event.postback);
-      }
+      // if (webhook_event.message) {
+      // handleMessagex(sender_psid, webhook_event.message);
+      //   receivedMessage(webhook_event);
+      // } else if (webhook_event.postback) {
+      //   handlePostback(sender_psid, webhook_event.postback);
+      // }
+      entry.messaging.forEach(function (messagingEvent) {
+        if (messagingEvent.message) {
+          console.log("entrando a received message");
+          receivedMessage(messagingEvent);
+        } else if (messagingEvent.postback) {
+          console.log("recive postback..........");
+          receivedPostback(messagingEvent);
+        } else {
+          console.log(
+            "Webhook received unknown messagingEvent: ",
+            messagingEvent
+          );
+        }
+      });
     });
 
     res.status(200).send("EVENT_RECEIVED");
@@ -105,6 +119,29 @@ async function receivedMessage(event) {
   } else if (messageAttachments) {
     handleMessageAttachments(messageAttachments, senderId);
   }
+}
+
+async function receivedPostback(event) {
+  var senderId = event.sender.id;
+  var recipientID = event.recipient.id;
+  var timeOfPostback = event.timestamp;
+
+  var payload = event.postback.payload;
+  let result;
+  switch (payload) {
+    default:
+      //unindentified payload
+      sendToDialogFlow(senderId, payload);
+      break;
+  }
+
+  console.log(
+    "Received postback for user %d and page %d with payload '%s' " + "at %d",
+    senderId,
+    recipientID,
+    payload,
+    timeOfPostback
+  );
 }
 
 function handleMessageAttachments(messageAttachments, senderId) {
@@ -201,10 +238,13 @@ async function handleMessages(messages, sender) {
 
 async function sendToDialogFlow(senderId, messageText) {
   sendTypingOn(senderId);
+  console.log("typing...");
   try {
     let result;
+    console.log("sessionANd User");
     setSessionAndUser(senderId);
     let session = sessionIds.get(senderId);
+    console.log("before dialog");
     result = await dialogflow.sendToDialogFlow(messageText, session);
 
     handleDialogFlowResponse(senderId, result);
@@ -222,6 +262,7 @@ function handleDialogFlowResponse(sender, response) {
   let parameters = response.parameters;
 
   sendTypingOff(sender);
+  console.log("handeling");
 
   if (isDefined(action)) {
     handleDialogFlowAction(sender, action, messages, contexts, parameters);
