@@ -1,7 +1,9 @@
 require('dotenv').config();
 const request = require('request');
 const axios = require('axios');
+const uuid = require("uuid");
 const dialogflow = require('./dialogFlowController');
+const { structProtoToJson } = require("../helpers/structFunctions");
 
 
 const MY_VERIFY_TOKEN = process.env.MY_VERIFY_FB_TOKEN;

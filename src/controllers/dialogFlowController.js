@@ -5,6 +5,7 @@ const uuid = require("uuid");
 const GOOGLE_PROJECT_ID = process.env.GOOGLE_PROJECT_ID;
 const GOOGLE_CLIENT_EMAIL = process.env.GOOGLE_CLIENT_EMAIL;
 const GOOGLE_PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY;
+const DF_LANGUAGE_CODE = process.env.DF_LANGUAGE_CODE;
 
 
 const sessionIds = new Map();
