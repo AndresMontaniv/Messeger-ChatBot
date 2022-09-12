@@ -40,8 +40,8 @@ const postWebHook = (req, res) => {
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
       if (webhook_event.message) {
-        // handleMessage(sender_psid, webhook_event.message);
-        receivedMessage(webhook_event);
+        handleMessagex(sender_psid, webhook_event.message);
+        // receivedMessage(webhook_event);
       } else if (webhook_event.postback) {
         handlePostback(sender_psid, webhook_event.postback);
       }
@@ -327,7 +327,7 @@ function sendQuickReply(recipientId, text, replies, metadata) {
 
 
 // Handles messages events
-function handleMessagexx(sender_psid, received_message) {
+function handleMessagex(sender_psid, received_message) {
   let response;
 
   // Checks if the message contains text
