@@ -32,13 +32,19 @@ const sessionClient = new dialogflow.SessionsClient({
  */
 async function sendToDialogFlow(sender, msg, params) {
     let textToDialogFlow = msg;
+    console.log("Project Id = ", GOOGLE_PROJECT_ID);
+    console.log("Client Email = ", GOOGLE_CLIENT_EMAIL);
+    console.log("Priv Key = ", GOOGLE_PRIVATE_KEY);
+    console.log("Language = ", DF_LANGUAGE_CODE);
+    console.log("se cago: ", msg);
     setSessionAndUser(sender);
+    console.log("se cago");
     try {
         const sessionPath = sessionClient.sessionPath(
             GOOGLE_PROJECT_ID,
             sessionIds.get(sender)
         );
-
+        console.log("se cago");
         const request = {
             session: sessionPath,
             queryInput: {
