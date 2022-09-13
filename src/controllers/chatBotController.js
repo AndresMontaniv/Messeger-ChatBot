@@ -470,7 +470,7 @@ function handlePostback(sender_psid, received_postback) {
 }
 
 // Sends response messages via the Send API
-function callSendAPI(sender_psid, response) {
+function callSendAPII(sender_psid, response) {
   // Construct the message body
   let request_body = {
     "recipient": {
@@ -491,6 +491,49 @@ function callSendAPI(sender_psid, response) {
     } else {
       console.error("Unable to send message:" + err);
     }
+  });
+}
+
+function callSendAPI(messageData) {
+  return new Promise((resolve, reject) => {
+    request(
+      {
+        uri: "https://graph.facebook.com/v7.0/me/messages",
+        qs: {
+          access_token: process.env.PAGE_ACCESS_TOKEN,
+        },
+        method: "POST",
+        json: messageData,
+      },
+      function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+          var recipientId = body.recipient_id;
+          var messageId = body.message_id;
+
+          if (messageId) {
+            console.log(
+              "Successfully sent message with id %s to recipient %s",
+              messageId,
+              recipientId
+            );
+          } else {
+            console.log(
+              "Successfully called Send API for recipient %s",
+              recipientId
+            );
+          }
+          resolve();
+        } else {
+          reject();
+          console.error(
+            "Failed calling Send API",
+            response.statusCode,
+            response.statusMessage,
+            body.error
+          );
+        }
+      }
+    );
   });
 }
 
