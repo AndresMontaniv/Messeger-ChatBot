@@ -247,7 +247,7 @@ async function sendToDialogFlow(senderId, messageText) {
     setSessionAndUser(senderId);
     let session = sessionIds.get(senderId);
     console.log("before dialog");
-    result = await dialogflow.sendToDialogFlow(messageText, session);
+    result = await dialogflow.sendToDialogFlow(senderId, messageText);
 
     handleDialogFlowResponse(senderId, result);
   } catch (error) {
