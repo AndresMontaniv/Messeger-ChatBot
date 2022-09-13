@@ -41,11 +41,11 @@ async function sendToDialogFlow(msg, session, source, params) {
                     languageCode: DF_LANGUAGE_CODE,
                 },
             },
-            queryParams: {
-                payload: {
-                    data: params,
-                },
-            },
+            // queryParams: {
+            //     payload: {
+            //         data: params,
+            //     },
+            // },
         };
         console.log("request MAP = ", request);
         const responses = await sessionClient.detectIntent(request);
