@@ -240,15 +240,15 @@ async function handleMessages(messages, sender) {
 
 async function sendToDialogFlow(senderId, messageText) {
   sendTypingOn(senderId);
-  console.log("typing...");
   try {
     let result;
-    console.log("sessionANd User");
     setSessionAndUser(senderId);
     let session = sessionIds.get(senderId);
-    console.log("before dialog");
-    result = await dialogflow.sendToDialogFlow(senderId, messageText);
-
+    result = await dialogflow.sendToDialogFlow(
+      messageText,
+      session,
+      "FACEBOOK"
+    );
     handleDialogFlowResponse(senderId, result);
   } catch (error) {
     console.log("salio mal en sendToDialogflow...", error);

@@ -23,13 +23,16 @@ const sessionClient = new dialogflow.SessionsClient({
  * @param {string} projectId The project to be used
  */
 async function sendToDialogFlow(msg, session, source, params) {
-    let textToDialogFlow = msg;
+    let textToDialogFlow = "Hola Amigos";
     try {
+        console.log("project id =  ", GOOGLE_PROJECT_ID);
+        console.log("email =  ", GOOGLE_CLIENT_EMAIL);
+        console.log("keyss =  ", GOOGLE_PRIVATE_KEY);
         const sessionPath = sessionClient.sessionPath(
             GOOGLE_PROJECT_ID,
             session
         );
-
+        console.log("session = ", sessionPath);
         const request = {
             session: sessionPath,
             queryInput: {
@@ -44,6 +47,7 @@ async function sendToDialogFlow(msg, session, source, params) {
                 },
             },
         };
+        console.log("request MAP = ", request);
         const responses = await sessionClient.detectIntent(request);
         const result = responses[0].queryResult;
         console.log("INTENT EMPAREJADO: ", result.intent.displayName);
