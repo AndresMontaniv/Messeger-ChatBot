@@ -49,10 +49,8 @@ const postWebHook = (req, res) => {
       // }
       entry.messaging.forEach(function (messagingEvent) {
         if (messagingEvent.message) {
-          console.log("entrando a received message");
           receivedMessage(messagingEvent);
         } else if (messagingEvent.postback) {
-          console.log("recive postback..........");
           receivedPostback(messagingEvent);
         } else {
           console.log(
