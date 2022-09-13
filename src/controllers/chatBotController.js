@@ -470,21 +470,16 @@ function handlePostback(sender_psid, received_postback) {
 }
 
 // Sends response messages via the Send API
-function callSendAPII(sender_psid, response) {
-  // Construct the message body
-  let request_body = {
-    "recipient": {
-      "id": sender_psid
-    },
-    "message": response
-  }
+function callSendAPI(messageData) {
 
   // Send the HTTP request to the Messenger Platform
   request({
-    "uri": "https://graph.facebook.com/v7.0/me/messages",
-    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN },
-    "method": "POST",
-    "json": request_body
+    uri: "https://graph.facebook.com/v7.0/me/messages",
+    qs: {
+      access_token: process.env.PAGE_ACCESS_TOKEN,
+    },
+    method: "POST",
+    json: messageData,
   }, (err, res, body) => {
     if (!err) {
       console.log('message sent!')
@@ -494,7 +489,7 @@ function callSendAPII(sender_psid, response) {
   });
 }
 
-function callSendAPI(messageData) {
+function callSendAPIX(messageData) {
   return new Promise((resolve, reject) => {
     request(
       {
