@@ -54,6 +54,7 @@ async function sendToDialogFlow(sender, msg, params) {
             },
         };
         const responses = await sessionClient.detectIntent(request);
+        console.log("responses.....:", responses);
         const result = responses[0].queryResult;
         let defaultResponses = [];
         if (result.action !== "input.unknown") {
@@ -68,7 +69,7 @@ async function sendToDialogFlow(sender, msg, params) {
             return result;
         }
         return result;
-        // console.log("se enviara el resultado: ", result);
+
     } catch (e) {
         console.log("error");
         console.log(e);
