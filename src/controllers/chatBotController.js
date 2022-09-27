@@ -5,6 +5,11 @@ const uuid = require("uuid");
 const dialogflow = require('./dialogFlowController');
 const { structProtoToJson } = require("../helpers/structFunctions");
 
+//mongodb models
+
+const User = require("../models/user");
+const user = require('../models/user');
+
 
 const MY_VERIFY_TOKEN = process.env.MY_VERIFY_FB_TOKEN;
 
@@ -114,6 +119,9 @@ async function receivedMessage(event) {
     return;
   }
 
+  saveUserData(senderId);
+
+
   if (messageText) {
     //send message to api.ai
     console.log("se recibio este mensaje: ", messageText);
@@ -121,6 +129,26 @@ async function receivedMessage(event) {
   } else if (messageAttachments) {
     handleMessageAttachments(messageAttachments, senderId);
   }
+}
+
+async function saveUserData(facebookId) {
+
+  const existeUser = await Usuario.findOne({ facebookId });
+  if (existeUser) {
+    return;
+  }
+  let userData = await getUserData(facebookId);
+  let user = new User({
+    firstName: userData.first_name,
+    lastName: userData.last_name,
+    facebookId,
+    profilePic: userData.profile_pic,
+  });
+
+  user.save((err, res) => {
+    if (err) return console.log(err);
+    console.log("Se creo un usuario: ", res);
+  });
 }
 
 async function receivedPostback(event) {
