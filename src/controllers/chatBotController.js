@@ -133,7 +133,7 @@ async function receivedMessage(event) {
 
 async function saveUserData(facebookId) {
 
-  const existeUser = await Usuario.findOne({ facebookId });
+  const existeUser = await User.findOne({ facebookId });
   if (existeUser) {
     return;
   }
