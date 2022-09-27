@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 const app = express();
 require('dotenv').config();
 
-// DB Config
+// DB Config MONGODB
 
 const { dbConnection } = require('./src/database/config');
 dbConnection();
