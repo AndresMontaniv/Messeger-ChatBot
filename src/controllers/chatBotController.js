@@ -201,9 +201,9 @@ async function handleDialogFlowAction(
   switch (action) {
     case "tipopolera.action":
       console.log(parameters);
-      // let category = parameters.fields.tipoPolera.stringValue;
-      // let poleras = await Product.find({ category });
-      // console.log(poleras);
+      let category = parameters.fields.tipoPolera.stringValue.toLowerCase();
+      let poleras = await Product.find({ category });
+      console.log(poleras);
       break;
     default:
       // break;
