@@ -200,10 +200,19 @@ async function handleDialogFlowAction(
 ) {
   switch (action) {
     case "tipopolera.action":
-      console.log(parameters);
       let category = parameters.fields.tipoPolera.stringValue.toLowerCase();
       let poleras = await Product.find({ category });
-      console.log(poleras);
+      let cards = [];
+      poleras.forEach((polera) => {
+        cards.push({
+          title: polera.name + " $" + polera.price,
+          image_url: polera.img,
+          subtitle: polera.description,
+          buttons: [
+          ],
+        });
+      });
+      sendGenericMessage(sender, cards);
       break;
     default:
       // break;
@@ -247,6 +256,25 @@ async function handleMessage(message, sender) {
       callSendAPI(messageData);
       break;
   }
+}
+
+async function sendGenericMessage(recipientId, elements) {
+  var messageData = {
+    recipient: {
+      id: recipientId,
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          elements: elements,
+        },
+      },
+    },
+  };
+
+  await callSendAPI(messageData);
 }
 
 
