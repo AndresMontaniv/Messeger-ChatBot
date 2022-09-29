@@ -203,15 +203,27 @@ async function handleDialogFlowAction(
       let category = parameters.fields.tipoPolera.stringValue.toLowerCase();
       let poleras = await Product.find({ category });
       let cards = [];
+      console.log(poleras);
       poleras.forEach((polera) => {
         cards.push({
           title: polera.name + " $" + polera.price,
           image_url: polera.img,
           subtitle: polera.description,
           buttons: [
+            {
+              type: "postback",
+              title: "Hacer compra",
+              payload: "hacer_compra",
+            },
+            {
+              type: "postback",
+              title: "Ver más helados",
+              payload: "ver_mas_helados",
+            },
           ],
         });
       });
+      console.log(cards);
       sendGenericMessage(sender, cards);
       break;
     default:
