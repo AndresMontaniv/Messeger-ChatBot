@@ -26,7 +26,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 //init all web routes
-initWebRoute(app);
+initWebRoute(app); 
+app.use('/api', require('./src/routes/api'));
 
 
 

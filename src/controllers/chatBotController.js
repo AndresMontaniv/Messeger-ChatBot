@@ -138,6 +138,7 @@ async function saveUserData(facebookId) {
     return;
   }
   let userData = await getUserData(facebookId);
+  if (userData.first_name == "" || userData.last_name == "") return;
   let user = new User({
     firstName: userData.first_name,
     lastName: userData.last_name,
