@@ -206,7 +206,7 @@ async function handleDialogFlowAction(
       // console.log(poleras);
       break;
     default:
-      break;
+      // break;
       //unhandled action, just send back the text
       handleMessages(messages, sender);
   }
