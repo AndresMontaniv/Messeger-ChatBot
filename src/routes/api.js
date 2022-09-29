@@ -18,6 +18,7 @@ router.post('/product/create', [
     check('description', 'description Es obligatorio').not().isEmpty(),
     check('price', 'price Es obligatorio').not().isEmpty(),
     check('img', 'img Es obligatorio').not().isEmpty(),
+    check('category', 'category Es obligatorio').not().isEmpty(),
     validarCampos
 ], createProduct);
 

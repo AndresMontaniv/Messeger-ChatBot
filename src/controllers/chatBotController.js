@@ -8,7 +8,7 @@ const { structProtoToJson } = require("../helpers/structFunctions");
 //mongodb models
 
 const User = require("../models/user");
-const user = require('../models/user');
+const Product = require('../models/product');
 
 
 const MY_VERIFY_TOKEN = process.env.MY_VERIFY_FB_TOKEN;
@@ -191,7 +191,7 @@ async function handleQuickReply(senderId, quickReply, messageId) {
   sendToDialogFlow(senderId, quickReplyPayload);
 }
 
-function handleDialogFlowAction(
+async function handleDialogFlowAction(
   sender,
   action,
   messages,
@@ -199,6 +199,12 @@ function handleDialogFlowAction(
   parameters
 ) {
   switch (action) {
+    case "tipopolera.action":
+      console.log(parameters);
+      let category = parameters.fields.tipoPolera.stringValue;
+      let poleras = await Product.find({ category });
+      console.log(poleras);
+      break;
     default:
       //unhandled action, just send back the text
       handleMessages(messages, sender);
