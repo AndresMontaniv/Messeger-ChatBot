@@ -3,6 +3,7 @@ const Product = require("../models/product");
 
 const createProduct = async (req, res = response) => {
     const { name } = req.body;
+    console.log("prin=====>t", name);
     try {
         const existProduct = await Product.findOne({ name });
         if (existProduct) {
