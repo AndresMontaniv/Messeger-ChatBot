@@ -25,14 +25,10 @@ const sessionClient = new dialogflow.SessionsClient({
 async function sendToDialogFlow(msg, session, source, params) {
     let textToDialogFlow = msg;
     try {
-        // console.log("project id =  ", GOOGLE_PROJECT_ID);
-        // console.log("email =  ", GOOGLE_CLIENT_EMAIL);
-        // console.log("keyss =  ", GOOGLE_PRIVATE_KEY);
         const sessionPath = sessionClient.sessionPath(
             GOOGLE_PROJECT_ID,
             session
         );
-        // console.log("session = ", sessionPath);
         const request = {
             session: sessionPath,
             queryInput: {
@@ -63,7 +59,6 @@ async function sendToDialogFlow(msg, session, source, params) {
         }
         result.fulfillmentMessages = defaultResponses;
         return result;
-        // console.log("se enviara el resultado: ", result);
     } catch (e) {
         console.log("error");
         console.log(e);

@@ -1,11 +1,13 @@
 const { response } = require("express");
-const User = require("../models/user");
+const Client = require("../models/client");
 
 const createUser = async (req, res = response) => {
     const { name } = req.body;
     try {
 
-        const user = new User(req.body);
+
+
+        const client = new Client(req.body);
 
         await user.save();
 

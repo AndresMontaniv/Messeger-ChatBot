@@ -7,8 +7,10 @@ const { structProtoToJson } = require("../helpers/structFunctions");
 
 //mongodb models
 
-const User = require("../models/user");
+const Client = require("../models/client");
 const Product = require('../models/product');
+const Visit = require('../models/visit');
+
 
 
 const MY_VERIFY_TOKEN = process.env.MY_VERIFY_FB_TOKEN;
@@ -35,35 +37,16 @@ const postWebHook = (req, res) => {
   if (body.object === "page") {
 
     body.entry.forEach(function (entry) {
-      // Gets the body of the webhook event
       let webhook_event = entry.messaging[0];
-      console.log(webhook_event);
-
-
-      // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
-      console.log('Sender PSID: ' + sender_psid);
 
-      // Check if the event is a message or postback and
-      // pass the event to the appropriate handler function
-      // if (webhook_event.message) {
-      // handleMessagex(sender_psid, webhook_event.message);
-      //   receivedMessage(webhook_event);
-      // } else if (webhook_event.postback) {
-      //   handlePostback(sender_psid, webhook_event.postback);
-      // }
       entry.messaging.forEach(function (messagingEvent) {
         if (messagingEvent.message) {
-          // console.log("entrando a received message");
           receivedMessage(messagingEvent);
         } else if (messagingEvent.postback) {
-          // console.log("recive postback..........");
           receivedPostback(messagingEvent);
         } else {
-          console.log(
-            "Webhook received unknown messagingEvent: ",
-            messagingEvent
-          );
+          console.log("Webhook received unknown messagingEvent Else: ");
         }
       });
     });
@@ -100,12 +83,12 @@ async function receivedMessage(event) {
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
   var message = event.message;
-  console.log(
-    "Received message for user %d and page %d at %d with message:",
-    senderId,
-    recipientID,
-    timeOfMessage
-  );
+  // console.log(
+  //   "Received message for user %d and page %d at %d with message:",
+  //   senderId,
+  //   recipientID,
+  //   timeOfMessage
+  // );
 
   var messageId = message.mid;
 
@@ -133,26 +116,39 @@ async function receivedMessage(event) {
 
 async function saveUserData(facebookId) {
 
-  const existeUser = await User.findOne({ facebookId });
+  const existeUser = await Client.findOne({ facebookId });
+
   if (existeUser) {
+    console.log('_id  =>', existeUser.id);
+    console.log('uid  =>', existeUser.uid);
+    let visit = new Visit({
+      name: existeUser.firstName + ' ' + existeUser.lastName,
+      score: 10,
+    });
+    visit.save((err, res) => {
+      if (err) return console.log(err);
+      console.log("Se creo una visita: ", res);
+    });
     return;
   }
   let userData = await getUserData(facebookId);
-  if (userData.first_name == "" || userData.last_name == "") return;
-  let user = new User({
+  if (userData.first_name == null || userData.last_name == null
+    || userData.first_name == "" || userData.last_name == "") return;
+  let client = new Client({
     firstName: userData.first_name,
     lastName: userData.last_name,
     facebookId,
     profilePic: userData.profile_pic,
   });
 
-  user.save((err, res) => {
+  client.save((err, res) => {
     if (err) return console.log(err);
-    console.log("Se creo un usuario: ", res);
+    console.log("Se creo un cliente: ", res);
   });
 }
 
 async function receivedPostback(event) {
+  console.log('recivedPostBack');
   var senderId = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfPostback = event.timestamp;
@@ -166,13 +162,13 @@ async function receivedPostback(event) {
       break;
   }
 
-  console.log(
-    "Received postback for user %d and page %d with payload '%s' " + "at %d",
-    senderId,
-    recipientID,
-    payload,
-    timeOfPostback
-  );
+  // console.log(
+  //   "Received postback for user %d and page %d with payload '%s' " + "at %d",
+  //   senderId,
+  //   recipientID,
+  //   payload,
+  //   timeOfPostback
+  // );
 }
 
 function handleMessageAttachments(messageAttachments, senderId) {
@@ -199,23 +195,52 @@ async function handleDialogFlowAction(
   parameters
 ) {
   switch (action) {
+    case "input.welcome":
+      console.log('esta saludando');
+      handleMessages(messages, sender);
+      break;
+
     case "tipopolera.action":
-      console.log(parameters);
-      let category = parameters.fields.tipoPolera.stringValue;
+      let category = parameters.fields.tipoPolera.stringValue.toLowerCase();
       let poleras = await Product.find({ category });
-      console.log(poleras);
+      let cards = [];
+      // console.log(poleras);
+      poleras.forEach((polera) => {
+        cards.push({
+          title: polera.name + " $" + polera.price,
+          image_url: polera.img,
+          subtitle: polera.description,
+          buttons: [
+            {
+              type: "postback",
+              title: "Hacer compra",
+              payload: "hacer_compra",
+            },
+            {
+              type: "postback",
+              title: "Ver más helados",
+              payload: "ver_mas_helados",
+            },
+          ],
+        });
+      });
+      sendGenericMessage(sender, cards);
       break;
     default:
+      // break;
       //unhandled action, just send back the text
       handleMessages(messages, sender);
   }
 }
 
 async function handleMessage(message, sender) {
+  console.log('handelMessage');
   switch (message.message) {
     case "text": //text
       for (const text of message.text.text) {
+        console.log(text);
         if (text !== "") {
+          console.log('entro==> ', text);
           await sendTextMessage(sender, text);
         }
       }
@@ -248,8 +273,28 @@ async function handleMessage(message, sender) {
   }
 }
 
+async function sendGenericMessage(recipientId, elements) {
+  var messageData = {
+    recipient: {
+      id: recipientId,
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          elements: elements,
+        },
+      },
+    },
+  };
+
+  await callSendAPI(messageData);
+}
+
 
 async function handleMessages(messages, sender) {
+  console.log('handleMesagesss');
   try {
     let i = 0;
     while (i < messages.length) {
@@ -306,7 +351,6 @@ function handleDialogFlowResponse(sender, response) {
   } else if (isDefined(messages)) {
     handleMessages(messages, sender);
   } else if (responseText == "" && !isDefined(action)) {
-    //dialogflow could not evaluate input.
     sendTextMessage(
       sender,
       "I'm not sure what you want. Can you be more specific?"
@@ -327,6 +371,7 @@ async function getUserData(senderId) {
         },
       }
     );
+    console.log('userdata==>', userData.data);
     return userData.data;
   } catch (err) {
     console.log("algo salio mal en axios getUserData: ", err);
@@ -344,6 +389,24 @@ async function sendTextMessage(recipientId, text) {
     text = text
       .replace("{first_name}", userData.first_name)
       .replace("{last_name}", userData.last_name);
+  }
+  console.log('text nuevo ==> ', text);
+  var messageData = {
+    recipient: {
+      id: recipientId,
+    },
+    message: {
+      text: text,
+    },
+  };
+  callSendAPI(messageData);
+}
+
+async function sendWelcomeMessage(recipientId, text) {
+  if (text.includes("[x]")) {
+    let userData = await getUserData(recipientId);
+    text = text
+      .replace("[x]", userData.first_name);
   }
   var messageData = {
     recipient: {
@@ -450,6 +513,7 @@ function handleMessagex(sender_psid, received_message) {
 }
 
 async function handleMessage(message, sender) {
+  console.log('Handle Message==>', message.message);
   switch (message.message) {
     case "text": //text
       for (const text of message.text.text) {
@@ -474,6 +538,7 @@ async function handleMessage(message, sender) {
       sendImageMessage(sender, message.image.imageUri);
       break;
     case "payload":
+
       let desestructPayload = structProtoToJson(message.payload);
       var messageData = {
         recipient: {
@@ -506,7 +571,7 @@ function handlePostback(sender_psid, received_postback) {
 
 // Sends response messages via the Send API
 function callSendAPI(messageData) {
-
+  console.log('esto va a enviar a fb==>', messageData);
   // Send the HTTP request to the Messenger Platform
   request({
     uri: "https://graph.facebook.com/v7.0/me/messages",
@@ -524,48 +589,6 @@ function callSendAPI(messageData) {
   });
 }
 
-function callSendAPIX(messageData) {
-  return new Promise((resolve, reject) => {
-    request(
-      {
-        uri: "https://graph.facebook.com/v7.0/me/messages",
-        qs: {
-          access_token: process.env.PAGE_ACCESS_TOKEN,
-        },
-        method: "POST",
-        json: messageData,
-      },
-      function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-          var recipientId = body.recipient_id;
-          var messageId = body.message_id;
-
-          if (messageId) {
-            console.log(
-              "Successfully sent message with id %s to recipient %s",
-              messageId,
-              recipientId
-            );
-          } else {
-            console.log(
-              "Successfully called Send API for recipient %s",
-              recipientId
-            );
-          }
-          resolve();
-        } else {
-          reject();
-          console.error(
-            "Failed calling Send API",
-            response.statusCode,
-            response.statusMessage,
-            body.error
-          );
-        }
-      }
-    );
-  });
-}
 
 /*
  * Turn typing indicator on
