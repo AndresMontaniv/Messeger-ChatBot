@@ -239,7 +239,8 @@ async function handleDialogFlowAction(
           ],
         });
       });
-      sendGenericMessage(sender, cards);
+      await sendGenericMessage(sender, cards);
+      await sendTextMessage(sender, '¿Cuál de las poleras le interesa?');
       break;
 
     case "poleraEspecifica.action": //La polera {polera_especifica} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
