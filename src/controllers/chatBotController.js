@@ -155,14 +155,23 @@ async function saveUserData(facebookId) {
   });
   */
   console.log("***********************************viendooo************************************: ");
-  resultado = await ofertasF();
+  resultado = await productosOfertasF();
   console.log("*************************RESULTADO***************************: ",  resultado);
-
-  console.log("***********************************viendooo************************************: ");
-  resultado2 = await imagenesF('633ee9360af63182752464ea');
-  console.log("*************************RESULTADO***************************: ",  resultado2);
 }
 
+
+async function productosOfertasF(){
+  ofertasR = await ofertasF();
+  const dataDB = await Product.find();
+  prod = dataDB[0];
+
+}
+
+async function productosF(response, senderId) {
+  // buscar en la base de datos mongoose las 10 primeras poleras
+  const dataDB = await Product.find().limit(10);
+  return dataDB;
+}
 
 async function categoriasF() {
   const dataDB = await Category.find();
@@ -181,7 +190,7 @@ async function imagenesF(id_prod) {
  // let imagenes = '';
   let imagenes = [];
   dataDB.forEach((imagen) => {
-      imagenes.push({ url: imagen.url, is_reusable: true });
+      imagenes.push({ url: imagen.url});
   });
 
   return imagenes;
