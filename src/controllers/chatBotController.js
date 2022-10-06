@@ -11,6 +11,7 @@ const Client = require("../models/client");
 const Product = require('../models/product');
 const Visit = require('../models/visit');
 const Deal = require('../models/deal');
+const Category = require('../models/category');
 
 
 
@@ -136,20 +137,11 @@ async function saveUserData(facebookId) {
   let userData = await getUserData(facebookId);
   if (userData.first_name == null || userData.last_name == null
     || userData.first_name == "" || userData.last_name == "") return;
-  let deal = new Deal({
-    name: 'Promocion Noviembre 2',
-    from: new Date(2022,10,1),
-    to: new Date(2022,10,30),
-    discount: 20,
-   // facebookId,
-   // profilePic: userData.profile_pic,
+  let category = new Category({
+    name: 'POLO',
   });
 
-  console.log("print 1: ", deal.from);
-  let fecha = new Date(2022, 10, 1);
-  console.log("Print 2: ", fecha);
-
-  deal.save((err, res) => {
+  category.save((err, res) => {
     if (err) return console.log(err);
     console.log("Se creo una oferta: ", res);
   });

@@ -2,13 +2,10 @@ const { Schema, model } = require('mongoose');
 
 const CategorySchema = Schema(
     {
-        firstName: String,
-        lastName: String,
-        facebookId: {
+        name: {
             type: String,
             unique: true,
         },
-        profilePic: String,
     }, { timestamps: true }
 );
 
