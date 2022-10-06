@@ -210,7 +210,7 @@ async function handleDialogFlowAction(
       break;
 
     case "poleraCategoria.action": //Las poleras {categoria_polera} que tenemos disponibles son las siguientes: {lista_polera_categoria} (lista de poleras de la categoriaPolera) ¿Cuál de las poleras le interesa?
-      console.log(parameters.fields);
+
       let params = parameters.fields.categoriapolera.stringValue.toUpperCase();
       let category = await Category.findOne({ name: params });
       let mapa = {};
@@ -244,7 +244,41 @@ async function handleDialogFlowAction(
       break;
 
     case "poleraEspecifica.action": //La polera {polera_especifica} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
-
+      let paramss = parameters.fields;
+      var size = paramss.talla.stringValue;
+      size = size[0].toUpperCase() + size.substring(1);
+      let cat = paramss.categoriaPolera.stringValue.toUpperCase();
+      var color = paramss.color.stringValue;
+      color = color[0].toUpperCase() + color.substring(1);
+      let map = {};
+      if (category) {
+        map.category = cat;
+        map.name = '/.*' + color + '.*/';
+      }
+      var poleras = await getProducts(sender, mapa);
+      var cards = [];
+      poleras.forEach((polera) => {
+        let disc = polera.deal != '0%' ? "(Descuento " + polera.deal + " )" : "";
+        cards.push({
+          title: polera.name + "  $" + polera.priceDeal + disc,
+          image_url: polera.image[0],
+          subtitle: polera.categoria,
+          buttons: [
+            {
+              type: "postback",
+              title: "Me gusta",
+              payload: "me_gusta",
+            },
+            {
+              type: "postback",
+              title: "No me gusta",
+              payload: "no_me_gusta",
+            },
+          ],
+        });
+      });
+      await sendGenericMessage(sender, cards);
+      await sendTextMessage(sender, '¿Te gustaría comprar este producto?');
       break;
 
     case "precio.action": //{precio_poleras} ¿Cual polera le interesa?
@@ -253,16 +287,30 @@ async function handleDialogFlowAction(
       break;
 
     case "puntuacion.action": //Gracias por tu valoración, nos ayuda a seguir mejorando. ¡Que tenga un buen dia!
-
+      var score = parameters.fields.puntuacion.stringValue;
+      await editVisit(sender, { score, isClosed: true });
       break;
 
     case "respuestaDatos.action": //¡Tu experiencia es importante para nosotros!, ¿Podrías darnos una puntuación en del 1 al 5, de como te pareció la atención?
-
+      var params = parameters.fields;
+      var name = params.name.stringValue;
+      var phone = params.phone.stringValue;
+      var email = params.email.stringValue;
+      var map = {};
+      if (name) {
+        map.name = name;
+      }
+      if (phone) {
+        map.phone = phone;
+      }
+      if (email) {
+        map.email = email;
+      }
+      await editClient(sender, map);
+      await editVisit(sender, map);
+      handleMessages(messages, sender);
       break;
 
-    case "":
-
-      break;
 
     default:
       // break;
