@@ -156,7 +156,7 @@ async function saveUserData(facebookId) {
   });
   */
   console.log("***********************************viendooo************************************: ");
-  resultado = await categoriaEspecificaF('633eda6329eaf21db88320e5');
+  resultado = await productosF();
   console.log("*************************RESULTADO***************************: ",  resultado);
 }
 
@@ -201,7 +201,7 @@ async function productosF() {
   
   for(var i = 0; i < dataDB.length; i++){
     prod = dataDB[i];
-    var nameCat = await categoriaEspecificaF(prod.category);
+    var nameCat = await categoriaNombreF(prod.category);
     imagenes = await imagenesF(prod._id);
       productos.push({
         "name" : prod.name,
@@ -228,7 +228,7 @@ async function categoriasF() {
 }
 
 //categoria especifica
-async function categoriaEspecificaF(categoriaP) {
+async function categoriaNombreF(categoriaP) {
   const dataDB = await Category.find({_id: categoriaP});
   //console.log("categoria", dataDB[0]);
   var cat = dataDB[0];
