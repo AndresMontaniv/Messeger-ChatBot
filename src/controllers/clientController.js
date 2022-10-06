@@ -1,34 +1,55 @@
 const { response } = require("express");
 const Client = require("../models/client");
 
-const createUser = async (req, res = response) => {
-    const { name } = req.body;
+const createClient = async (firstName, lastName, profilePic, facebookId, phone, email, isClient = false) => {
     try {
-
-
-
-        const client = new Client(req.body);
-
-        await user.save();
-
-        res.json({
-            ok: true,
-            user
+        const existClient = await Client.findOne({ facebookId });
+        if (existClient) {
+            return;
+        }
+        const client = new Client({
+            firstName,
+            lastName,
+            facebookId,
+            profilePic,
+            phone,
+            email,
+            isClient
         });
+
+        await client.save();
+
+        return client;
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({
-            ok: false,
-            message: 'Hable Con el Admin'
-        });
+        return;
     }
+}
 
+const editClient = async (facebookId, phone, email, isClient = false) => {
+    try {
+        const client = new Client({
+            firstName,
+            lastName,
+            facebookId,
+            profilePic,
+            phone,
+            email,
+            isClient
+        });
 
+        await client.save();
 
+        return client;
+
+    } catch (error) {
+        console.log(error);
+        return;
+    }
 
 }
 
 module.exports = {
-    createUser
+    createClient
 }
