@@ -41,7 +41,6 @@ async function sendToDialogFlow(msg, session, source, params) {
         // console.log("request MAP = ", request);
         const responses = await sessionClient.detectIntent(request);
         const result = responses[0].queryResult;
-        console.log(result);
         console.log("INTENT EMPAREJADO: ", result.intent.displayName);
         let defaultResponses = [];
         if (result.action !== "input.unknown") {

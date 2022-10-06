@@ -90,12 +90,12 @@ async function receivedMessage(event) {
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
   var message = event.message;
-  console.log(
-    "Received message for user %d and page %d at %d with message:",
-    senderId,
-    recipientID,
-    timeOfMessage
-  );
+  // console.log(
+  //   "Received message for user %d and page %d at %d with message:",
+  //   senderId,
+  //   recipientID,
+  //   timeOfMessage
+  // );
 
   var messageId = message.mid;
 
@@ -220,7 +220,6 @@ async function handleDialogFlowAction(
           ],
         });
       });
-      console.log(cards);
       sendGenericMessage(sender, cards);
       break;
     default:
@@ -341,7 +340,6 @@ function handleDialogFlowResponse(sender, response) {
 
   sendTypingOff(sender);
   console.log("handeling");
-  console.log(responseText);
 
   if (isDefined(action)) {
     handleDialogFlowAction(sender, action, messages, contexts, parameters);
@@ -509,6 +507,7 @@ function handleMessagex(sender_psid, received_message) {
 }
 
 async function handleMessage(message, sender) {
+  console.log(message.message);
   switch (message.message) {
     case "text": //text
       for (const text of message.text.text) {
@@ -533,6 +532,7 @@ async function handleMessage(message, sender) {
       sendImageMessage(sender, message.image.imageUri);
       break;
     case "payload":
+
       let desestructPayload = structProtoToJson(message.payload);
       var messageData = {
         recipient: {
