@@ -659,13 +659,16 @@ async function getProducts(facebookId, req = {}) {
     const descuento = await Discount.findOne({ deal: ofert._id, product: prod._id });
     let imagenes = await imagenesF(prod._id);
     var nameCat = await categoriaNombreF(prod.category);
-    let query = new Query({ visit, product: prod._id });
-    try {
-      await query.save();
-      console.log('new query', query);
-    } catch (err) {
-      console.log(err);
+    if (visit) {
+      let query = new Query({ visit, product: prod._id });
+      try {
+        await query.save();
+        console.log('new query', query);
+      } catch (err) {
+        console.log(err);
+      }
     }
+
     if (descuento) {
       let prodDcto = prod.price * dcto;
       productosOf.push({
