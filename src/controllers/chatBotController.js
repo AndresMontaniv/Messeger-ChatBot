@@ -127,6 +127,10 @@ async function receivedMessage(event) {
 
 async function saveUserData(facebookId) {
   const clientDoc = await Client.findOne({ facebookId });
+  let allP = await getProducts();
+  let allPF = await getProductsFromDeal();
+  console.log('allp==>  ', allP);
+  console.log('allpf==>  ', allPF);
   if (clientDoc) {
     let mapa = {};
     if (!clientDoc.phone) {
@@ -174,13 +178,6 @@ async function receivedPostback(event) {
       break;
   }
 
-  // console.log(
-  //   "Received postback for user %d and page %d with payload '%s' " + "at %d",
-  //   senderId,
-  //   recipientID,
-  //   payload,
-  //   timeOfPostback
-  // );
 }
 
 function handleMessageAttachments(messageAttachments, senderId) {
@@ -645,21 +642,21 @@ function isDefined(obj) {
 
 
 //todos los productos existentes
-async function productosTodos() {
-  ofertasR = await ofertasF(); //oferta disponible
-  ofert = ofertasR[0];
+async function getProducts(req = {}) {
+  let ofertasR = await ofertasF();
+  let ofert = ofertasR[0];
   var dcto1 = String(ofert.discount) + '%';
   var dcto = 1 - (ofert.discount / 100);
-  const dataDB = await Product.find(); //todos los productos
+  const dataDB = await Product.find(req); //todos los productos
   var productosOf = [];
 
   for (var i = 0; i < dataDB.length; i++) {
     prod = dataDB[i];
     const descuento = await Discount.findOne({ deal: ofert._id, product: prod._id });
-    imagenes = await imagenesF(prod._id);
+    let imagenes = await imagenesF(prod._id);
     var nameCat = await categoriaNombreF(prod.category);
     if (descuento) {
-      prodDcto = prod.price * dcto;
+      let prodDcto = prod.price * dcto;
       productosOf.push({
         "name": prod.name,
         "description": prod.description,
@@ -685,8 +682,37 @@ async function productosTodos() {
   return productosOf;
 }
 
+async function getProductsFromDeal(req = {}) {
+  let ofertasR = await ofertasF();
+  let ofert = ofertasR[0];
+  var dcto1 = String(ofert.discount) + '%';
+  var dcto = 1 - (ofert.discount / 100);
+  const dataDB = await Product.find(req); //todos los productos
+  var productosOf = [];
 
-// buscar en la base de datos mongoose las poleras x
+  for (var i = 0; i < dataDB.length; i++) {
+    prod = dataDB[i];
+    const descuento = await Discount.findOne({ deal: ofert._id, product: prod._id });
+    let imagenes = await imagenesF(prod._id);
+    var nameCat = await categoriaNombreF(prod.category);
+    if (descuento) {
+      let prodDcto = prod.price * dcto;
+      productosOf.push({
+        "name": prod.name,
+        "description": prod.description,
+        "deal": dcto1,
+        "price": prod.price,
+        "priceDeal": prodDcto,
+        "categoria": nameCat,
+        "image": imagenes,
+      });
+    }
+  }
+
+  return productosOf;
+}
+
+
 async function productosF() {
   const dataDB = await Product.find();
   var productos = [];
@@ -707,7 +733,6 @@ async function productosF() {
   return productos;
 }
 
-//productos de cierta categoria
 async function productosCategoryF(categoryP) {
   const dataDB = await Product.find().limit(10);
   return dataDB;
@@ -722,7 +747,6 @@ async function categoriasF() {
 //categoria especifica
 async function categoriaNombreF(categoriaP) {
   const dataDB = await Category.find({ _id: categoriaP });
-  //console.log("categoria", dataDB[0]);
   var cat = dataDB[0];
   var nameCat = cat.name;
   return nameCat;
@@ -743,7 +767,6 @@ async function ofertasF() {
 
 async function imagenesF(id_prod) {
   const dataDB = await Image.find({ product: id_prod });
-  // let imagenes = '';
   let imagenes = [];
   dataDB.forEach((imagen) => {
     imagenes.push(imagen.url);

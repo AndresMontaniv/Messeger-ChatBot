@@ -1,5 +1,7 @@
 const { response } = require("express");
 const Product = require("../models/product");
+const Deal = require("../models/deal");
+const Discount = require("../models/discount");
 
 const createProduct = async (req, res = response) => {
     const { name } = req.body;
@@ -29,10 +31,8 @@ const createProduct = async (req, res = response) => {
         });
     }
 
-
-
-
 }
+
 
 
 
