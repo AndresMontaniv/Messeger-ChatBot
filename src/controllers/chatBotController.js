@@ -167,14 +167,22 @@ async function productosOfertasF(){
   return prod;
 }
 
+
+// buscar en la base de datos mongoose las 10 primeras poleras
 async function productosF(response, senderId) {
-  // buscar en la base de datos mongoose las 10 primeras poleras
   const dataDB = await Product.find().limit(10);
   return dataDB;
 }
 
+//todas las categorias
 async function categoriasF() {
   const dataDB = await Category.find();
+  return dataDB;
+}
+
+//categoria especifica
+async function categoriasF(nameC) {
+  const dataDB = await Category.find({name: nameC});
   return dataDB;
 }
 
