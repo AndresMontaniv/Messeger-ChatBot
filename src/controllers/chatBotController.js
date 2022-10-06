@@ -156,7 +156,7 @@ async function saveUserData(facebookId) {
   });
   */
   console.log("***********************************viendooo************************************: ");
-  resultado = await productosF();
+  resultado = await categoriaEspecificaF('633eda6329eaf21db88320e5');
   console.log("*************************RESULTADO***************************: ",  resultado);
 }
 
@@ -201,7 +201,7 @@ async function productosF() {
   
   for(var i = 0; i < dataDB.length; i++){
     prod = dataDB[i];
-    nameCat = await categoriaEspecificaF(prod.category);
+    var nameCat = await categoriaEspecificaF(prod.category);
     imagenes = await imagenesF(prod._id);
       productos.push({
         "name" : prod.name,
