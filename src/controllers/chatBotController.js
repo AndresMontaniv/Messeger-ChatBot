@@ -164,7 +164,10 @@ async function saveUserData(facebookId) {
 async function productosOfertasF(){
   ofertasR = await ofertasF(); //oferta disponible
   ofert = ofertasR[0];
-  var dcto = (ofert.discount / 100) - 1;
+  console.log("oferta:        ", ofert);
+
+  var dcto = 1 - (ofert.discount / 100) ;
+  console.log("Dcto:        ", dcto);
   const dataDB = await Product.find(); //todos los productos
   var productosOf = [];
 
@@ -176,14 +179,14 @@ async function productosOfertasF(){
 
     const descuento = await Discount.findOne({deal: ofert._id, product: prod._id});
     console.log("producto con descuento:        ", descuento);
-    
+
     if(descuento){
       prodDcto = prod.price * dcto; 
       imagenes = await imagenesF(prod._id);
       productosOf.push({
         "name" : prod.name,
-        "description" : prodDcto,
-        "price" : prod.price,
+        "description" : prod.description,
+        "price" : prodDcto,
         "image" : imagenes,
       });
     }
@@ -223,7 +226,7 @@ async function imagenesF(id_prod) {
  // let imagenes = '';
   let imagenes = [];
   dataDB.forEach((imagen) => {
-      imagenes.push({ url: imagen.url});
+      imagenes.push(imagen.url);
   });
 
   return imagenes;
