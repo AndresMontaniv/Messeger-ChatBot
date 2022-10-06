@@ -16,7 +16,7 @@ const Deal = require('../models/deal');
 const Category = require('../models/category');
 const Image = require('../models/image');
 const Discount = require('../models/discount');
-const { Query } = require('mongoose');
+const Query = require('../models/query');
 
 
 
@@ -646,6 +646,7 @@ function isDefined(obj) {
 //todos los productos existentes
 async function getProducts(facebookId, req = {}) {
   let visit = await getCurrentVisit(facebookId);
+  console.log('cvisit   ===> ', visit);
   let ofertasR = await ofertasF();
   let ofert = ofertasR[0];
   var dcto1 = String(ofert.discount) + '%';
