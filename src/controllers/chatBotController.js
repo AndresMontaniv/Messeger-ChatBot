@@ -44,14 +44,6 @@ const postWebHook = (req, res) => {
       let sender_psid = webhook_event.sender.id;
       console.log('Sender PSID: ' + sender_psid);
 
-      // Check if the event is a message or postback and
-      // pass the event to the appropriate handler function
-      // if (webhook_event.message) {
-      // handleMessagex(sender_psid, webhook_event.message);
-      //   receivedMessage(webhook_event);
-      // } else if (webhook_event.postback) {
-      //   handlePostback(sender_psid, webhook_event.postback);
-      // }
       entry.messaging.forEach(function (messagingEvent) {
         if (messagingEvent.message) {
           // console.log("entrando a received message");
@@ -199,6 +191,10 @@ async function handleDialogFlowAction(
   parameters
 ) {
   switch (action) {
+    case "input.welcome":
+      console.log('esta saludando');
+      break;
+
     case "tipopolera.action":
       let category = parameters.fields.tipoPolera.stringValue.toLowerCase();
       let poleras = await Product.find({ category });
@@ -565,48 +561,6 @@ function callSendAPI(messageData) {
   });
 }
 
-function callSendAPIX(messageData) {
-  return new Promise((resolve, reject) => {
-    request(
-      {
-        uri: "https://graph.facebook.com/v7.0/me/messages",
-        qs: {
-          access_token: process.env.PAGE_ACCESS_TOKEN,
-        },
-        method: "POST",
-        json: messageData,
-      },
-      function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-          var recipientId = body.recipient_id;
-          var messageId = body.message_id;
-
-          if (messageId) {
-            console.log(
-              "Successfully sent message with id %s to recipient %s",
-              messageId,
-              recipientId
-            );
-          } else {
-            console.log(
-              "Successfully called Send API for recipient %s",
-              recipientId
-            );
-          }
-          resolve();
-        } else {
-          reject();
-          console.error(
-            "Failed calling Send API",
-            response.statusCode,
-            response.statusMessage,
-            body.error
-          );
-        }
-      }
-    );
-  });
-}
 
 /*
  * Turn typing indicator on
