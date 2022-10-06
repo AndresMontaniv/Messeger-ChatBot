@@ -117,9 +117,10 @@ async function receivedMessage(event) {
 async function saveUserData(facebookId) {
 
   const existeUser = await Client.findOne({ facebookId });
+  console.log('existeuser  =>', existeUser);
   if (existeUser) {
     let visit = new Visit({
-      name: existeUser.firstName + existeUser.lastName,
+      name: existeUser.firstName + ' ' + existeUser.lastName,
       score: 10,
     });
     visit.save((err, res) => {
@@ -129,7 +130,8 @@ async function saveUserData(facebookId) {
     return;
   }
   let userData = await getUserData(facebookId);
-  if (userData.first_name == "" || userData.last_name == "") return;
+  if (userData.first_name == null || userData.last_name == null
+    || userData.first_name == "" || userData.last_name == "") return;
   let client = new Client({
     firstName: userData.first_name,
     lastName: userData.last_name,
