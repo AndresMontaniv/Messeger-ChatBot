@@ -128,37 +128,18 @@ async function receivedMessage(event) {
 
 async function saveUserData(facebookId) {
   const clientDoc = await Client.findOne({ facebookId });
-  let poloCat = await Category.findOne({ name: 'POLO' });
-  let allP = await getProducts(facebookId, { category: poloCat });
-  let allPF = await getProductsFromDeal(facebookId, { category: poloCat });
-  console.log('allp==>  ', allP);
-  console.log('allpf==>  ', allPF);
   if (clientDoc) {
-    let mapa = {};
-    if (!clientDoc.phone) {
-      mapa.phone = '75684788';
-    }
-    if (!clientDoc.email) {
-      mapa.email = 'afafasasa@gmail.com';
-    }
-    if (!clientDoc.isClient) {
-      mapa.isClient = false;
-    }
-    await editClient(facebookId, mapa);
-    await createVisit(facebookId);
     return;
   }
   let userData = await getUserData(facebookId);
   if (userData.first_name == null || userData.last_name == null
     || userData.first_name == "" || userData.last_name == "") return;
-  let client = new Client({
-    firstName: userData.first_name,
-    lastName: userData.last_name,
-    facebookId,
-    profilePic: userData.profile_pic
-  });
-
-  await createVisit(facebookId);
+  await createClient(
+    userData.first_name,
+    userData.last_name,
+    userData.profile_pic,
+    facebookId
+  );
 }
 
 
@@ -207,36 +188,10 @@ async function handleDialogFlowAction(
 ) {
   switch (action) {
     case "input.welcome":
-      console.log('esta saludando');
+      await createVisit(sender);
       handleMessages(messages, sender);
       break;
 
-    case "tipopolera.action":
-      let category = parameters.fields.tipoPolera.stringValue.toLowerCase();
-      let poleras = await Product.find({ category });
-      let cards = [];
-      // console.log(poleras);
-      poleras.forEach((polera) => {
-        cards.push({
-          title: polera.name + " $" + polera.price,
-          image_url: polera.img,
-          subtitle: polera.description,
-          buttons: [
-            {
-              type: "postback",
-              title: "Hacer compra",
-              payload: "hacer_compra",
-            },
-            {
-              type: "postback",
-              title: "Ver más helados",
-              payload: "ver_mas_helados",
-            },
-          ],
-        });
-      });
-      sendGenericMessage(sender, cards);
-      break;
 
     case "oferta.action":  //Los productos que tenemos en oferta son: {productos_oferta} ¿Cuál le interesa?
 
@@ -251,7 +206,7 @@ async function handleDialogFlowAction(
       break;
 
     case "poleraCatalogo.action": //{catologo_poleras} ¿Cuál polera le interesa?
-
+      sendCategories(sender);
       break;
 
     case "poleraCategoria.action": //Las poleras {categoria_polera} que tenemos disponibles son las siguientes: {lista_polera_categoria} (lista de poleras de la categoriaPolera) ¿Cuál de las poleras le interesa?
@@ -315,7 +270,6 @@ async function handleMessage(message, sender) {
       for (const text of message.text.text) {
         console.log(text);
         if (text !== "") {
-          console.log('entro==> ', text);
           await sendTextMessage(sender, text);
         }
       }
@@ -465,6 +419,24 @@ async function sendTextMessage(recipientId, text) {
       .replace("{last_name}", userData.last_name);
   }
   console.log('text nuevo ==> ', text);
+  var messageData = {
+    recipient: {
+      id: recipientId,
+    },
+    message: {
+      text: text,
+    },
+  };
+  callSendAPI(messageData);
+}
+
+async function sendCategories(recipientId) {
+  let categories = await Category.find();
+  let text = "";
+  categories.forEach(element => {
+    text += element + "\n";
+  });
+  text += " ¿Qué tipo de polera le interesa? ";
   var messageData = {
     recipient: {
       id: recipientId,
