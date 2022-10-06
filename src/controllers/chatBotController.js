@@ -10,6 +10,8 @@ const { structProtoToJson } = require("../helpers/structFunctions");
 const Client = require("../models/client");
 const Product = require('../models/product');
 const Visit = require('../models/visit');
+const Deal = require('../models/deal');
+
 
 
 
