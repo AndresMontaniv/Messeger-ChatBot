@@ -25,9 +25,28 @@ const createClient = async (firstName, lastName, profilePic, facebookId, phone, 
         console.log(error);
         return;
     }
+}
 
+const editClient = async (facebookId, phone, email, isClient = false) => {
+    try {
+        const client = new Client({
+            firstName,
+            lastName,
+            facebookId,
+            profilePic,
+            phone,
+            email,
+            isClient
+        });
 
+        await client.save();
 
+        return client;
+
+    } catch (error) {
+        console.log(error);
+        return;
+    }
 
 }
 
