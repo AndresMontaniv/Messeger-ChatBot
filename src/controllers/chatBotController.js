@@ -194,12 +194,11 @@ async function handleDialogFlowAction(
 
 
     case "oferta.action":  //Los productos que tenemos en oferta son: {productos_oferta} ¿Cuál le interesa?
-      var params = parameters.fields.categoriapolera.stringValue.toUpperCase();
-      var poleras = await getProducts(sender);
-      var cards = [];
-      poleras.forEach((polera) => {
+      var polerasx = await getProductsFromDeal(sender);
+      var cardsx = [];
+      polerasx.forEach((polera) => {
         let disc = polera.deal != '0%' ? "(Descuento " + polera.deal + " )" : "";
-        cards.push({
+        cardsx.push({
           title: polera.name + "  $" + polera.priceDeal + disc,
           image_url: polera.image[0],
           subtitle: polera.categoria,
@@ -217,7 +216,7 @@ async function handleDialogFlowAction(
           ],
         });
       });
-      await sendGenericMessage(sender, cards);
+      await sendGenericMessage(sender, cardsx);
       await sendTextMessage(sender, 'Estos son los productos con descuentos');
       break;
 
@@ -279,11 +278,11 @@ async function handleDialogFlowAction(
         map.category = cat;
         map.name = '/.*' + color + '.*/';
       }
-      var poleras = await getProducts(sender, mapa);
-      var cards = [];
-      poleras.forEach((polera) => {
+      var polerasas = await getProducts(sender, mapa);
+      var cardsas = [];
+      polerasas.forEach((polera) => {
         let disc = polera.deal != '0%' ? "(Descuento " + polera.deal + " )" : "";
-        cards.push({
+        cardsas.push({
           title: polera.name + "  $" + polera.priceDeal + disc,
           image_url: polera.image[0],
           subtitle: polera.categoria,
@@ -301,7 +300,7 @@ async function handleDialogFlowAction(
           ],
         });
       });
-      await sendGenericMessage(sender, cards);
+      await sendGenericMessage(sender, cardsas);
       await sendTextMessage(sender, '¿Te gustaría comprar este producto?');
       break;
 
@@ -316,22 +315,22 @@ async function handleDialogFlowAction(
       break;
 
     case "respuestaDatos.action": //¡Tu experiencia es importante para nosotros!, ¿Podrías darnos una puntuación en del 1 al 5, de como te pareció la atención?
-      var params = parameters.fields;
-      var name = params.name.stringValue;
-      var phone = params.phone.stringValue;
-      var email = params.email.stringValue;
-      var map = {};
+      var paramsxx = parameters.fields;
+      var name = paramsxx.name.stringValue;
+      var phone = paramsxx.phone.stringValue;
+      var email = paramsxx.email.stringValue;
+      var mapx = {};
       if (name) {
-        map.name = name;
+        mapx.name = name;
       }
       if (phone) {
-        map.phone = phone;
+        mapx.phone = phone;
       }
       if (email) {
-        map.email = email;
+        mapx.email = email;
       }
-      await editClient(sender, map);
-      await editVisit(sender, map);
+      await editClient(sender, mapx);
+      await editVisit(sender, mapx);
       handleMessages(messages, sender);
       break;
 
