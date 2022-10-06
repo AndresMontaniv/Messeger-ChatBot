@@ -156,11 +156,12 @@ async function saveUserData(facebookId) {
   });
   */
   console.log("***********************************viendooo************************************: ");
-  resultado = await productosOfertasF();
+  resultado = await productosF();
   console.log("*************************RESULTADO***************************: ",  resultado);
 }
 
 
+//todos los oriductos en oferta
 async function productosOfertasF(){
   ofertasR = await ofertasF(); //oferta disponible
   ofert = ofertasR[0];
@@ -183,6 +184,8 @@ async function productosOfertasF(){
         "price" : prod.price,
         "priceDeal" : prodDcto,
         "image" : imagenes,
+
+        //categoria
       });
     }
   }
@@ -191,8 +194,29 @@ async function productosOfertasF(){
 }
 
 
-// buscar en la base de datos mongoose las 10 primeras poleras
-async function productosF(response, senderId) {
+// buscar en la base de datos mongoose las poleras
+async function productosF() {
+  const dataDB = await Product.find();
+  var productos = [];
+  
+  for(var i = 0; i < dataDB.length; i++){
+    prod = dataDB[i];
+    var nameCat = await categoriasEspecificaF(prod.category);
+    imagenes = await imagenesF(prod._id);
+      productos.push({
+        "name" : prod.name,
+        "description" : prod.description,
+        "price" : prod.price,
+        "categoria" : nameCat,
+        "image" : imagenes,
+      });
+  }
+
+  return productos;
+}
+
+//productos de cierta categoria
+async function productosCategoryF(categoryP) {
   const dataDB = await Product.find().limit(10);
   return dataDB;
 }
@@ -204,6 +228,13 @@ async function categoriasF() {
 }
 
 //categoria especifica
+async function categoriasEspecificaF(categoriaP) {
+  const dataDB = await Category.find({category: categoriaP});
+  var cat = dataDB[0];
+  return cat.name;
+}
+
+//todas las categorias
 async function categoriasF(nameC) {
   const dataDB = await Category.find({name: nameC});
   return dataDB;
