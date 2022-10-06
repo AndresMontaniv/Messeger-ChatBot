@@ -193,6 +193,9 @@ async function handleDialogFlowAction(
   switch (action) {
     case "input.welcome":
       console.log('esta saludando');
+      let welcomeMsg = messages.text.text
+      console.log(welcomeMsg);
+      sendWelcomeMessage(sender, welcomeMsg);
       break;
 
     case "tipopolera.action":
@@ -381,6 +384,23 @@ async function sendTextMessage(recipientId, text) {
     text = text
       .replace("{first_name}", userData.first_name)
       .replace("{last_name}", userData.last_name);
+  }
+  var messageData = {
+    recipient: {
+      id: recipientId,
+    },
+    message: {
+      text: text,
+    },
+  };
+  callSendAPI(messageData);
+}
+
+async function sendWelcomeMessage(recipientId, text) {
+  if (text.includes("[x]")) {
+    let userData = await getUserData(recipientId);
+    text = text
+      .replace("[x]", userData.first_name);
   }
   var messageData = {
     recipient: {
