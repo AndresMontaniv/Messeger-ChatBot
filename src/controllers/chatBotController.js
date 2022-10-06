@@ -152,7 +152,7 @@ async function saveUserData(facebookId) {
   });
   */
   console.log("***********************************viendooo************************************: ");
-  result = await imagenConProducto("autor");
+  resultado = await imagenConProducto("autor");
   console.log("*************************RESULTADO***************************: ",  resultado);
 }
 
