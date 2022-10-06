@@ -151,6 +151,7 @@ async function saveUserData(facebookId) {
     console.log("Se creo un cliente: ", res);
   });
   */
+  console.log("****************viendooo**********************: ",  resultado);
   result = await imagenConProducto("autor");
   console.log("*************************RESULTADO***************************: ",  resultado);
 }
