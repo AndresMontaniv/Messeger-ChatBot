@@ -270,7 +270,7 @@ async function handleDialogFlowAction(
       poleras1.forEach((polera1) => {
         cards1.push({
           title: polera1.name + " $" + polera1.price,
-          image_url: polera1.img[0],
+          image_url: polera1.image[0],
           subtitle: polera1.description,
           buttons: [
         /*    {
