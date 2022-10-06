@@ -119,11 +119,11 @@ async function saveUserData(facebookId) {
   const existeUser = await Client.findOne({ facebookId });
 
   if (existeUser) {
-    console.log('_id  =>', existeUser.id);
-    console.log('uid  =>', existeUser.uid);
+    console.log('id  =>', existeUser.id);
     let visit = new Visit({
       name: existeUser.firstName + ' ' + existeUser.lastName,
       score: 10,
+      client: existeUser,
     });
     visit.save((err, res) => {
       if (err) return console.log(err);
@@ -371,7 +371,6 @@ async function getUserData(senderId) {
         },
       }
     );
-    console.log('userdata==>', userData.data);
     return userData.data;
   } catch (err) {
     console.log("algo salio mal en axios getUserData: ", err);
@@ -571,7 +570,6 @@ function handlePostback(sender_psid, received_postback) {
 
 // Sends response messages via the Send API
 function callSendAPI(messageData) {
-  console.log('esto va a enviar a fb==>', messageData);
   // Send the HTTP request to the Messenger Platform
   request({
     uri: "https://graph.facebook.com/v7.0/me/messages",
