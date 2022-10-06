@@ -129,7 +129,7 @@ async function saveUserData(facebookId) {
   const clientDoc = await Client.findOne({ facebookId });
 
   if (clientDoc) {
-    await editClient(facebookId, 'hola@gmail.com', _, true);
+    await editClient(facebookId, '75684756', 'hola@gmail.com', true);
     return;
   }
   let userData = await getUserData(facebookId);
