@@ -4,7 +4,6 @@ const axios = require('axios');
 const uuid = require("uuid");
 const dialogflow = require('./dialogFlowController');
 const { structProtoToJson } = require("../helpers/structFunctions");
-const { createClient } = require("../controllers/clientController");
 
 //mongodb models
 
@@ -14,10 +13,8 @@ const Visit = require('../models/visit');
 const Deal = require('../models/deal');
 const Category = require('../models/category');
 const Image = require('../models/image');
-const Order = require('../models/order');
-const Detail = require('../models/detail');
-const Query = require('../models/query');
 const Discount = require('../models/discount');
+const image = require('../models/image');
 
 
 //const intentF = require('./intentController');
@@ -129,15 +126,24 @@ async function receivedMessage(event) {
 
 async function saveUserData(facebookId) {
 
-  const clientDoc = await Client.findOne({ facebookId });
-
-  if (clientDoc) {
+  const existeUser = await Client.findOne({ facebookId });
+  
+  if (existeUser) {
+    console.log('id  =>', existeUser.id);
+    let visit = new Visit({
+      name: existeUser.firstName + ' ' + existeUser.lastName,
+      score: 10,
+      client: existeUser,
+    });
+    visit.save((err, res) => {
+      if (err) return console.log(err);
+      console.log("Se creo una visita: ", res);
+    });
     return;
   }
   let userData = await getUserData(facebookId);
   if (userData.first_name == null || userData.last_name == null
     || userData.first_name == "" || userData.last_name == "") return;
-<<<<<<< HEAD
  /* let client = new Client({
     firstName: userData.first_name,
     lastName: userData.last_name,
@@ -157,10 +163,28 @@ async function saveUserData(facebookId) {
 
 
 async function productosOfertasF(){
-  ofertasR = await ofertasF();
-  const dataDB = await Product.find();
-  prod = dataDB[0];
-  return prod;
+  ofertasR = await ofertasF(); //oferta disponible
+  ofert = ofertasR[0];
+  var dcto = (ofert.discount / 100) - 1;
+  const dataDB = await Product.find(); //todos los productos
+  var productosOf = [];
+  
+  for(var i = 0; i < dataDB.length; i++){
+    prod = dataDB[i];
+    const descuento = await Discount.findOne({deal: ofert._id, product: prod._id});
+    if(descuento){
+      prodDcto = prod.price * dcto; 
+      imagenes = await imagenesF(prod._id);
+      productosOf.push({
+        "name" : prod.name,
+        "description" : prodDcto,
+        "price" : prod.price,
+        "image" : imagenes,
+      });
+    }
+  }
+
+  return productosOf;
 }
 
 
@@ -225,14 +249,14 @@ async function saveUserData(facebookId) {
   let client = new Client({
     firstName: userData.first_name,
     lastName: userData.last_name,
-=======
-  await createClient(
-    userData.first_name,
-    userData.last_name,
-    userData.profile_pic,
->>>>>>> bc20b24281c8b448fdc1957bfc490446902c6395
     facebookId,
-  );
+    profilePic: userData.profile_pic,
+  });
+
+  client.save((err, res) => {
+    if (err) return console.log(err);
+    console.log("Se creo un cliente: ", res);
+  });
 }
 */
 
@@ -558,6 +582,50 @@ function sendQuickReply(recipientId, text, replies, metadata) {
 
 
 
+// Handles messages events
+function handleMessagex(sender_psid, received_message) {
+  let response;
+
+  // Checks if the message contains text
+  if (received_message.text) {
+    // Create the payload for a basic text message, which
+    // will be added to the body of our request to the Send API
+    response = {
+      "text": `Enviaste el mensaje: "${received_message.text}".`
+    }
+  } else if (received_message.attachments) {
+    // Get the URL of the message attachment
+    let attachment_url = received_message.attachments[0].payload.url;
+    response = {
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "generic",
+          "elements": [{
+            "title": "Is this the right picture?",
+            "subtitle": "Tap a button to answer.",
+            "image_url": attachment_url,
+            "buttons": [
+              {
+                "type": "postback",
+                "title": "Yes!",
+                "payload": "yes",
+              },
+              {
+                "type": "postback",
+                "title": "No!",
+                "payload": "no",
+              }
+            ],
+          }]
+        }
+      }
+    }
+  }
+
+  // Send the response message
+  callSendAPI(sender_psid, response);
+}
 
 async function handleMessage(message, sender) {
   console.log('Handle Message==>', message.message);
@@ -679,7 +747,6 @@ function isDefined(obj) {
 }
 
 
-<<<<<<< HEAD
 //va a mirar en  imagen
 async function imagenConProducto (autor) {
   const resultado = await Image.aggregate(
@@ -702,9 +769,6 @@ async function imagenConProducto (autor) {
   return resultado;
 }
 
-=======
-// ? Query Functions
->>>>>>> bc20b24281c8b448fdc1957bfc490446902c6395
 
 module.exports = {
   postWebHook,
