@@ -15,6 +15,9 @@ const Category = require('../models/category');
 const Image = require('../models/image');
 
 
+//const intentF = require('./intentController');
+
+
 
 
 const MY_VERIFY_TOKEN = process.env.MY_VERIFY_FB_TOKEN;
@@ -152,8 +155,14 @@ async function saveUserData(facebookId) {
   });
   */
   console.log("***********************************viendooo************************************: ");
-  resultado = await imagenConProducto("autor");
+  resultado = await categoriasF();
   console.log("*************************RESULTADO***************************: ",  resultado);
+}
+
+
+async function categoriasF() {
+  const dataDB = await category.find();
+  return dataDB;
 }
 
 
@@ -691,7 +700,9 @@ async function imagenConProducto (autor) {
           foreignField: "_id",
           as: "imageProduct"
         }
-      }
+      },
+      { $unwind: "$imageProduct"},
+    //  {$match : {name: }}
     ]
   )
 
