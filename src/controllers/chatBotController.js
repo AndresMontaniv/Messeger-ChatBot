@@ -9,6 +9,8 @@ const { structProtoToJson } = require("../helpers/structFunctions");
 
 const Client = require("../models/client");
 const Product = require('../models/product');
+const Visit = require('../models/visit');
+
 
 
 const MY_VERIFY_TOKEN = process.env.MY_VERIFY_FB_TOKEN;
@@ -116,7 +118,10 @@ async function saveUserData(facebookId) {
 
   const existeUser = await Client.findOne({ facebookId });
   if (existeUser) {
-
+    let visit = new Visit({
+      name: existeUser.firstName + existeUser.lastName,
+      score: 10,
+    });
     return;
   }
   let userData = await getUserData(facebookId);
@@ -358,6 +363,7 @@ async function getUserData(senderId) {
         },
       }
     );
+    console.log('userdata==>', userData.data);
     return userData.data;
   } catch (err) {
     console.log("algo salio mal en axios getUserData: ", err);
