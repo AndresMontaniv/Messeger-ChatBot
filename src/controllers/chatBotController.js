@@ -127,8 +127,9 @@ async function receivedMessage(event) {
 
 async function saveUserData(facebookId) {
   const clientDoc = await Client.findOne({ facebookId });
-  let allP = await getProducts();
-  let allPF = await getProductsFromDeal();
+  let poloCat = await Category.findOne({ name: 'POLO' });
+  let allP = await getProducts({ category: poloCat });
+  let allPF = await getProductsFromDeal({ category: poloCat });
   console.log('allp==>  ', allP);
   console.log('allpf==>  ', allPF);
   if (clientDoc) {
