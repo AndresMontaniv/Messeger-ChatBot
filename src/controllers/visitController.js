@@ -45,10 +45,21 @@ const editVisit = async (facebookId, req) => {
         console.log('visit', currentVisit);
         if (currentVisit) {
             await currentVisit.save();
-            return;
+            return currentVisit;
         }
 
-        return currentVisit;
+        const visit = new Visit({ client: client.id });
+
+        await visit.save();
+        const currentVisita = await Visit.findOneAndUpdate(
+            {
+                client: client,
+                isClosed: false
+            }, req
+        );
+
+        return currentVisita;
+
 
     } catch (error) {
         console.log(error);
