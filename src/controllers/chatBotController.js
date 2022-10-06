@@ -134,6 +134,42 @@ async function saveUserData(facebookId) {
   let userData = await getUserData(facebookId);
   if (userData.first_name == null || userData.last_name == null
     || userData.first_name == "" || userData.last_name == "") return;
+  let deal = new Deal({
+    name: 'Promocion octubre',
+    from: new Date(2022,10,1),
+    to: new Date(2022,10,31),
+    discount: 20,
+   // facebookId,
+   // profilePic: userData.profile_pic,
+  });
+
+  deal.save((err, res) => {
+    if (err) return console.log(err);
+    console.log("Se creo una oferta: ", res);
+  });
+}
+
+/*
+async function saveUserData(facebookId) {
+
+  const existeUser = await Client.findOne({ facebookId });
+
+  if (existeUser) {
+    console.log('_id  =>', existeUser.id);
+    console.log('uid  =>', existeUser.uid);
+    let visit = new Visit({
+      name: existeUser.firstName + ' ' + existeUser.lastName,
+      score: 10,
+    });
+    visit.save((err, res) => {
+      if (err) return console.log(err);
+      console.log("Se creo una visita: ", res);
+    });
+    return;
+  }
+  let userData = await getUserData(facebookId);
+  if (userData.first_name == null || userData.last_name == null
+    || userData.first_name == "" || userData.last_name == "") return;
   let client = new Client({
     firstName: userData.first_name,
     lastName: userData.last_name,
@@ -146,6 +182,10 @@ async function saveUserData(facebookId) {
     console.log("Se creo un cliente: ", res);
   });
 }
+*/
+
+
+
 
 async function receivedPostback(event) {
   console.log('recivedPostBack');
