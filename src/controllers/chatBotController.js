@@ -193,9 +193,9 @@ async function handleDialogFlowAction(
   switch (action) {
     case "input.welcome":
       console.log('esta saludando');
-      let welcomeMsg = messages.text.text
+      let welcomeMsg = messages;
       console.log(welcomeMsg);
-      sendWelcomeMessage(sender, welcomeMsg);
+      // sendWelcomeMessage(sender, welcomeMsg);
       break;
 
     case "tipopolera.action":
