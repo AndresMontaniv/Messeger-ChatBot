@@ -1,18 +1,23 @@
 const { Schema, model } = require('mongoose');
 
-const CategorySchema = Schema(
+const ImageSchema = Schema(
     {
         name: {
             type: String,
-            unique: true,
+            required: true
         },
+        url: {
+            type: String,
+            required: true,
+        },
+
     }, { timestamps: true }
 );
 
-CategorySchema.method('toJSON', function () {
+ImageSchema.method('toJSON', function () {
     const { __v, _id, ...object } = this.toObject();
     object.uid = _id;
     return object;
 });
 
-module.exports = model('Category', CategorySchema);
+module.exports = model('Image', ImageSchema);

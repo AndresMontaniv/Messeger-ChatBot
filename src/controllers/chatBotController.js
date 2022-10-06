@@ -10,6 +10,10 @@ const { structProtoToJson } = require("../helpers/structFunctions");
 const Client = require("../models/client");
 const Product = require('../models/product');
 const Visit = require('../models/visit');
+const Deal = require('../models/deal');
+const Category = require('../models/category');
+const Image = require('../models/image');
+
 
 
 
@@ -114,6 +118,7 @@ async function receivedMessage(event) {
   }
 }
 
+
 async function saveUserData(facebookId) {
 
   const existeUser = await Client.findOne({ facebookId });
@@ -146,6 +151,9 @@ async function saveUserData(facebookId) {
     console.log("Se creo un cliente: ", res);
   });
 }
+
+
+
 
 async function receivedPostback(event) {
   console.log('recivedPostBack');
