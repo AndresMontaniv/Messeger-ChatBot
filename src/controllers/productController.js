@@ -5,6 +5,7 @@ const createProduct = async (req, res = response) => {
     const { name } = req.body;
     try {
         const existProduct = await Product.findOne({ name });
+
         if (existProduct) {
             return res.status(400).json({
                 ok: false,
