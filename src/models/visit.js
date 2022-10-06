@@ -22,6 +22,11 @@ const VisitSchema = Schema(
         client: {
             type: Schema.Types.ObjectId, ref: 'clients'
         },
+        products: [
+            {
+                type: Schema.Types.ObjectId, ref: 'products'
+            }
+        ]
     }, { timestamps: true }
 );
 

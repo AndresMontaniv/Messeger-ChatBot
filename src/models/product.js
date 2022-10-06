@@ -9,10 +9,8 @@ const ProductSchema = Schema(
         },
         description: String,
         price: Number,
-        img: String,
         category: {
-            type: String,
-            required: true
+            type: Schema.Types.ObjectId, ref: 'categories'
         },
     }, { timestamps: true }
 );

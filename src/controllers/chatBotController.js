@@ -117,7 +117,7 @@ async function receivedMessage(event) {
 async function saveUserData(facebookId) {
 
   const existeUser = await Client.findOne({ facebookId });
-
+  
   if (existeUser) {
     console.log('id  =>', existeUser.id);
     let visit = new Visit({
