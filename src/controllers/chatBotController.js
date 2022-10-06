@@ -156,13 +156,13 @@ async function saveUserData(facebookId) {
   });
   */
   console.log("***********************************viendooo************************************: ");
-  resultado = await productosF();
+  resultado = await productosTodos();
   console.log("*************************RESULTADO***************************: ",  resultado);
 }
 
 
 //todos los oriductos en oferta
-async function productosOfertasF(){
+async function productosTodos(){
   ofertasR = await ofertasF(); //oferta disponible
   ofert = ofertasR[0];
   var dcto1 = String(ofert.discount) + '%';
@@ -173,19 +173,28 @@ async function productosOfertasF(){
   for(var i = 0; i < dataDB.length; i++){
     prod = dataDB[i];
     const descuento = await Discount.findOne({deal: ofert._id, product: prod._id});
-
+    imagenes = await imagenesF(prod._id);
+    var nameCat = await categoriaNombreF(prod.category);
     if(descuento){
       prodDcto = prod.price * dcto; 
-      imagenes = await imagenesF(prod._id);
       productosOf.push({
         "name" : prod.name,
         "description" : prod.description,
         "deal": dcto1,
         "price" : prod.price,
         "priceDeal" : prodDcto,
+        "categoria" : nameCat,
         "image" : imagenes,
-
-        //categoria
+      });
+    }else{
+      productosOf.push({
+        "name" : prod.name,
+        "description" : prod.description,
+        "deal": '0%',
+        "price" : prod.price,
+        "priceDeal" : prod.price,
+        "categoria" : nameCat,
+        "image" : imagenes,
       });
     }
   }
