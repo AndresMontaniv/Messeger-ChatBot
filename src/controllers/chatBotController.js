@@ -5,6 +5,7 @@ const uuid = require("uuid");
 const dialogflow = require('./dialogFlowController');
 const { structProtoToJson } = require("../helpers/structFunctions");
 const { createClient, editClient } = require("../controllers/clientController");
+const { createVisit, editVisit } = require("../controllers/visitController");
 
 //mongodb models
 
@@ -151,6 +152,8 @@ async function saveUserData(facebookId) {
     userData.profile_pic,
     facebookId,
   );
+
+  await createVisit(facebookId);
 }
 
 
