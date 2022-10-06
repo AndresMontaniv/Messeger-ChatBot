@@ -13,6 +13,10 @@ const Visit = require('../models/visit');
 const Deal = require('../models/deal');
 const Category = require('../models/category');
 const Image = require('../models/image');
+const Order = require('../models/order');
+const Detail = require('../models/detail');
+const Query = require('../models/query');
+const Discount = require('../models/discount');
 
 
 
@@ -122,7 +126,14 @@ async function receivedMessage(event) {
 async function saveUserData(facebookId) {
 
   const existeUser = await Client.findOne({ facebookId });
-  
+
+  const docsOrder = await Order.findOne({});
+  const docsQuery = await Query.findOne({});
+  const docsDeal = await Deal.findOne({});
+  const docsImage = await Image.findOne({});
+  const docsDetail = await Detail.findOne({});
+  const docsDiscount = await Discount.findOne({});
+
   if (existeUser) {
     console.log('id  =>', existeUser.id);
     let visit = new Visit({
