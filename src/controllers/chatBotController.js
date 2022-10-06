@@ -46,10 +46,8 @@ const postWebHook = (req, res) => {
 
       entry.messaging.forEach(function (messagingEvent) {
         if (messagingEvent.message) {
-          // console.log("entrando a received message");
           receivedMessage(messagingEvent);
         } else if (messagingEvent.postback) {
-          // console.log("recive postback..........");
           receivedPostback(messagingEvent);
         } else {
           console.log(
@@ -340,7 +338,7 @@ function handleDialogFlowResponse(sender, response) {
 
   sendTypingOff(sender);
   console.log("handeling");
-  console.log(messages);
+  console.log(responseText);
 
   if (isDefined(action)) {
     handleDialogFlowAction(sender, action, messages, contexts, parameters);
@@ -385,6 +383,7 @@ async function sendTextMessage(recipientId, text) {
       .replace("{first_name}", userData.first_name)
       .replace("{last_name}", userData.last_name);
   }
+  console.log(text);
   var messageData = {
     recipient: {
       id: recipientId,
