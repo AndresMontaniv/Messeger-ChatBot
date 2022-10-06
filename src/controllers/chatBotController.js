@@ -164,7 +164,7 @@ async function productosOfertasF(){
   ofertasR = await ofertasF();
   const dataDB = await Product.find();
   prod = dataDB[0];
-
+  return prod;
 }
 
 async function productosF(response, senderId) {
