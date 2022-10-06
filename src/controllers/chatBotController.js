@@ -7,7 +7,7 @@ const { structProtoToJson } = require("../helpers/structFunctions");
 
 //mongodb models
 
-const User = require("../models/user");
+const Client = require("../models/client");
 const Product = require('../models/product');
 
 
@@ -35,14 +35,8 @@ const postWebHook = (req, res) => {
   if (body.object === "page") {
 
     body.entry.forEach(function (entry) {
-      // Gets the body of the webhook event
       let webhook_event = entry.messaging[0];
-      // console.log(webhook_event);
-
-
-      // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
-      // console.log('Sender PSID: ' + sender_psid);
 
       entry.messaging.forEach(function (messagingEvent) {
         if (messagingEvent.message) {
@@ -50,10 +44,7 @@ const postWebHook = (req, res) => {
         } else if (messagingEvent.postback) {
           receivedPostback(messagingEvent);
         } else {
-          console.log(
-            "Webhook received unknown messagingEvent: ",
-            messagingEvent
-          );
+          console.log("Webhook received unknown messagingEvent Else: ");
         }
       });
     });
@@ -123,22 +114,23 @@ async function receivedMessage(event) {
 
 async function saveUserData(facebookId) {
 
-  const existeUser = await User.findOne({ facebookId });
+  const existeUser = await Client.findOne({ facebookId });
   if (existeUser) {
+
     return;
   }
   let userData = await getUserData(facebookId);
   if (userData.first_name == "" || userData.last_name == "") return;
-  let user = new User({
+  let client = new Client({
     firstName: userData.first_name,
     lastName: userData.last_name,
     facebookId,
     profilePic: userData.profile_pic,
   });
 
-  user.save((err, res) => {
+  client.save((err, res) => {
     if (err) return console.log(err);
-    console.log("Se creo un usuario: ", res);
+    console.log("Se creo un cliente: ", res);
   });
 }
 
