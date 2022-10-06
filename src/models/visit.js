@@ -2,7 +2,6 @@ const { Schema, model } = require('mongoose');
 
 const VisitSchema = Schema(
     {
-        _id: Number,
         score: Number,
         name: {
             type: String,

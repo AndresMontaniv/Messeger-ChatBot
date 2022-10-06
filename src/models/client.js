@@ -2,7 +2,6 @@ const { Schema, model } = require('mongoose');
 
 const ClientSchema = Schema(
     {
-        _id: Number,
         firstName: {
             type: String,
             trim: true
