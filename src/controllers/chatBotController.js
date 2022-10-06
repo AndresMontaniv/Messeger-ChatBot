@@ -194,7 +194,31 @@ async function handleDialogFlowAction(
 
 
     case "oferta.action":  //Los productos que tenemos en oferta son: {productos_oferta} ¿Cuál le interesa?
-
+      var params = parameters.fields.categoriapolera.stringValue.toUpperCase();
+      var poleras = await getProducts(sender);
+      var cards = [];
+      poleras.forEach((polera) => {
+        let disc = polera.deal != '0%' ? "(Descuento " + polera.deal + " )" : "";
+        cards.push({
+          title: polera.name + "  $" + polera.priceDeal + disc,
+          image_url: polera.image[0],
+          subtitle: polera.categoria,
+          buttons: [
+            {
+              type: "postback",
+              title: "Me gusta",
+              payload: "me_gusta",
+            },
+            {
+              type: "postback",
+              title: "No me gusta",
+              payload: "no_me_gusta",
+            },
+          ],
+        });
+      });
+      await sendGenericMessage(sender, cards);
+      await sendTextMessage(sender, 'Estos son los productos con descuentos');
       break;
 
     case "ofertaCategoria.action": //[x] (si o no) Tenemos en oferta. ¿Cuál polera le interesa?
