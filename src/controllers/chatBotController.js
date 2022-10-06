@@ -122,6 +122,10 @@ async function saveUserData(facebookId) {
       name: existeUser.firstName + existeUser.lastName,
       score: 10,
     });
+    visit.save((err, res) => {
+      if (err) return console.log(err);
+      console.log("Se creo una visita: ", res);
+    });
     return;
   }
   let userData = await getUserData(facebookId);
