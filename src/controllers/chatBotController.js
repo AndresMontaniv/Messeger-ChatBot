@@ -679,13 +679,14 @@ function isDefined(obj) {
 }
 
 
+//va a mirar en  imagen
 async function imagenConProducto (autor) {
   const resultado = await Image.aggregate(
     [
       {
         $lookup:
         {
-          from: "images",
+          from: "products",
           localField: "product",
           foreignField: "_id",
           as: "imageProduct"
