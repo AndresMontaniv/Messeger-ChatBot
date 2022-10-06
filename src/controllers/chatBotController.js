@@ -4,7 +4,7 @@ const axios = require('axios');
 const uuid = require("uuid");
 const dialogflow = require('./dialogFlowController');
 const { structProtoToJson } = require("../helpers/structFunctions");
-const { createClient } = require("../controllers/clientController");
+const { createClient, editClient } = require("../controllers/clientController");
 
 //mongodb models
 
@@ -129,6 +129,7 @@ async function saveUserData(facebookId) {
   const clientDoc = await Client.findOne({ facebookId });
 
   if (clientDoc) {
+    await editClient(facebookId, 'hola@gmail.com', _, true);
     return;
   }
   let userData = await getUserData(facebookId);

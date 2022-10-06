@@ -29,11 +29,8 @@ const createClient = async (firstName, lastName, profilePic, facebookId, phone, 
 
 const editClient = async (facebookId, phone, email, isClient = false) => {
     try {
-        const client = new Client({
-            firstName,
-            lastName,
-            facebookId,
-            profilePic,
+
+        const client = await Client.findOneAndUpdate({ facebookId }, {
             phone,
             email,
             isClient
@@ -51,5 +48,6 @@ const editClient = async (facebookId, phone, email, isClient = false) => {
 }
 
 module.exports = {
-    createClient
+    createClient,
+    editClient
 }
