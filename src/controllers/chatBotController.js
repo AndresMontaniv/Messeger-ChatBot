@@ -15,10 +15,9 @@ const Visit = require('../models/visit');
 const Deal = require('../models/deal');
 const Category = require('../models/category');
 const Image = require('../models/image');
-const Order = require('../models/order');
-const Detail = require('../models/detail');
-const Query = require('../models/query');
 const Discount = require('../models/discount');
+
+
 
 
 
@@ -125,10 +124,9 @@ async function receivedMessage(event) {
 }
 
 
+
 async function saveUserData(facebookId) {
-
   const clientDoc = await Client.findOne({ facebookId });
-
   if (clientDoc) {
     let mapa = {};
     if (!clientDoc.phone) {
@@ -147,15 +145,16 @@ async function saveUserData(facebookId) {
   let userData = await getUserData(facebookId);
   if (userData.first_name == null || userData.last_name == null
     || userData.first_name == "" || userData.last_name == "") return;
-  await createClient(
-    userData.first_name,
-    userData.last_name,
-    userData.profile_pic,
+  let client = new Client({
+    firstName: userData.first_name,
+    lastName: userData.last_name,
     facebookId,
-  );
+    profilePic: userData.profile_pic
+  });
 
   await createVisit(facebookId);
 }
+
 
 
 
@@ -479,6 +478,50 @@ function sendQuickReply(recipientId, text, replies, metadata) {
 
 
 
+// Handles messages events
+function handleMessagex(sender_psid, received_message) {
+  let response;
+
+  // Checks if the message contains text
+  if (received_message.text) {
+    // Create the payload for a basic text message, which
+    // will be added to the body of our request to the Send API
+    response = {
+      "text": `Enviaste el mensaje: "${received_message.text}".`
+    }
+  } else if (received_message.attachments) {
+    // Get the URL of the message attachment
+    let attachment_url = received_message.attachments[0].payload.url;
+    response = {
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "generic",
+          "elements": [{
+            "title": "Is this the right picture?",
+            "subtitle": "Tap a button to answer.",
+            "image_url": attachment_url,
+            "buttons": [
+              {
+                "type": "postback",
+                "title": "Yes!",
+                "payload": "yes",
+              },
+              {
+                "type": "postback",
+                "title": "No!",
+                "payload": "no",
+              }
+            ],
+          }]
+        }
+      }
+    }
+  }
+
+  // Send the response message
+  callSendAPI(sender_psid, response);
+}
 
 async function handleMessage(message, sender) {
   console.log('Handle Message==>', message.message);
@@ -600,7 +643,115 @@ function isDefined(obj) {
 }
 
 
-// ? Query Functions
+
+//todos los productos existentes
+async function productosTodos() {
+  ofertasR = await ofertasF(); //oferta disponible
+  ofert = ofertasR[0];
+  var dcto1 = String(ofert.discount) + '%';
+  var dcto = 1 - (ofert.discount / 100);
+  const dataDB = await Product.find(); //todos los productos
+  var productosOf = [];
+
+  for (var i = 0; i < dataDB.length; i++) {
+    prod = dataDB[i];
+    const descuento = await Discount.findOne({ deal: ofert._id, product: prod._id });
+    imagenes = await imagenesF(prod._id);
+    var nameCat = await categoriaNombreF(prod.category);
+    if (descuento) {
+      prodDcto = prod.price * dcto;
+      productosOf.push({
+        "name": prod.name,
+        "description": prod.description,
+        "deal": dcto1,
+        "price": prod.price,
+        "priceDeal": prodDcto,
+        "categoria": nameCat,
+        "image": imagenes,
+      });
+    } else {
+      productosOf.push({
+        "name": prod.name,
+        "description": prod.description,
+        "deal": '0%',
+        "price": prod.price,
+        "priceDeal": prod.price,
+        "categoria": nameCat,
+        "image": imagenes,
+      });
+    }
+  }
+
+  return productosOf;
+}
+
+
+// buscar en la base de datos mongoose las poleras x
+async function productosF() {
+  const dataDB = await Product.find();
+  var productos = [];
+
+  for (var i = 0; i < dataDB.length; i++) {
+    prod = dataDB[i];
+    var nameCat = await categoriaNombreF(prod.category);
+    imagenes = await imagenesF(prod._id);
+    productos.push({
+      "name": prod.name,
+      "description": prod.description,
+      "price": prod.price,
+      "categoria": nameCat,
+      "image": imagenes,
+    });
+  }
+
+  return productos;
+}
+
+//productos de cierta categoria
+async function productosCategoryF(categoryP) {
+  const dataDB = await Product.find().limit(10);
+  return dataDB;
+}
+
+//todas las categorias
+async function categoriasF() {
+  const dataDB = await Category.find();
+  return dataDB;
+}
+
+//categoria especifica
+async function categoriaNombreF(categoriaP) {
+  const dataDB = await Category.find({ _id: categoriaP });
+  //console.log("categoria", dataDB[0]);
+  var cat = dataDB[0];
+  var nameCat = cat.name;
+  return nameCat;
+}
+
+//todas las categorias
+async function categoriasF(nameC) {
+  const dataDB = await Category.find({ name: nameC });
+  return dataDB;
+}
+
+
+async function ofertasF() {
+  const dataDB = await Deal.find().sort({ $natural: -1 }).limit(1);
+  return dataDB;
+}
+
+
+async function imagenesF(id_prod) {
+  const dataDB = await Image.find({ product: id_prod });
+  // let imagenes = '';
+  let imagenes = [];
+  dataDB.forEach((imagen) => {
+    imagenes.push(imagen.url);
+  });
+
+  return imagenes;
+}
+
 
 module.exports = {
   postWebHook,
