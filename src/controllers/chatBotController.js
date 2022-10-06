@@ -201,7 +201,7 @@ async function productosF() {
   
   for(var i = 0; i < dataDB.length; i++){
     prod = dataDB[i];
-    var nameCat = await categoriasEspecificaF(prod.category);
+    nameCat = await categoriaEspecificaF(prod.category);
     imagenes = await imagenesF(prod._id);
       productos.push({
         "name" : prod.name,
@@ -228,8 +228,8 @@ async function categoriasF() {
 }
 
 //categoria especifica
-async function categoriasEspecificaF(categoriaP) {
-  const dataDB = await Category.find({category: categoriaP});
+async function categoriaEspecificaF(categoriaP) {
+  const dataDB = await Category.findOne({_id: categoriaP});
   var cat = dataDB[0];
   return cat.name;
 }
