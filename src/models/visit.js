@@ -20,7 +20,7 @@ const VisitSchema = Schema(
             default: false
         },
         client: {
-            type: mongoose.Schema.Types.ObjectId, ref: 'clients'
+            type: Schema.Types.ObjectId, ref: 'clients'
         },
     }, { timestamps: true }
 );
