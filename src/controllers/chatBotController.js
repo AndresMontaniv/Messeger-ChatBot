@@ -118,38 +118,7 @@ async function receivedMessage(event) {
   }
 }
 
-async function saveUserData(facebookId) {
 
-  const existeUser = await Client.findOne({ facebookId });
-
-  if (existeUser) {
-    console.log('_id  =>', existeUser.id);
-    console.log('uid  =>', existeUser.uid);
-    let visit = new Visit({
-      name: existeUser.firstName + ' ' + existeUser.lastName,
-      score: 10,
-    });
-    visit.save((err, res) => {
-      if (err) return console.log(err);
-      console.log("Se creo una visita: ", res);
-    });
-    return;
-  }
-  let userData = await getUserData(facebookId);
-  if (userData.first_name == null || userData.last_name == null
-    || userData.first_name == "" || userData.last_name == "") return;
-  let image = new Image({
-    name: 'imagen polera basica negra',
-    url: 'https://cdn.shopify.com/s/files/1/0302/2189/3676/products/Negro_540x.jpg?v=1635171871'
-  });
-
-  image.save((err, res) => {
-    if (err) return console.log(err);
-    console.log("Se creo una imgen: ", res);
-  });
-}
-
-/*
 async function saveUserData(facebookId) {
 
   const existeUser = await Client.findOne({ facebookId });
@@ -182,7 +151,6 @@ async function saveUserData(facebookId) {
     console.log("Se creo un cliente: ", res);
   });
 }
-*/
 
 
 
