@@ -37,12 +37,12 @@ const postWebHook = (req, res) => {
     body.entry.forEach(function (entry) {
       // Gets the body of the webhook event
       let webhook_event = entry.messaging[0];
-      console.log(webhook_event);
+      // console.log(webhook_event);
 
 
       // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
-      console.log('Sender PSID: ' + sender_psid);
+      // console.log('Sender PSID: ' + sender_psid);
 
       entry.messaging.forEach(function (messagingEvent) {
         if (messagingEvent.message) {
@@ -143,6 +143,7 @@ async function saveUserData(facebookId) {
 }
 
 async function receivedPostback(event) {
+  console.log('recivedPostBack');
   var senderId = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfPostback = event.timestamp;
@@ -156,13 +157,13 @@ async function receivedPostback(event) {
       break;
   }
 
-  console.log(
-    "Received postback for user %d and page %d with payload '%s' " + "at %d",
-    senderId,
-    recipientID,
-    payload,
-    timeOfPostback
-  );
+  // console.log(
+  //   "Received postback for user %d and page %d with payload '%s' " + "at %d",
+  //   senderId,
+  //   recipientID,
+  //   payload,
+  //   timeOfPostback
+  // );
 }
 
 function handleMessageAttachments(messageAttachments, senderId) {
@@ -200,7 +201,7 @@ async function handleDialogFlowAction(
       let category = parameters.fields.tipoPolera.stringValue.toLowerCase();
       let poleras = await Product.find({ category });
       let cards = [];
-      console.log(poleras);
+      // console.log(poleras);
       poleras.forEach((polera) => {
         cards.push({
           title: polera.name + " $" + polera.price,
@@ -290,6 +291,7 @@ async function sendGenericMessage(recipientId, elements) {
 
 
 async function handleMessages(messages, sender) {
+  console.log('handleMesagesss');
   try {
     let i = 0;
     while (i < messages.length) {
@@ -384,7 +386,7 @@ async function sendTextMessage(recipientId, text) {
       .replace("{first_name}", userData.first_name)
       .replace("{last_name}", userData.last_name);
   }
-  console.log(text);
+  console.log('text nuevo ==> ', text);
   var messageData = {
     recipient: {
       id: recipientId,
@@ -507,7 +509,7 @@ function handleMessagex(sender_psid, received_message) {
 }
 
 async function handleMessage(message, sender) {
-  console.log(message.message);
+  console.log('Handle Message==>', message.message);
   switch (message.message) {
     case "text": //text
       for (const text of message.text.text) {
@@ -565,7 +567,7 @@ function handlePostback(sender_psid, received_postback) {
 
 // Sends response messages via the Send API
 function callSendAPI(messageData) {
-
+  console.log('esto va a enviar a fb==>', messageData);
   // Send the HTTP request to the Messenger Platform
   request({
     uri: "https://graph.facebook.com/v7.0/me/messages",
