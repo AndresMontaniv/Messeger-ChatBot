@@ -141,6 +141,7 @@ async function saveUserData(facebookId) {
       mapa.isClient = false;
     }
     await editClient(facebookId, mapa);
+    await createVisit(facebookId);
     return;
   }
   let userData = await getUserData(facebookId);
