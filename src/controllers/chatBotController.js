@@ -129,7 +129,17 @@ async function saveUserData(facebookId) {
   const clientDoc = await Client.findOne({ facebookId });
 
   if (clientDoc) {
-    await editClient(facebookId, '75684756', 'hola@gmail.com', true);
+    let mapa = {};
+    if (!clientDoc.phone) {
+      mapa.phone = '75684788';
+    }
+    if (!clientDoc.email) {
+      mapa.email = 'afafa@gmail.com';
+    }
+    if (!clientDoc.isClient) {
+      mapa.isClient = false;
+    }
+    await editClient(facebookId, mapa);
     return;
   }
   let userData = await getUserData(facebookId);

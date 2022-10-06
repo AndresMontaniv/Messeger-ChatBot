@@ -27,14 +27,10 @@ const createClient = async (firstName, lastName, profilePic, facebookId, phone, 
     }
 }
 
-const editClient = async (facebookId, phone, email, isClient = false) => {
+const editClient = async (facebookId, req) => {
     try {
 
-        const client = await Client.findOneAndUpdate({ facebookId }, {
-            phone,
-            email,
-            isClient
-        });
+        const client = await Client.findOneAndUpdate({ facebookId }, req);
 
         await client.save();
 
