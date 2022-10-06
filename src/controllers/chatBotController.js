@@ -161,7 +161,7 @@ async function saveUserData(facebookId) {
 
 
 async function categoriasF() {
-  const dataDB = await category.find();
+  const dataDB = await Category.find();
   return dataDB;
 }
 
