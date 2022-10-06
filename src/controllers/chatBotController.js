@@ -189,7 +189,7 @@ async function handleDialogFlowAction(
   parameters
 ) {
   switch (action) {
-    case "input.welcome":
+    case "input.welcomemes":
       console.log('esta saludando');
       let welcomeMsg = messages;
       console.log(welcomeMsg);
