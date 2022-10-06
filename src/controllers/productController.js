@@ -9,7 +9,7 @@ const createProduct = async (req, res = response) => {
         if (existProduct) {
             return res.status(400).json({
                 ok: false,
-                message: 'Ese nombre ya esta ocupado'
+                message: 'Ese nombre ya esta ocupado.'
             });
         }
         const product = new Product(req.body);
