@@ -155,14 +155,36 @@ async function saveUserData(facebookId) {
   });
   */
   console.log("***********************************viendooo************************************: ");
-  resultado = await categoriasF();
+  resultado = await ofertasF();
   console.log("*************************RESULTADO***************************: ",  resultado);
+
+  console.log("***********************************viendooo************************************: ");
+  resultado2 = await imagenesF('633ee9360af63182752464ea');
+  console.log("*************************RESULTADO***************************: ",  resultado2);
 }
 
 
 async function categoriasF() {
   const dataDB = await Category.find();
   return dataDB;
+}
+
+
+async function ofertasF() {
+  const dataDB = await Deal.find().sort({$natural:-1}).limit(1);
+  return dataDB;
+}
+
+
+async function imagenesF(id_prod) {
+  const dataDB = await Image.find( {product: id_prod});
+ // let imagenes = '';
+  let imagenes = [];
+  dataDB.forEach((imagen) => {
+      imagenes.push({ url: imagen.url, is_reusable: true });
+  });
+
+  return imagenes;
 }
 
 
