@@ -231,10 +231,13 @@ async function handleDialogFlowAction(
 }
 
 async function handleMessage(message, sender) {
+  console.log('handelMessage');
   switch (message.message) {
     case "text": //text
       for (const text of message.text.text) {
+        console.log(text);
         if (text !== "") {
+          console.log('entro==> ', text);
           await sendTextMessage(sender, text);
         }
       }
