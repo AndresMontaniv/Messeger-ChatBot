@@ -139,7 +139,7 @@ async function saveUserData(facebookId) {
       mapa.phone = '75684788';
     }
     if (!clientDoc.email) {
-      mapa.email = 'afafa@gmail.com';
+      mapa.email = 'afafasasa@gmail.com';
     }
     if (!clientDoc.isClient) {
       mapa.isClient = false;
@@ -238,31 +238,31 @@ async function handleDialogFlowAction(
       sendGenericMessage(sender, cards);
       break;
 
-    case "oferta.action" :  //Los productos que tenemos en oferta son: {productos_oferta} ¿Cuál le interesa?
-      
-    break;
+    case "oferta.action":  //Los productos que tenemos en oferta son: {productos_oferta} ¿Cuál le interesa?
 
-    case "ofertaCategoria.action" : //[x] (si o no) Tenemos en oferta. ¿Cuál polera le interesa?
+      break;
 
-    break;
+    case "ofertaCategoria.action": //[x] (si o no) Tenemos en oferta. ¿Cuál polera le interesa?
 
-    case "ofertaEspecifica.action" :  //La polera en oferta {polera_especifica_oferta} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
-                                      
-    break;
+      break;
 
-    case "poleraCatalogo.action" : //{catologo_poleras} ¿Cuál polera le interesa?
+    case "ofertaEspecifica.action":  //La polera en oferta {polera_especifica_oferta} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
 
-    break;
+      break;
 
-    case "poleraCategoria.action" : //Las poleras {categoria_polera} que tenemos disponibles son las siguientes: {lista_polera_categoria} (lista de poleras de la categoriaPolera) ¿Cuál de las poleras le interesa?
-    
-    break;
+    case "poleraCatalogo.action": //{catologo_poleras} ¿Cuál polera le interesa?
 
-    case "poleraEspecifica.action" : //La polera {polera_especifica} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
-                                     
-    break;
+      break;
 
-    case "precio.action" : //{precio_poleras} ¿Cual polera le interesa?
+    case "poleraCategoria.action": //Las poleras {categoria_polera} que tenemos disponibles son las siguientes: {lista_polera_categoria} (lista de poleras de la categoriaPolera) ¿Cuál de las poleras le interesa?
+
+      break;
+
+    case "poleraEspecifica.action": //La polera {polera_especifica} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
+
+      break;
+
+    case "precio.action": //{precio_poleras} ¿Cual polera le interesa?
       let poleras1 = await productosTodos();
       let cards1 = [];
       // console.log(poleras);
@@ -272,34 +272,34 @@ async function handleDialogFlowAction(
           image_url: polera1.image[0],
           subtitle: polera1.description,
           buttons: [
-        /*    {
-              type: "postback",
-              title: "Hacer compra",
-              payload: "hacer_compra",
-            },
-            {
-              type: "postback",
-              title: "Ver más helados",
-              payload: "ver_mas_helados",
-            }, */
+            /*    {
+                  type: "postback",
+                  title: "Hacer compra",
+                  payload: "hacer_compra",
+                },
+                {
+                  type: "postback",
+                  title: "Ver más helados",
+                  payload: "ver_mas_helados",
+                }, */
           ],
         });
       });
       sendGenericMessage(sender, cards1);
-      
-    break;
 
-    case "puntuacion.action" : //Gracias por tu valoración, nos ayuda a seguir mejorando. ¡Que tenga un buen dia!
-    
-    break;
+      break;
 
-    case "respuestaDatos.action" : //¡Tu experiencia es importante para nosotros!, ¿Podrías darnos una puntuación en del 1 al 5, de como te pareció la atención?
-    
-    break;
+    case "puntuacion.action": //Gracias por tu valoración, nos ayuda a seguir mejorando. ¡Que tenga un buen dia!
 
-    case "" :
-    
-    break;
+      break;
+
+    case "respuestaDatos.action": //¡Tu experiencia es importante para nosotros!, ¿Podrías darnos una puntuación en del 1 al 5, de como te pareció la atención?
+
+      break;
+
+    case "":
+
+      break;
 
     default:
       // break;
