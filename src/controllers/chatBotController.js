@@ -130,7 +130,7 @@ async function saveUserData(facebookId) {
   const clientDoc = await Client.findOne({ facebookId });
   let poloCat = await Category.findOne({ name: 'POLO' });
   let allP = await getProducts(facebookId, { category: poloCat });
-  let allPF = await getProductsFromDeal({ category: poloCat });
+  let allPF = await getProductsFromDeal(facebookId, { category: poloCat });
   console.log('allp==>  ', allP);
   console.log('allpf==>  ', allPF);
   if (clientDoc) {
@@ -646,7 +646,6 @@ function isDefined(obj) {
 //todos los productos existentes
 async function getProducts(facebookId, req = {}) {
   let visit = await getCurrentVisit(facebookId);
-  console.log('cvisit   ===> ', visit);
   let ofertasR = await ofertasF();
   let ofert = ofertasR[0];
   var dcto1 = String(ofert.discount) + '%';
@@ -696,7 +695,8 @@ async function getProducts(facebookId, req = {}) {
   return productosOf;
 }
 
-async function getProductsFromDeal(req = {}) {
+async function getProductsFromDeal(facebookId, req = {}) {
+  let visit = await getCurrentVisit(facebookId);
   let ofertasR = await ofertasF();
   let ofert = ofertasR[0];
   var dcto1 = String(ofert.discount) + '%';
@@ -709,6 +709,15 @@ async function getProductsFromDeal(req = {}) {
     const descuento = await Discount.findOne({ deal: ofert._id, product: prod._id });
     let imagenes = await imagenesF(prod._id);
     var nameCat = await categoriaNombreF(prod.category);
+    if (visit) {
+      let query = new Query({ visit, product: prod._id });
+      try {
+        await query.save();
+        console.log('new query', query);
+      } catch (err) {
+        console.log(err);
+      }
+    }
     if (descuento) {
       let prodDcto = prod.price * dcto;
       productosOf.push({
