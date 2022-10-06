@@ -123,154 +123,7 @@ async function receivedMessage(event) {
 }
 
 
-async function saveUserData(facebookId) {
 
-  const existeUser = await Client.findOne({ facebookId });
-  
-  if (existeUser) {
-    console.log('id  =>', existeUser.id);
-    let visit = new Visit({
-      name: existeUser.firstName + ' ' + existeUser.lastName,
-      score: 10,
-      client: existeUser,
-    });
-    visit.save((err, res) => {
-      if (err) return console.log(err);
-      console.log("Se creo una visita: ", res);
-    });
-    return;
-  }
-  let userData = await getUserData(facebookId);
-  if (userData.first_name == null || userData.last_name == null
-    || userData.first_name == "" || userData.last_name == "") return;
- /* let client = new Client({
-    firstName: userData.first_name,
-    lastName: userData.last_name,
-    facebookId,
-    profilePic: userData.profile_pic,
-  });
-
-  client.save((err, res) => {
-    if (err) return console.log(err);
-    console.log("Se creo un cliente: ", res);
-  });
-  */
-  console.log("***********************************viendooo************************************: ");
-  resultado = await productosTodos();
-  console.log("*************************RESULTADO***************************: ",  resultado);
-}
-
-
-//todos los oriductos en oferta
-async function productosTodos(){
-  ofertasR = await ofertasF(); //oferta disponible
-  ofert = ofertasR[0];
-  var dcto1 = String(ofert.discount) + '%';
-  var dcto = 1 - (ofert.discount / 100) ;
-  const dataDB = await Product.find(); //todos los productos
-  var productosOf = [];
-  
-  for(var i = 0; i < dataDB.length; i++){
-    prod = dataDB[i];
-    const descuento = await Discount.findOne({deal: ofert._id, product: prod._id});
-    imagenes = await imagenesF(prod._id);
-    var nameCat = await categoriaNombreF(prod.category);
-    if(descuento){
-      prodDcto = prod.price * dcto; 
-      productosOf.push({
-        "name" : prod.name,
-        "description" : prod.description,
-        "deal": dcto1,
-        "price" : prod.price,
-        "priceDeal" : prodDcto,
-        "categoria" : nameCat,
-        "image" : imagenes,
-      });
-    }else{
-      productosOf.push({
-        "name" : prod.name,
-        "description" : prod.description,
-        "deal": '0%',
-        "price" : prod.price,
-        "priceDeal" : prod.price,
-        "categoria" : nameCat,
-        "image" : imagenes,
-      });
-    }
-  }
-
-  return productosOf;
-}
-
-
-// buscar en la base de datos mongoose las poleras
-async function productosF() {
-  const dataDB = await Product.find();
-  var productos = [];
-  
-  for(var i = 0; i < dataDB.length; i++){
-    prod = dataDB[i];
-    var nameCat = await categoriaNombreF(prod.category);
-    imagenes = await imagenesF(prod._id);
-      productos.push({
-        "name" : prod.name,
-        "description" : prod.description,
-        "price" : prod.price,
-        "categoria" : nameCat,
-        "image" : imagenes,
-      });
-  }
-
-  return productos;
-}
-
-//productos de cierta categoria
-async function productosCategoryF(categoryP) {
-  const dataDB = await Product.find().limit(10);
-  return dataDB;
-}
-
-//todas las categorias
-async function categoriasF() {
-  const dataDB = await Category.find();
-  return dataDB;
-}
-
-//categoria especifica
-async function categoriaNombreF(categoriaP) {
-  const dataDB = await Category.find({_id: categoriaP});
-  //console.log("categoria", dataDB[0]);
-  var cat = dataDB[0];
-  var nameCat = cat.name;
-  return nameCat;
-}
-
-//todas las categorias
-async function categoriasF(nameC) {
-  const dataDB = await Category.find({name: nameC});
-  return dataDB;
-}
-
-
-async function ofertasF() {
-  const dataDB = await Deal.find().sort({$natural:-1}).limit(1);
-  return dataDB;
-}
-
-
-async function imagenesF(id_prod) {
-  const dataDB = await Image.find( {product: id_prod});
- // let imagenes = '';
-  let imagenes = [];
-  dataDB.forEach((imagen) => {
-      imagenes.push(imagen.url);
-  });
-
-  return imagenes;
-}
-
-
-/*
 async function saveUserData(facebookId) {
 
   const existeUser = await Client.findOne({ facebookId });
@@ -303,8 +156,6 @@ async function saveUserData(facebookId) {
     console.log("Se creo un cliente: ", res);
   });
 }
-*/
-
 
 
 
@@ -792,26 +643,113 @@ function isDefined(obj) {
 }
 
 
-//va a mirar en  imagen
-async function imagenConProducto (autor) {
-  const resultado = await Image.aggregate(
-    [
-      {
-        $lookup:
-        {
-          from: "products",
-          localField: "product",
-          foreignField: "_id",
-          as: "imageProduct"
-        }
-      },
-      { $unwind: "$imageProduct"},
-    //  {$match : {name: }}
-    ]
-  )
 
- // console.log("*************************RESULTADO***************************: ",  resultado);
-  return resultado;
+//todos los productos existentes
+async function productosTodos(){
+  ofertasR = await ofertasF(); //oferta disponible
+  ofert = ofertasR[0];
+  var dcto1 = String(ofert.discount) + '%';
+  var dcto = 1 - (ofert.discount / 100) ;
+  const dataDB = await Product.find(); //todos los productos
+  var productosOf = [];
+  
+  for(var i = 0; i < dataDB.length; i++){
+    prod = dataDB[i];
+    const descuento = await Discount.findOne({deal: ofert._id, product: prod._id});
+    imagenes = await imagenesF(prod._id);
+    var nameCat = await categoriaNombreF(prod.category);
+    if(descuento){
+      prodDcto = prod.price * dcto; 
+      productosOf.push({
+        "name" : prod.name,
+        "description" : prod.description,
+        "deal": dcto1,
+        "price" : prod.price,
+        "priceDeal" : prodDcto,
+        "categoria" : nameCat,
+        "image" : imagenes,
+      });
+    }else{
+      productosOf.push({
+        "name" : prod.name,
+        "description" : prod.description,
+        "deal": '0%',
+        "price" : prod.price,
+        "priceDeal" : prod.price,
+        "categoria" : nameCat,
+        "image" : imagenes,
+      });
+    }
+  }
+
+  return productosOf;
+}
+
+
+// buscar en la base de datos mongoose las poleras
+async function productosF() {
+  const dataDB = await Product.find();
+  var productos = [];
+  
+  for(var i = 0; i < dataDB.length; i++){
+    prod = dataDB[i];
+    var nameCat = await categoriaNombreF(prod.category);
+    imagenes = await imagenesF(prod._id);
+      productos.push({
+        "name" : prod.name,
+        "description" : prod.description,
+        "price" : prod.price,
+        "categoria" : nameCat,
+        "image" : imagenes,
+      });
+  }
+
+  return productos;
+}
+
+//productos de cierta categoria
+async function productosCategoryF(categoryP) {
+  const dataDB = await Product.find().limit(10);
+  return dataDB;
+}
+
+//todas las categorias
+async function categoriasF() {
+  const dataDB = await Category.find();
+  return dataDB;
+}
+
+//categoria especifica
+async function categoriaNombreF(categoriaP) {
+  const dataDB = await Category.find({_id: categoriaP});
+  //console.log("categoria", dataDB[0]);
+  var cat = dataDB[0];
+  var nameCat = cat.name;
+  return nameCat;
+}
+
+//todas las categorias
+async function categoriasF(nameC) {
+  const dataDB = await Category.find({name: nameC});
+  return dataDB;
+}
+
+
+async function ofertasF() {
+  const dataDB = await Deal.find().sort({$natural:-1}).limit(1);
+  return dataDB;
+}
+
+
+async function imagenesF(id_prod) {
+  const dataDB = await Image.find( {product: id_prod});
+ // let imagenes = '';
+  let imagenes = [];
+  dataDB.forEach((imagen) => {
+      imagenes.push(imagen.url);
+  });
+
+  return imagenes;
 }
 
 
