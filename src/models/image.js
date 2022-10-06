@@ -10,6 +10,9 @@ const ImageSchema = Schema(
             type: String,
             required: true,
         },
+        product: {
+            type: Schema.Types.ObjectId, ref: 'products'
+        },
 
     }, { timestamps: true }
 );
