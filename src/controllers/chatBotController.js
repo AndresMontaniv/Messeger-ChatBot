@@ -210,7 +210,35 @@ async function handleDialogFlowAction(
       break;
 
     case "poleraCategoria.action": //Las poleras {categoria_polera} que tenemos disponibles son las siguientes: {lista_polera_categoria} (lista de poleras de la categoriaPolera) ¿Cuál de las poleras le interesa?
-
+      console.log(parameters.fields);
+      let params = parameters.fields.categoriapolera.stringValue.toUpperCase();
+      let category = await Category.findOne({ name: params });
+      let mapa = {};
+      if (category) {
+        mapa.category = category;
+      }
+      let poleras = await getProducts(sender, mapa);
+      let cards = [];
+      poleras.forEach((polera) => {
+        cards.push({
+          title: polera.name + "  $" + polera.priceDeal + "(Descuento " + polera.deal + " )",
+          image_url: polera.image[0],
+          subtitle: polera.categoria,
+          buttons: [
+            {
+              type: "postback",
+              title: "Me gusta",
+              payload: "me_gusta",
+            },
+            {
+              type: "postback",
+              title: "No me gusta",
+              payload: "no_me_gusta",
+            },
+          ],
+        });
+      });
+      sendGenericMessage(sender, cards);
       break;
 
     case "poleraEspecifica.action": //La polera {polera_especifica} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
@@ -218,29 +246,7 @@ async function handleDialogFlowAction(
       break;
 
     case "precio.action": //{precio_poleras} ¿Cual polera le interesa?
-      let poleras1 = await productosTodos();
-      let cards1 = [];
-      // console.log(poleras);
-      poleras1.forEach((polera1) => {
-        cards1.push({
-          title: polera1.name + " $" + polera1.price,
-          image_url: polera1.image[0],
-          subtitle: polera1.description,
-          buttons: [
-            /*    {
-                  type: "postback",
-                  title: "Hacer compra",
-                  payload: "hacer_compra",
-                },
-                {
-                  type: "postback",
-                  title: "Ver más helados",
-                  payload: "ver_mas_helados",
-                }, */
-          ],
-        });
-      });
-      sendGenericMessage(sender, cards1);
+
 
       break;
 
