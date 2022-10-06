@@ -238,6 +238,70 @@ async function handleDialogFlowAction(
       });
       sendGenericMessage(sender, cards);
       break;
+
+    case "oferta.action" :  //Los productos que tenemos en oferta son: {productos_oferta} ¿Cuál le interesa?
+      
+    break;
+
+    case "ofertaCategoria.action" : //[x] (si o no) Tenemos en oferta. ¿Cuál polera le interesa?
+
+    break;
+
+    case "ofertaEspecifica.action" :  //La polera en oferta {polera_especifica_oferta} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
+                                      
+    break;
+
+    case "poleraCatalogo.action" : //{catologo_poleras} ¿Cuál polera le interesa?
+
+    break;
+
+    case "poleraCategoria.action" : //Las poleras {categoria_polera} que tenemos disponibles son las siguientes: {lista_polera_categoria} (lista de poleras de la categoriaPolera) ¿Cuál de las poleras le interesa?
+    
+    break;
+
+    case "poleraEspecifica.action" : //La polera {polera_especifica} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
+                                     
+    break;
+
+    case "precio.action" : //{precio_poleras} ¿Cual polera le interesa?
+      let poleras1 = await productosTodos();
+      let cards1 = [];
+      // console.log(poleras);
+      poleras1.forEach((polera1) => {
+        cards1.push({
+          title: polera1.name + " $" + polera1.price,
+          image_url: polera1.img[0],
+          subtitle: polera1.description,
+          buttons: [
+        /*    {
+              type: "postback",
+              title: "Hacer compra",
+              payload: "hacer_compra",
+            },
+            {
+              type: "postback",
+              title: "Ver más helados",
+              payload: "ver_mas_helados",
+            }, */
+          ],
+        });
+      });
+      sendGenericMessage(sender, cards1);
+      
+    break;
+
+    case "puntuacion.action" : //Gracias por tu valoración, nos ayuda a seguir mejorando. ¡Que tenga un buen dia!
+    
+    break;
+
+    case "respuestaDatos.action" : //¡Tu experiencia es importante para nosotros!, ¿Podrías darnos una puntuación en del 1 al 5, de como te pareció la atención?
+    
+    break;
+
+    case "" :
+    
+    break;
+
     default:
       // break;
       //unhandled action, just send back the text
