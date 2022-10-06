@@ -220,8 +220,9 @@ async function handleDialogFlowAction(
       let poleras = await getProducts(sender, mapa);
       let cards = [];
       poleras.forEach((polera) => {
+        let disc = polera.deal != '0%' ? "(Descuento " + polera.deal + " )" : "";
         cards.push({
-          title: polera.name + "  $" + polera.priceDeal + "(Descuento " + polera.deal + " )",
+          title: polera.name + "  $" + polera.priceDeal + disc,
           image_url: polera.image[0],
           subtitle: polera.categoria,
           buttons: [
