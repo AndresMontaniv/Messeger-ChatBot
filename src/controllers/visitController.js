@@ -46,7 +46,7 @@ const editVisit = async (facebookId, req) => {
             await currentVisit.save();
             return;
         }
-
+        console.log('visit', currentVisit);
         return currentVisit;
 
     } catch (error) {
