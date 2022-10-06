@@ -42,11 +42,12 @@ const editVisit = async (facebookId, req) => {
                 isClosed: false
             }, req
         );
+        console.log('visit', currentVisit);
         if (currentVisit) {
             await currentVisit.save();
             return;
         }
-        console.log('visit', currentVisit);
+
         return currentVisit;
 
     } catch (error) {

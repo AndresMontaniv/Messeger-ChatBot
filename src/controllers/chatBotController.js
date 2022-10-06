@@ -312,6 +312,7 @@ async function handleDialogFlowAction(
     case "puntuacion.action": //Gracias por tu valoración, nos ayuda a seguir mejorando. ¡Que tenga un buen dia!
       var score = parameters.fields.puntuacion.stringValue;
       await editVisit(sender, { score, isClosed: true });
+      handleMessages(messages, sender);
       break;
 
     case "respuestaDatos.action": //¡Tu experiencia es importante para nosotros!, ¿Podrías darnos una puntuación en del 1 al 5, de como te pareció la atención?
