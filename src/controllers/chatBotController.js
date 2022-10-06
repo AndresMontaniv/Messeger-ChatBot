@@ -434,7 +434,7 @@ async function sendCategories(recipientId) {
   let categories = await Category.find();
   let text = "";
   categories.forEach(element => {
-    text += element + "\n";
+    text += element.name + "\n";
   });
   text += " ¿Qué tipo de polera le interesa? ";
   var messageData = {
