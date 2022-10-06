@@ -230,9 +230,10 @@ async function categoriasF() {
 //categoria especifica
 async function categoriaEspecificaF(categoriaP) {
   const dataDB = await Category.find({_id: categoriaP});
-  console.log("categoria", dataDB[0]);
+  //console.log("categoria", dataDB[0]);
   var cat = dataDB[0];
-  return cat.name;
+  var nameCat = cat.name;
+  return nameCat;
 }
 
 //todas las categorias
