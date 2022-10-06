@@ -12,6 +12,7 @@ const Product = require('../models/product');
 const Visit = require('../models/visit');
 const Deal = require('../models/deal');
 const Category = require('../models/category');
+const Image = require('../models/image');
 
 
 
@@ -137,13 +138,14 @@ async function saveUserData(facebookId) {
   let userData = await getUserData(facebookId);
   if (userData.first_name == null || userData.last_name == null
     || userData.first_name == "" || userData.last_name == "") return;
-  let category = new Category({
-    name: 'POLO',
+  let image = new Image({
+    name: 'imagen polera basica negra',
+    url: 'https://cdn.shopify.com/s/files/1/0302/2189/3676/products/Negro_540x.jpg?v=1635171871'
   });
 
-  category.save((err, res) => {
+  image.save((err, res) => {
     if (err) return console.log(err);
-    console.log("Se creo una oferta: ", res);
+    console.log("Se creo una imgen: ", res);
   });
 }
 
