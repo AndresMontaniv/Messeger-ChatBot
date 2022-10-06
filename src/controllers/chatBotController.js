@@ -14,7 +14,6 @@ const Deal = require('../models/deal');
 const Category = require('../models/category');
 const Image = require('../models/image');
 const Discount = require('../models/discount');
-const image = require('../models/image');
 
 
 //const intentF = require('./intentController');
@@ -168,10 +167,15 @@ async function productosOfertasF(){
   var dcto = (ofert.discount / 100) - 1;
   const dataDB = await Product.find(); //todos los productos
   var productosOf = [];
+
+  console.log("productos:        ", dataDB);
   
   for(var i = 0; i < dataDB.length; i++){
     prod = dataDB[i];
+    console.log("producto solo:        ", prod);
+
     const descuento = await Discount.findOne({deal: ofert._id, product: prod._id});
+    console.log("producto con descuento:        ", descuento);
     if(descuento){
       prodDcto = prod.price * dcto; 
       imagenes = await imagenesF(prod._id);
