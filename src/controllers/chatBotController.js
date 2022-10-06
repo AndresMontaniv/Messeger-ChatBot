@@ -5,7 +5,7 @@ const uuid = require("uuid");
 const dialogflow = require('./dialogFlowController');
 const { structProtoToJson } = require("../helpers/structFunctions");
 const { createClient, editClient } = require("../controllers/clientController");
-const { createVisit, editVisit } = require("../controllers/visitController");
+const { createVisit, editVisit, getCurrentVisit } = require("../controllers/visitController");
 
 //mongodb models
 
@@ -16,6 +16,7 @@ const Deal = require('../models/deal');
 const Category = require('../models/category');
 const Image = require('../models/image');
 const Discount = require('../models/discount');
+const { Query } = require('mongoose');
 
 
 
@@ -643,7 +644,8 @@ function isDefined(obj) {
 
 
 //todos los productos existentes
-async function getProducts(req = {}) {
+async function getProducts(facebookId, req = {}) {
+  let visit = await getCurrentVisit(facebookId);
   let ofertasR = await ofertasF();
   let ofert = ofertasR[0];
   var dcto1 = String(ofert.discount) + '%';
@@ -656,6 +658,12 @@ async function getProducts(req = {}) {
     const descuento = await Discount.findOne({ deal: ofert._id, product: prod._id });
     let imagenes = await imagenesF(prod._id);
     var nameCat = await categoriaNombreF(prod.category);
+    let query = new Query({ visit, product: prod });
+    try {
+      await query.save();
+    } catch (err) {
+      console.log(err);
+    }
     if (descuento) {
       let prodDcto = prod.price * dcto;
       productosOf.push({

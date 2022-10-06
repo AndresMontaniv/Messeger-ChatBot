@@ -47,7 +47,27 @@ const editVisit = async (facebookId, req) => {
             return;
         }
 
-        return client;
+        return currentVisit;
+
+    } catch (error) {
+        console.log(error);
+        return;
+    }
+
+}
+
+const getCurrentVisit = async (facebookId) => {
+    try {
+        const client = await Client.findOne({ facebookId });
+        if (!client) {
+            return;
+        }
+        const currentVisit = await Visit.findOne({
+            client: client,
+            isClosed: false
+        });
+
+        return currentVisit;
 
     } catch (error) {
         console.log(error);
@@ -58,5 +78,6 @@ const editVisit = async (facebookId, req) => {
 
 module.exports = {
     createVisit,
-    editVisit
+    editVisit,
+    getCurrentVisit
 }
