@@ -176,6 +176,7 @@ async function productosOfertasF(){
 
     const descuento = await Discount.findOne({deal: ofert._id, product: prod._id});
     console.log("producto con descuento:        ", descuento);
+    
     if(descuento){
       prodDcto = prod.price * dcto; 
       imagenes = await imagenesF(prod._id);
