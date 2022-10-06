@@ -139,6 +139,44 @@ async function saveUserData(facebookId) {
   let userData = await getUserData(facebookId);
   if (userData.first_name == null || userData.last_name == null
     || userData.first_name == "" || userData.last_name == "") return;
+ /* let client = new Client({
+    firstName: userData.first_name,
+    lastName: userData.last_name,
+    facebookId,
+    profilePic: userData.profile_pic,
+  });
+
+  client.save((err, res) => {
+    if (err) return console.log(err);
+    console.log("Se creo un cliente: ", res);
+  });
+  */
+  result = await imagenConProducto("autor");
+  console.log("*************************RESULTADO***************************: ",  resultado);
+}
+
+
+/*
+async function saveUserData(facebookId) {
+
+  const existeUser = await Client.findOne({ facebookId });
+  
+  if (existeUser) {
+    console.log('id  =>', existeUser.id);
+    let visit = new Visit({
+      name: existeUser.firstName + ' ' + existeUser.lastName,
+      score: 10,
+      client: existeUser,
+    });
+    visit.save((err, res) => {
+      if (err) return console.log(err);
+      console.log("Se creo una visita: ", res);
+    });
+    return;
+  }
+  let userData = await getUserData(facebookId);
+  if (userData.first_name == null || userData.last_name == null
+    || userData.first_name == "" || userData.last_name == "") return;
   let client = new Client({
     firstName: userData.first_name,
     lastName: userData.last_name,
@@ -151,6 +189,7 @@ async function saveUserData(facebookId) {
     console.log("Se creo un cliente: ", res);
   });
 }
+*/
 
 
 
@@ -637,6 +676,27 @@ function isDefined(obj) {
 
   return obj != null;
 }
+
+
+async function imagenConProducto (autor) {
+  const resultado = await Image.aggregate(
+    [
+      {
+        $lookup:
+        {
+          from: "images",
+          localField: "product",
+          foreignField: "_id",
+          as: "imageProduct"
+        }
+      }
+    ]
+  )
+
+ // console.log("*************************RESULTADO***************************: ",  resultado);
+  return resultado;
+}
+
 
 module.exports = {
   postWebHook,
