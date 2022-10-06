@@ -137,17 +137,11 @@ async function saveUserData(facebookId) {
   if (userData.first_name == null || userData.last_name == null
     || userData.first_name == "" || userData.last_name == "") return;
   let deal = new Deal({
-    name: 'Promocion octubre1',
-    from: new Date(2022,12,1),
-    to: new Date(2022,12,31),
+    name: 'Promocion Noviembre',
+    from: new Date("2022/11/01 00:00:00"),
+    to: new Date("2022/11/30 00:00:00"),
     discount: 20,
-   // facebookId,
-   // profilePic: userData.profile_pic,
   });
-
-  console.log("print 1: ", deal.from);
-  let fecha = new Date(2022, 12, 1);
-  console.log("Print 2: ", fecha);
 
   deal.save((err, res) => {
     if (err) return console.log(err);
