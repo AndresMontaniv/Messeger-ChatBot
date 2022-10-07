@@ -17,7 +17,6 @@ const createVisit = async (facebookId) => {
         );
         if (currentVisit) {
             await currentVisit.save();
-            return;
         }
         const visit = new Visit({ client: client.id });
 
