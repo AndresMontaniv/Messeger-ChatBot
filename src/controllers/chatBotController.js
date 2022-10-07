@@ -301,26 +301,21 @@ async function handleDialogFlowAction(
       await sendGenericMessage(sender, card1);
       await sendTextMessage(sender, '¿Te gustaría comprar este producto?');
       break;
-
-
-
-
+      
       async function getProductsEsp(facebookId, colorP, tallaP, catName) {
-        let busq = '/';
+        var busq = '';
         if(colorP && tallaP){
-          busq = colorP + ' talla ' + tallaP + '/i';
+          busq = colorP + ' talla ' + tallaP ;
         }else{
           if (colorP){
-            busq = colorP + '/i';
+            busq = colorP;
           }
           if(tallaP){
-            busq = tallaP + '/i';
+            busq = tallaP;
           }
         }
-      //  `On easter we decorted ${eggCount}`;
-     //   let busqueda = /rojo talla M/
+        var busq1 = ` /${prueba}/ `
 
-  //      let busq = colorP + '|' + tallaP;
         let visit1 = await getCurrentVisit(facebookId);
         let categoriaPE = await Category.find({name: catName}).limit(1);
         let ofertasR1 = await ofertasF();
@@ -328,13 +323,11 @@ async function handleDialogFlowAction(
         var dcto12 = String(ofert1.discount) + '%';
         var dcto1 = 1 - (ofert1.discount / 100);
         let categoriaPEE = categoriaPE[0];
-        console.log("*******************************busqueda********************: ", busq);
+        console.log("*******************************busqueda********************: ", busq1);
         console.log("*******************************color********************: ", colorP);
         console.log("*******************************talla********************: ", tallaP);
-  //      console.log("*******************************busqueda********************: ", busqueda);
-      //  let catID = categoriaPEE._id;
-       // {$text:{$search: 'ficct | M' }, price: '633eda6329eaf21db88320e5'}
-        const dataDB = await Product.find({category:categoriaPEE._id, $text:{$search: busq}}); //db.content.find({$text:{$search:"dog"}})
+
+        const dataDB = await Product.find({category:categoriaPEE._id, $text:{$search: `/${prueba}/`}}); //db.content.find({$text:{$search:"dog"}})
         var productosOf = [];
         console.log("***************************************************: , productos");
         console.log(dataDB);
