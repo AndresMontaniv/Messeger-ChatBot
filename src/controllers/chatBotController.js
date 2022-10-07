@@ -264,33 +264,7 @@ async function handleDialogFlowAction(
     break;
 
     case "precio.action" : //{precio_poleras} ¿Cual polera le interesa?
-  //  let category = parameters.fields.tipoPolera.stringValue.toLowerCase();
-    let poleras1 = await productosTodos();
-    let cards1 = [];
-    // console.log(poleras);
-    poleras1.forEach((polera1) => {
-      console.log("****************************************: ", polera1);
-      console.log("****************************************: ", polera1.name);
-     /* cards.push({
-        title: polera.name + " $" + polera.price,
-        image_url: polera.img,
-        subtitle: polera.description,
-        buttons: [
-          {
-            type: "postback",
-            title: "Hacer compra",
-            payload: "hacer_compra",
-          },
-          {
-            type: "postback",
-            title: "Ver más helados",
-            payload: "ver_mas_helados",
-          },
-        ],
-      });
-      */
-    });
-    sendGenericMessage(sender, cards);
+
     break;
 
     case "puntuacion.action" : //Gracias por tu valoración, nos ayuda a seguir mejorando. ¡Que tenga un buen dia!
