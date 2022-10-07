@@ -327,7 +327,7 @@ async function handleDialogFlowAction(
         console.log("*******************************color********************: ", colorP);
         console.log("*******************************talla********************: ", tallaP);
 
-        const dataDB = await Product.find({category:categoriaPEE._id, $text:{$search: busq1}}); //db.content.find({$text:{$search:"dog"}})
+        const dataDB = await Product.find({category:categoriaPEE._id, $text:{$search: ` /${busq}/ `}}); //db.content.find({$text:{$search:"dog"}})
         var productosOf = [];
         console.log("***************************************************: , productos");
         console.log(dataDB);
