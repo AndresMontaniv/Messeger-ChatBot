@@ -314,9 +314,10 @@ async function handleDialogFlowAction(
         var dcto1 = 1 - (ofert1.discount / 100);
         let categoriaPE = await Category.find({name: catP}).limit(1);
         let categoriaPEE = categoriaPE[0];
-        let catID = categoriaPEE._id;
+        console.log("*****************************************************: ", categoriaPEE)
+      //  let catID = categoriaPEE._id;
        // {$text:{$search: 'ficct | M' }, price: '633eda6329eaf21db88320e5'}
-        const dataDB = await Product.find({category:catID, $text:{$search: busq}}); //db.content.find({$text:{$search:"dog"}})
+        const dataDB = await Product.find({category:categoriaPEE, $text:{$search: busq}}); //db.content.find({$text:{$search:"dog"}})
         var productosOf = [];
       
         for (var i = 0; i < dataDB.length; i++) {
