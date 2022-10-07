@@ -17,6 +17,7 @@ const createVisit = async (facebookId) => {
         );
         if (currentVisit) {
             await currentVisit.save();
+            return;
         }
         const visit = new Visit({ client: client.id });
 
@@ -42,7 +43,6 @@ const editVisit = async (facebookId, req) => {
                 isClosed: false
             }, req
         );
-        console.log('visit', currentVisit);
         if (currentVisit) {
             await currentVisit.save();
             return currentVisit;
@@ -57,6 +57,7 @@ const editVisit = async (facebookId, req) => {
                 isClosed: false
             }, req
         );
+        await currentVisit.save();
 
         return currentVisita;
 
@@ -78,6 +79,10 @@ const getCurrentVisit = async (facebookId) => {
             client: client,
             isClosed: false
         });
+
+        if (!currentVisit) {
+            return createVisit(facebookId);
+        }
 
         return currentVisit;
 
