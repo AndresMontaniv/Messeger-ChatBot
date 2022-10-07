@@ -14,6 +14,10 @@ const Deal = require('../models/deal');
 const Category = require('../models/category');
 const Image = require('../models/image');
 const Discount = require('../models/discount');
+<<<<<<< HEAD
+=======
+const Query = require('../models/query');
+>>>>>>> 44670d94559f5b65a36db4ee73e2b6c5bd1d6261
 
 
 //const intentF = require('./intentController');
@@ -125,6 +129,7 @@ async function receivedMessage(event) {
 
 
 async function saveUserData(facebookId) {
+<<<<<<< HEAD
 
   const existeUser = await Client.findOne({ facebookId });
   
@@ -139,11 +144,16 @@ async function saveUserData(facebookId) {
       if (err) return console.log(err);
       console.log("Se creo una visita: ", res);
     });
+=======
+  const clientDoc = await Client.findOne({ facebookId });
+  if (clientDoc) {
+>>>>>>> 44670d94559f5b65a36db4ee73e2b6c5bd1d6261
     return;
   }
   let userData = await getUserData(facebookId);
   if (userData.first_name == null || userData.last_name == null
     || userData.first_name == "" || userData.last_name == "") return;
+<<<<<<< HEAD
   let client = new Client({
     firstName: userData.first_name,
     lastName: userData.last_name,
@@ -155,6 +165,14 @@ async function saveUserData(facebookId) {
     if (err) return console.log(err);
     console.log("Se creo un cliente: ", res);
   });
+=======
+  await createClient(
+    userData.first_name,
+    userData.last_name,
+    userData.profile_pic,
+    facebookId
+  );
+>>>>>>> 44670d94559f5b65a36db4ee73e2b6c5bd1d6261
 }
 
 
@@ -208,53 +226,53 @@ async function handleDialogFlowAction(
 ) {
   switch (action) {
     case "input.welcome":
-      console.log('esta saludando');
+      await createVisit(sender);
       handleMessages(messages, sender);
       break;
 
-    case "tipopolera.action":
-      let category = parameters.fields.tipoPolera.stringValue.toLowerCase();
-      let poleras = await Product.find({ category });
-      let cards = [];
-      // console.log(poleras);
-      poleras.forEach((polera) => {
-        cards.push({
-          title: polera.name + " $" + polera.price,
-          image_url: polera.img,
-          subtitle: polera.description,
+
+    case "oferta.action":  //Los productos que tenemos en oferta son: {productos_oferta} ¿Cuál le interesa?
+      var polerasx = await getProductsFromDeal(sender);
+      var cardsx = [];
+      polerasx.forEach((polera) => {
+        let disc = polera.deal != '0%' ? "(Descuento " + polera.deal + " )" : "";
+        cardsx.push({
+          title: polera.name + "  $" + polera.priceDeal + disc,
+          image_url: polera.image[0],
+          subtitle: polera.categoria,
           buttons: [
             {
               type: "postback",
-              title: "Hacer compra",
-              payload: "hacer_compra",
+              title: "Me gusta",
+              payload: "me_gusta",
             },
             {
               type: "postback",
-              title: "Ver más helados",
-              payload: "ver_mas_helados",
+              title: "No me gusta",
+              payload: "no_me_gusta",
             },
           ],
         });
       });
-      sendGenericMessage(sender, cards);
+      await sendGenericMessage(sender, cardsx);
+      await sendTextMessage(sender, 'Estos son los productos con descuentos');
       break;
 
-    case "oferta.action" :  //Los productos que tenemos en oferta son: {productos_oferta} ¿Cuál le interesa?
-      
-    break;
+    case "ofertaCategoria.action": //[x] (si o no) Tenemos en oferta. ¿Cuál polera le interesa?
 
-    case "ofertaCategoria.action" : //[x] (si o no) Tenemos en oferta. ¿Cuál polera le interesa?
+      break;
 
-    break;
+    case "ofertaEspecifica.action":  //La polera en oferta {polera_especifica_oferta} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
 
-    case "ofertaEspecifica.action" :  //La polera en oferta {polera_especifica_oferta} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
-                                      
-    break;
+      break;
 
-    case "poleraCatalogo.action" : //{catologo_poleras} ¿Cuál polera le interesa?
+    case "poleraCatalogo.action": //{catologo_poleras} ¿Cuál polera le interesa?
+      sendCategories(sender);
+      break;
 
-    break;
+    case "poleraCategoria.action": //Las poleras {categoria_polera} que tenemos disponibles son las siguientes: {lista_polera_categoria} (lista de poleras de la categoriaPolera) ¿Cuál de las poleras le interesa?
 
+<<<<<<< HEAD
     case "poleraCategoria.action" : //Las poleras {categoria_polera} que tenemos disponibles son las siguientes: {lista_polera_categoria} (lista de poleras de la categoriaPolera) ¿Cuál de las poleras le interesa?
     
     break;
@@ -266,18 +284,109 @@ async function handleDialogFlowAction(
     case "precio.action" : //{precio_poleras} ¿Cual polera le interesa?
 
     break;
+=======
+      let params = parameters.fields.categoriapolera.stringValue.toUpperCase();
+      let category = await Category.findOne({ name: params });
+      let mapa = {};
+      if (category) {
+        mapa.category = category;
+      }
+      let poleras = await getProducts(sender, mapa);
+      let cards = [];
+      poleras.forEach((polera) => {
+        let disc = polera.deal != '0%' ? "(Descuento " + polera.deal + " )" : "";
+        cards.push({
+          title: polera.name + "  $" + polera.priceDeal + disc,
+          image_url: polera.image[0],
+          subtitle: polera.categoria,
+          buttons: [
+            {
+              type: "postback",
+              title: "Me gusta",
+              payload: "me_gusta",
+            },
+            {
+              type: "postback",
+              title: "No me gusta",
+              payload: "no_me_gusta",
+            },
+          ],
+        });
+      });
+      await sendGenericMessage(sender, cards);
+      await sendTextMessage(sender, '¿Cuál de las poleras le interesa?');
+      break;
+>>>>>>> 44670d94559f5b65a36db4ee73e2b6c5bd1d6261
 
-    case "puntuacion.action" : //Gracias por tu valoración, nos ayuda a seguir mejorando. ¡Que tenga un buen dia!
-    
-    break;
+    case "poleraEspecifica.action": //La polera {polera_especifica} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
+      let paramss = parameters.fields;
+      var size = paramss.talla.stringValue;
+      size = size[0].toUpperCase() + size.substring(1);
+      let cat = paramss.categoriaPolera.stringValue.toUpperCase();
+      var color = paramss.color.stringValue;
+      color = color[0].toUpperCase() + color.substring(1);
+      let map = {};
+      if (category) {
+        map.category = cat;
+        map.name = '/.*' + color + '.*/';
+      }
+      var polerasas = await getProducts(sender, mapa);
+      var cardsas = [];
+      polerasas.forEach((polera) => {
+        let disc = polera.deal != '0%' ? "(Descuento " + polera.deal + " )" : "";
+        cardsas.push({
+          title: polera.name + "  $" + polera.priceDeal + disc,
+          image_url: polera.image[0],
+          subtitle: polera.categoria,
+          buttons: [
+            {
+              type: "postback",
+              title: "Me gusta",
+              payload: "me_gusta",
+            },
+            {
+              type: "postback",
+              title: "No me gusta",
+              payload: "no_me_gusta",
+            },
+          ],
+        });
+      });
+      await sendGenericMessage(sender, cardsas);
+      await sendTextMessage(sender, '¿Te gustaría comprar este producto?');
+      break;
 
-    case "respuestaDatos.action" : //¡Tu experiencia es importante para nosotros!, ¿Podrías darnos una puntuación en del 1 al 5, de como te pareció la atención?
-    
-    break;
+    case "precio.action": //{precio_poleras} ¿Cual polera le interesa?
 
-    case "" :
-    
-    break;
+
+      break;
+
+    case "puntuacion.action": //Gracias por tu valoración, nos ayuda a seguir mejorando. ¡Que tenga un buen dia!
+      var score = parameters.fields.puntuacion.stringValue;
+      await editVisit(sender, { score, isClosed: true });
+      handleMessages(messages, sender);
+      break;
+
+    case "respuestaDatos.action": //¡Tu experiencia es importante para nosotros!, ¿Podrías darnos una puntuación en del 1 al 5, de como te pareció la atención?
+      var paramsxx = parameters.fields;
+      var name = paramsxx.name.stringValue;
+      var phone = paramsxx.phone.stringValue;
+      var email = paramsxx.email.stringValue;
+      var mapx = {};
+      if (name) {
+        mapx.name = name;
+      }
+      if (phone) {
+        mapx.phone = phone;
+      }
+      if (email) {
+        mapx.email = email;
+      }
+      await editClient(sender, mapx);
+      await editVisit(sender, mapx);
+      handleMessages(messages, sender);
+      break;
+
 
     default:
       // break;
@@ -293,7 +402,6 @@ async function handleMessage(message, sender) {
       for (const text of message.text.text) {
         console.log(text);
         if (text !== "") {
-          console.log('entro==> ', text);
           await sendTextMessage(sender, text);
         }
       }
@@ -443,6 +551,24 @@ async function sendTextMessage(recipientId, text) {
       .replace("{last_name}", userData.last_name);
   }
   console.log('text nuevo ==> ', text);
+  var messageData = {
+    recipient: {
+      id: recipientId,
+    },
+    message: {
+      text: text,
+    },
+  };
+  callSendAPI(messageData);
+}
+
+async function sendCategories(recipientId) {
+  let categories = await Category.find();
+  let text = "";
+  categories.forEach(element => {
+    text += element.name + "\n";
+  });
+  text += " ¿Qué tipo de polera le interesa? ";
   var messageData = {
     recipient: {
       id: recipientId,
@@ -699,8 +825,23 @@ async function productosTodos(){
     const descuento = await Discount.findOne({deal: ofert._id, product: prod._id});
     imagenes = await imagenesF(prod._id);
     var nameCat = await categoriaNombreF(prod.category);
+<<<<<<< HEAD
     if(descuento){
       prodDcto = prod.price * dcto; 
+=======
+    if (visit) {
+      let query = new Query({ visit, product: prod._id });
+      try {
+        await query.save();
+        console.log('new query', query);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    if (descuento) {
+      let prodDcto = prod.price * dcto;
+>>>>>>> 44670d94559f5b65a36db4ee73e2b6c5bd1d6261
       productosOf.push({
         "name" : prod.name,
         "description" : prod.description,
@@ -715,10 +856,57 @@ async function productosTodos(){
         "name" : prod.name,
         "description" : prod.description,
         "deal": '0%',
+<<<<<<< HEAD
         "price" : prod.price,
         "priceDeal" : prod.price,
         "categoria" : nameCat,
         "image" : imagenes,
+=======
+        "price": prod.price,
+        "priceDeal": prod.price,
+        "categoria": nameCat,
+        "image": imagenes,
+      });
+    }
+  }
+
+  return productosOf;
+}
+
+async function getProductsFromDeal(facebookId, req = {}) {
+  let visit = await getCurrentVisit(facebookId);
+  let ofertasR = await ofertasF();
+  let ofert = ofertasR[0];
+  var dcto1 = String(ofert.discount) + '%';
+  var dcto = 1 - (ofert.discount / 100);
+  const dataDB = await Product.find(req); //todos los productos
+  var productosOf = [];
+
+  for (var i = 0; i < dataDB.length; i++) {
+    prod = dataDB[i];
+    const descuento = await Discount.findOne({ deal: ofert._id, product: prod._id });
+    let imagenes = await imagenesF(prod._id);
+    var nameCat = await categoriaNombreF(prod.category);
+    if (visit) {
+      let query = new Query({ visit, product: prod._id });
+      try {
+        await query.save();
+        console.log('new query', query);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    if (descuento) {
+      let prodDcto = prod.price * dcto;
+      productosOf.push({
+        "name": prod.name,
+        "description": prod.description,
+        "deal": dcto1,
+        "price": prod.price,
+        "priceDeal": prodDcto,
+        "categoria": nameCat,
+        "image": imagenes,
+>>>>>>> 44670d94559f5b65a36db4ee73e2b6c5bd1d6261
       });
     }
   }
