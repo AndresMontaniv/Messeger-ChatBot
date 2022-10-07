@@ -317,8 +317,8 @@ async function handleDialogFlowAction(
             busq = tallaP;
           }
         }
-
-        let busqueda = '"\"' + busq +'\""' ;
+      //  `On easter we decorted ${eggCount}`;
+        let busqueda = `"\"${busq}\""`;
 
   //      let busq = colorP + '|' + tallaP;
         let visit1 = await getCurrentVisit(facebookId);
