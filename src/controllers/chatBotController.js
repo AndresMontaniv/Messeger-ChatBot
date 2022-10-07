@@ -276,10 +276,8 @@ async function handleDialogFlowAction(
       const cat1 = parameters.fields.categoriaPolera.stringValue;
       const color1 = parameters.fields.color.stringValue;
       let category1 = await Category.findOne({ name: cat1 });
-     // color = color[0].toUpperCase() + color.substring(1);
       let map1 = {};
       if (category1) {
-        //if(color1 && size1)
         map1.category = cat1;
         map1.name = '/.*' + color1 + '.*/';
       }
@@ -308,6 +306,75 @@ async function handleDialogFlowAction(
       await sendGenericMessage(sender, card1);
       await sendTextMessage(sender, '¿Te gustaría comprar este producto?');
       break;
+
+
+
+
+      async function getProductsEsp(facebookId, colorP, tallaP, catP) {
+        let busq = colorP + '|' + tallaP;
+        let visit1 = await getCurrentVisit(facebookId);
+        let ofertasR1 = await ofertasF();
+        let ofert1 = ofertasR1[0];
+        var dcto12 = String(ofert1.discount) + '%';
+        var dcto1 = 1 - (ofert1.discount / 100);
+        const categoriaPE = await Category.findOne({name: catP});
+        const categoriaPEid = categoriaPE[0]._id;
+       // {$text:{$search: 'ficct | M' }, price: '633eda6329eaf21db88320e5'}
+        const dataDB = await Product.find({category:categoriaPEid, $text:{$search: busq}}); //db.content.find({$text:{$search:"dog"}})
+        var productosOf = [];
+      
+        for (var i = 0; i < dataDB.length; i++) {
+          prod = dataDB[i];
+          const descuento = await Discount.findOne({ deal: ofert1._id, product: prod._id });
+          let imagenes = await imagenesF(prod._id);
+          var nameCat = await categoriaNombreF(prod.category);
+          if (visit1) {
+            let query = new Query({ visit1, product: prod._id });
+            try {
+              await query.save();
+              console.log('new query', query);
+            } catch (err) {
+              console.log(err);
+            }
+          }
+      
+          if (descuento) {
+            let prodDcto = prod.price * dcto1;
+            productosOf.push({
+              "name": prod.name,
+              "description": prod.description,
+              "deal": dcto12,
+              "price": prod.price,
+              "priceDeal": prodDcto,
+              "categoria": nameCat,
+              "image": imagenes,
+            });
+          } else {
+            productosOf.push({
+              "name": prod.name,
+              "description": prod.description,
+              "deal": '0%',
+              "price": prod.price,
+              "priceDeal": prod.price,
+              "categoria": nameCat,
+              "image": imagenes,
+            });
+          }
+        }
+      
+        return productosOf;
+      }
+
+
+
+
+
+
+
+
+
+
+
 
     
 
