@@ -276,7 +276,7 @@ async function handleDialogFlowAction(
       const cat1 = parameters.fields.categoriaPolera.stringValue;
       const color1 = parameters.fields.color.stringValue;
      // let category1 = await Category.findOne({ name: cat1 });
-      var poleras1 = await getProductsEsp(sender, color1, size1, cat1);
+      var poleras1 = await getProductsEsp(sender, color1, size1, cat1.toUpperCase());
       var card1 = [];
       poleras1.forEach((polera1) => {
         let disc = polera1.deal != '0%' ? "(Descuento " + polera1.deal + " )" : "";
@@ -305,11 +305,11 @@ async function handleDialogFlowAction(
 
 
 
-      async function getProductsEsp(facebookId, colorP, tallaP, catP1) {
+      async function getProductsEsp(facebookId, colorP, tallaP, catName) {
 
         let busq = colorP + '|' + tallaP;
         let visit1 = await getCurrentVisit(facebookId);
-        let categoriaPE = await Category.find({name: catP1}).limit(1);
+        let categoriaPE = await Category.find({name: catName}).limit(1);
         let ofertasR1 = await ofertasF();
         let ofert1 = ofertasR1[0];
         var dcto12 = String(ofert1.discount) + '%';
