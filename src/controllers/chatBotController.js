@@ -306,7 +306,7 @@ async function handleDialogFlowAction(
 
 
       async function getProductsEsp(facebookId, colorP, tallaP, catName) {
-        const busq = '';
+        let busq = '';
         if(colorP && tallaP){
           busq = colorP + ' | ' + tallaP;
         }else{
@@ -327,7 +327,7 @@ async function handleDialogFlowAction(
         var dcto1 = 1 - (ofert1.discount / 100);
         
         let categoriaPEE = categoriaPE[0];
-        console.log("*****************************************************: ", categoriaPE._id);
+        console.log("*****************************************************: ", categoriaPEE._id);
         console.log("*******************************cat********************: ", busq);
       //  let catID = categoriaPEE._id;
        // {$text:{$search: 'ficct | M' }, price: '633eda6329eaf21db88320e5'}
