@@ -306,19 +306,19 @@ async function handleDialogFlowAction(
 
 
       async function getProductsEsp(facebookId, colorP, tallaP, catName) {
-        let busq = '';
+        let busq = '/';
         if(colorP && tallaP){
-          busq = colorP + ' talla ' + tallaP;
+          busq = colorP + ' talla ' + tallaP + '/i';
         }else{
           if (colorP){
-            busq = colorP;
+            busq = colorP + '/i';
           }
           if(tallaP){
-            busq = tallaP;
+            busq = tallaP + '/i';
           }
         }
       //  `On easter we decorted ${eggCount}`;
-        let busqueda = `"\"${busq}\""`;
+     //   let busqueda = /rojo talla M/
 
   //      let busq = colorP + '|' + tallaP;
         let visit1 = await getCurrentVisit(facebookId);
@@ -334,7 +334,7 @@ async function handleDialogFlowAction(
   //      console.log("*******************************busqueda********************: ", busqueda);
       //  let catID = categoriaPEE._id;
        // {$text:{$search: 'ficct | M' }, price: '633eda6329eaf21db88320e5'}
-        const dataDB = await Product.find({category:categoriaPEE._id, $text:{$search: busqueda}}); //db.content.find({$text:{$search:"dog"}})
+        const dataDB = await Product.find({category:categoriaPEE._id, $text:{$search: busq}}); //db.content.find({$text:{$search:"dog"}})
         var productosOf = [];
         console.log("***************************************************: , productos");
         console.log(dataDB);
