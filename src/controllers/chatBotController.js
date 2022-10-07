@@ -276,11 +276,6 @@ async function handleDialogFlowAction(
       const cat1 = parameters.fields.categoriaPolera.stringValue;
       const color1 = parameters.fields.color.stringValue;
      // let category1 = await Category.findOne({ name: cat1 });
-      let map1 = {};
-      if (category1) {
-        map1.category = cat1;
-        map1.name = '/.*' + color1 + '.*/';
-      }
       var poleras1 = await getProductsEsp(sender, color1, size1, cat1);
       var card1 = [];
       poleras1.forEach((polera1) => {
