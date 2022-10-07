@@ -314,7 +314,7 @@ async function handleDialogFlowAction(
             busq = tallaP;
           }
         }
-        var busq1 = ` /${prueba}/ `
+        var busq1 = ` /${busq}/ `
 
         let visit1 = await getCurrentVisit(facebookId);
         let categoriaPE = await Category.find({name: catName}).limit(1);
