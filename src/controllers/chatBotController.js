@@ -318,7 +318,7 @@ async function handleDialogFlowAction(
           }
         }
 
-        const busqueda = '"\"' + busq +'\""' ;
+        let busqueda = '"\"' + busq +'\""' ;
 
   //      let busq = colorP + '|' + tallaP;
         let visit1 = await getCurrentVisit(facebookId);
@@ -329,11 +329,14 @@ async function handleDialogFlowAction(
         var dcto1 = 1 - (ofert1.discount / 100);
         let categoriaPEE = categoriaPE[0];
         console.log("*******************************busqueda********************: ", busqueda);
+        console.log("*******************************color********************: ", colorP);
+        console.log("*******************************talla********************: ", tallaP);
+  //      console.log("*******************************busqueda********************: ", busqueda);
       //  let catID = categoriaPEE._id;
        // {$text:{$search: 'ficct | M' }, price: '633eda6329eaf21db88320e5'}
         const dataDB = await Product.find({category:categoriaPEE._id, $text:{$search: busqueda}}); //db.content.find({$text:{$search:"dog"}})
         var productosOf = [];
-        console.log("*******************************siz********************: , productos");
+        console.log("***************************************************: , productos");
         console.log(dataDB);
         for (var i = 0; i < dataDB.length; i++) {
           prod = dataDB[i];
