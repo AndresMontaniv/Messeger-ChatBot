@@ -328,7 +328,7 @@ async function handleDialogFlowAction(
         var dcto12 = String(ofert1.discount) + '%';
         var dcto1 = 1 - (ofert1.discount / 100);
         let categoriaPEE = categoriaPE[0];
-        console.log("*******************************busqueda********************: ", busqueda);
+        console.log("*******************************busqueda********************: ", bus);
         console.log("*******************************color********************: ", colorP);
         console.log("*******************************talla********************: ", tallaP);
   //      console.log("*******************************busqueda********************: ", busqueda);
