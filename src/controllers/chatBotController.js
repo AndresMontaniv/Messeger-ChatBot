@@ -281,7 +281,7 @@ async function handleDialogFlowAction(
         map1.category = cat1;
         map1.name = '/.*' + color1 + '.*/';
       }
-      var poleras1 = await getProducts(sender, map1);
+      var poleras1 = await getProductsEsp(sender, color1, size1, cat1);
       var card1 = [];
       poleras1.forEach((polera1) => {
         let disc = polera1.deal != '0%' ? "(Descuento " + polera1.deal + " )" : "";
