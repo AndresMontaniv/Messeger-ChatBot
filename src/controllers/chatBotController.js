@@ -325,13 +325,11 @@ async function handleDialogFlowAction(
         let ofert1 = ofertasR1[0];
         var dcto12 = String(ofert1.discount) + '%';
         var dcto1 = 1 - (ofert1.discount / 100);
-        
         let categoriaPEE = categoriaPE[0];
-        console.log("*****************************************************: ", categoriaPEE._id);
-        console.log("*******************************cat********************: ", busq);
+        console.log("*******************************busqueda********************: ", busq);
       //  let catID = categoriaPEE._id;
        // {$text:{$search: 'ficct | M' }, price: '633eda6329eaf21db88320e5'}
-        const dataDB = await Product.find({category:categoriaPE._id, $text:{$search: busq}}); //db.content.find({$text:{$search:"dog"}})
+        const dataDB = await Product.find({category:categoriaPEE._id, $text:{$search: busq}}); //db.content.find({$text:{$search:"dog"}})
         var productosOf = [];
         console.log("*******************************siz********************: , productos");
         console.log(dataDB);
