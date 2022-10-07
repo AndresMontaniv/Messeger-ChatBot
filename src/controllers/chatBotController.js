@@ -14,10 +14,7 @@ const Deal = require('../models/deal');
 const Category = require('../models/category');
 const Image = require('../models/image');
 const Discount = require('../models/discount');
-<<<<<<< HEAD
-=======
-const Query = require('../models/query');
->>>>>>> 44670d94559f5b65a36db4ee73e2b6c5bd1d6261
+const { Query } = require('mongoose');
 
 
 //const intentF = require('./intentController');
@@ -129,50 +126,38 @@ async function receivedMessage(event) {
 
 
 async function saveUserData(facebookId) {
-<<<<<<< HEAD
-
-  const existeUser = await Client.findOne({ facebookId });
-  
-  if (existeUser) {
-    console.log('id  =>', existeUser.id);
-    let visit = new Visit({
-      name: existeUser.firstName + ' ' + existeUser.lastName,
-      score: 10,
-      client: existeUser,
-    });
-    visit.save((err, res) => {
-      if (err) return console.log(err);
-      console.log("Se creo una visita: ", res);
-    });
-=======
   const clientDoc = await Client.findOne({ facebookId });
+  let poloCat = await Category.findOne({ name: 'POLO' });
+  let allP = await getProducts(facebookId, { category: poloCat });
+  let allPF = await getProductsFromDeal({ category: poloCat });
+  console.log('allp==>  ', allP);
+  console.log('allpf==>  ', allPF);
   if (clientDoc) {
->>>>>>> 44670d94559f5b65a36db4ee73e2b6c5bd1d6261
+    let mapa = {};
+    if (!clientDoc.phone) {
+      mapa.phone = '75684788';
+    }
+    if (!clientDoc.email) {
+      mapa.email = 'afafa@gmail.com';
+    }
+    if (!clientDoc.isClient) {
+      mapa.isClient = false;
+    }
+    await editClient(facebookId, mapa);
+    await createVisit(facebookId);
     return;
   }
   let userData = await getUserData(facebookId);
   if (userData.first_name == null || userData.last_name == null
     || userData.first_name == "" || userData.last_name == "") return;
-<<<<<<< HEAD
   let client = new Client({
     firstName: userData.first_name,
     lastName: userData.last_name,
     facebookId,
-    profilePic: userData.profile_pic,
+    profilePic: userData.profile_pic
   });
 
-  client.save((err, res) => {
-    if (err) return console.log(err);
-    console.log("Se creo un cliente: ", res);
-  });
-=======
-  await createClient(
-    userData.first_name,
-    userData.last_name,
-    userData.profile_pic,
-    facebookId
-  );
->>>>>>> 44670d94559f5b65a36db4ee73e2b6c5bd1d6261
+  await createVisit(facebookId);
 }
 
 
@@ -272,19 +257,6 @@ async function handleDialogFlowAction(
 
     case "poleraCategoria.action": //Las poleras {categoria_polera} que tenemos disponibles son las siguientes: {lista_polera_categoria} (lista de poleras de la categoriaPolera) ¿Cuál de las poleras le interesa?
 
-<<<<<<< HEAD
-    case "poleraCategoria.action" : //Las poleras {categoria_polera} que tenemos disponibles son las siguientes: {lista_polera_categoria} (lista de poleras de la categoriaPolera) ¿Cuál de las poleras le interesa?
-    
-    break;
-
-    case "poleraEspecifica.action" : //La polera {polera_especifica} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
-                                     
-    break;
-
-    case "precio.action" : //{precio_poleras} ¿Cual polera le interesa?
-
-    break;
-=======
       let params = parameters.fields.categoriapolera.stringValue.toUpperCase();
       let category = await Category.findOne({ name: params });
       let mapa = {};
@@ -316,47 +288,42 @@ async function handleDialogFlowAction(
       await sendGenericMessage(sender, cards);
       await sendTextMessage(sender, '¿Cuál de las poleras le interesa?');
       break;
->>>>>>> 44670d94559f5b65a36db4ee73e2b6c5bd1d6261
 
-    case "poleraEspecifica.action": //La polera {polera_especifica} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
-      let paramss = parameters.fields;
-      var size = paramss.talla.stringValue;
-      size = size[0].toUpperCase() + size.substring(1);
-      let cat = paramss.categoriaPolera.stringValue.toUpperCase();
-      var color = paramss.color.stringValue;
-      color = color[0].toUpperCase() + color.substring(1);
-      let map = {};
-      if (category) {
-        map.category = cat;
-        map.name = '/.*' + color + '.*/';
-      }
-      var polerasas = await getProducts(sender, mapa);
-      var cardsas = [];
-      polerasas.forEach((polera) => {
-        let disc = polera.deal != '0%' ? "(Descuento " + polera.deal + " )" : "";
-        cardsas.push({
-          title: polera.name + "  $" + polera.priceDeal + disc,
-          image_url: polera.image[0],
-          subtitle: polera.categoria,
+    case "poleraCategoria.action" : //Las poleras {categoria_polera} que tenemos disponibles son las siguientes: {lista_polera_categoria} (lista de poleras de la categoriaPolera) ¿Cuál de las poleras le interesa?
+    //prueba
+    
+    break;
+
+    case "poleraEspecifica.action" : //La polera {polera_especifica} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
+                                     
+    break;
+
+    case "precio.action" : //{precio_poleras} ¿Cual polera le interesa?
+      let poleras1 = await productosTodos();
+      let cards1 = [];
+      // console.log(poleras);
+      poleras1.forEach((polera1) => {
+        cards1.push({
+          title: polera1.name + " $" + polera1.price,
+          image_url: polera1.image[0],
+          subtitle: polera1.description,
           buttons: [
-            {
+        /*    {
               type: "postback",
-              title: "Me gusta",
-              payload: "me_gusta",
+              title: "Hacer compra",
+              payload: "hacer_compra",
             },
             {
               type: "postback",
-              title: "No me gusta",
-              payload: "no_me_gusta",
-            },
+              title: "Ver más helados",
+              payload: "ver_mas_helados",
+            }, */
           ],
         });
       });
-      await sendGenericMessage(sender, cardsas);
-      await sendTextMessage(sender, '¿Te gustaría comprar este producto?');
-      break;
-
-    case "precio.action": //{precio_poleras} ¿Cual polera le interesa?
+      sendGenericMessage(sender, cards1);
+      
+    break;
 
 
       break;
@@ -825,23 +792,15 @@ async function productosTodos(){
     const descuento = await Discount.findOne({deal: ofert._id, product: prod._id});
     imagenes = await imagenesF(prod._id);
     var nameCat = await categoriaNombreF(prod.category);
-<<<<<<< HEAD
-    if(descuento){
-      prodDcto = prod.price * dcto; 
-=======
-    if (visit) {
-      let query = new Query({ visit, product: prod._id });
-      try {
-        await query.save();
-        console.log('new query', query);
-      } catch (err) {
-        console.log(err);
-      }
+    let query = new Query({ visit, product: prod._id });
+    try {
+      await query.save();
+      console.log('new query', query);
+    } catch (err) {
+      console.log(err);
     }
-
     if (descuento) {
       let prodDcto = prod.price * dcto;
->>>>>>> 44670d94559f5b65a36db4ee73e2b6c5bd1d6261
       productosOf.push({
         "name" : prod.name,
         "description" : prod.description,
@@ -856,12 +815,6 @@ async function productosTodos(){
         "name" : prod.name,
         "description" : prod.description,
         "deal": '0%',
-<<<<<<< HEAD
-        "price" : prod.price,
-        "priceDeal" : prod.price,
-        "categoria" : nameCat,
-        "image" : imagenes,
-=======
         "price": prod.price,
         "priceDeal": prod.price,
         "categoria": nameCat,
@@ -873,8 +826,7 @@ async function productosTodos(){
   return productosOf;
 }
 
-async function getProductsFromDeal(facebookId, req = {}) {
-  let visit = await getCurrentVisit(facebookId);
+async function getProductsFromDeal(req = {}) {
   let ofertasR = await ofertasF();
   let ofert = ofertasR[0];
   var dcto1 = String(ofert.discount) + '%';
@@ -887,15 +839,6 @@ async function getProductsFromDeal(facebookId, req = {}) {
     const descuento = await Discount.findOne({ deal: ofert._id, product: prod._id });
     let imagenes = await imagenesF(prod._id);
     var nameCat = await categoriaNombreF(prod.category);
-    if (visit) {
-      let query = new Query({ visit, product: prod._id });
-      try {
-        await query.save();
-        console.log('new query', query);
-      } catch (err) {
-        console.log(err);
-      }
-    }
     if (descuento) {
       let prodDcto = prod.price * dcto;
       productosOf.push({
@@ -906,7 +849,6 @@ async function getProductsFromDeal(facebookId, req = {}) {
         "priceDeal": prodDcto,
         "categoria": nameCat,
         "image": imagenes,
->>>>>>> 44670d94559f5b65a36db4ee73e2b6c5bd1d6261
       });
     }
   }
