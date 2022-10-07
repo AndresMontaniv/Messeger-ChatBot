@@ -235,7 +235,7 @@ async function handleDialogFlowAction(
       sendCategories(sender);
       break;
 
-      
+
     case "poleraCategoria.action": //Las poleras {categoria_polera} que tenemos disponibles son las siguientes: {lista_polera_categoria} (lista de poleras de la categoriaPolera) ¿Cuál de las poleras le interesa?
       let params = parameters.fields.categoriapolera.stringValue.toUpperCase();
       let category = await Category.findOne({ name: params });
@@ -271,13 +271,15 @@ async function handleDialogFlowAction(
 
     case "poleraEspecifica.action": //La polera {polera_especifica} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
      // let paramss1 = parameters.fields;
-      let category1 = await Category.findOne({ name: params });
+      
       const size1 = parameters.fields.talla.stringValue;
       const cat1 = parameters.fields.categoriaPolera.stringValue;
       const color1 = parameters.fields.color.stringValue;
+      let category1 = await Category.findOne({ name: cat1 });
      // color = color[0].toUpperCase() + color.substring(1);
       let map1 = {};
       if (category1) {
+        //if(color1 && size1)
         map1.category = cat1;
         map1.name = '/.*' + color1 + '.*/';
       }
