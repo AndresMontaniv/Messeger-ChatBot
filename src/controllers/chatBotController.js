@@ -317,12 +317,12 @@ async function handleDialogFlowAction(
         
         let categoriaPEE = categoriaPE[0];
         console.log("*****************************************************: ", categoriaPE);
-        console.log("*******************************cat********************: ", catP1);
+        console.log("*******************************cat********************: ", catName);
         console.log("********************************col*******************: ", colorP);
         console.log("*******************************siz********************: ", tallaP);
       //  let catID = categoriaPEE._id;
        // {$text:{$search: 'ficct | M' }, price: '633eda6329eaf21db88320e5'}
-        const dataDB = await Product.find({category:categoriaPEE, $text:{$search: busq}}); //db.content.find({$text:{$search:"dog"}})
+        const dataDB = await Product.find({category:categoriaPE._id, $text:{$search: busq}}); //db.content.find({$text:{$search:"dog"}})
         var productosOf = [];
       
         for (var i = 0; i < dataDB.length; i++) {
