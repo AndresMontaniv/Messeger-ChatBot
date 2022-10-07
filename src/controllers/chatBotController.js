@@ -305,16 +305,21 @@ async function handleDialogFlowAction(
 
 
 
-      async function getProductsEsp(facebookId, colorP, tallaP, catP) {
+      async function getProductsEsp(facebookId, colorP, tallaP, catP1) {
+
         let busq = colorP + '|' + tallaP;
         let visit1 = await getCurrentVisit(facebookId);
+        let categoriaPE = await Category.find({name: catP1}).limit(1);
         let ofertasR1 = await ofertasF();
         let ofert1 = ofertasR1[0];
         var dcto12 = String(ofert1.discount) + '%';
         var dcto1 = 1 - (ofert1.discount / 100);
-        let categoriaPE = await Category.find({name: catP}).limit(1);
+        
         let categoriaPEE = categoriaPE[0];
-        console.log("*****************************************************: ", categoriaPEE)
+        console.log("*****************************************************: ", categoriaPE);
+        console.log("*******************************cat********************: ", catP1);
+        console.log("********************************col*******************: ", colorP);
+        console.log("*******************************siz********************: ", tallaP);
       //  let catID = categoriaPEE._id;
        // {$text:{$search: 'ficct | M' }, price: '633eda6329eaf21db88320e5'}
         const dataDB = await Product.find({category:categoriaPEE, $text:{$search: busq}}); //db.content.find({$text:{$search:"dog"}})
