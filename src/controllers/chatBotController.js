@@ -306,8 +306,19 @@ async function handleDialogFlowAction(
 
 
       async function getProductsEsp(facebookId, colorP, tallaP, catName) {
+        const busq = '';
+        if(colorP && tallaP){
+          busq = colorP + ' | ' + tallaP;
+        }else{
+          if (colorP){
+            busq = colorP;
+          }
+          if(tallaP){
+            busq = tallaP;
+          }
+        }
 
-        let busq = colorP + '|' + tallaP;
+  //      let busq = colorP + '|' + tallaP;
         let visit1 = await getCurrentVisit(facebookId);
         let categoriaPE = await Category.find({name: catName}).limit(1);
         let ofertasR1 = await ofertasF();
@@ -316,15 +327,14 @@ async function handleDialogFlowAction(
         var dcto1 = 1 - (ofert1.discount / 100);
         
         let categoriaPEE = categoriaPE[0];
-        console.log("*****************************************************: ", categoriaPE);
-        console.log("*******************************cat********************: ", catName);
-        console.log("********************************col*******************: ", colorP);
-        console.log("*******************************siz********************: ", tallaP);
+        console.log("*****************************************************: ", categoriaPE._id);
+        console.log("*******************************cat********************: ", busq);
       //  let catID = categoriaPEE._id;
        // {$text:{$search: 'ficct | M' }, price: '633eda6329eaf21db88320e5'}
         const dataDB = await Product.find({category:categoriaPE._id, $text:{$search: busq}}); //db.content.find({$text:{$search:"dog"}})
         var productosOf = [];
-      
+        console.log("*******************************siz********************: , productos");
+        console.log(dataDB);
         for (var i = 0; i < dataDB.length; i++) {
           prod = dataDB[i];
           const descuento = await Discount.findOne({ deal: ofert1._id, product: prod._id });
