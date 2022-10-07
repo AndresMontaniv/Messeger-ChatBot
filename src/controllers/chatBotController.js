@@ -193,6 +193,7 @@ async function handleDialogFlowAction(
       break;
 
 
+
     case "oferta.action":  //Los productos que tenemos en oferta son: {productos_oferta} ¿Cuál le interesa?
       var polerasx = await getProductsFromDeal(sender);
       var cardsx = [];
@@ -220,11 +221,13 @@ async function handleDialogFlowAction(
       await sendTextMessage(sender, 'Estos son los productos con descuentos');
       break;
 
+
     case "ofertaCategoria.action": //[x] (si o no) Tenemos en oferta. ¿Cuál polera le interesa?
 
       break;
 
     case "ofertaEspecifica.action":  //La polera en oferta {polera_especifica_oferta} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
+
 
       break;
 
@@ -232,8 +235,8 @@ async function handleDialogFlowAction(
       sendCategories(sender);
       break;
 
+      
     case "poleraCategoria.action": //Las poleras {categoria_polera} que tenemos disponibles son las siguientes: {lista_polera_categoria} (lista de poleras de la categoriaPolera) ¿Cuál de las poleras le interesa?
-
       let params = parameters.fields.categoriapolera.stringValue.toUpperCase();
       let category = await Category.findOne({ name: params });
       let mapa = {};
@@ -267,25 +270,25 @@ async function handleDialogFlowAction(
       break;
 
     case "poleraEspecifica.action": //La polera {polera_especifica} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
-      let paramss = parameters.fields;
-      var size = paramss.talla.stringValue;
-      size = size[0].toUpperCase() + size.substring(1);
-      let cat = paramss.categoriaPolera.stringValue.toUpperCase();
-      var color = paramss.color.stringValue;
-      color = color[0].toUpperCase() + color.substring(1);
-      let map = {};
-      if (category) {
-        map.category = cat;
-        map.name = '/.*' + color + '.*/';
+     // let paramss1 = parameters.fields;
+      let category1 = await Category.findOne({ name: params });
+      const size1 = parameters.fields.talla.stringValue;
+      const cat1 = parameters.fields.categoriaPolera.stringValue;
+      const color1 = parameters.fields.color.stringValue;
+     // color = color[0].toUpperCase() + color.substring(1);
+      let map1 = {};
+      if (category1) {
+        map1.category = cat1;
+        map1.name = '/.*' + color1 + '.*/';
       }
-      var polerasas = await getProducts(sender, mapa);
-      var cardsas = [];
-      polerasas.forEach((polera) => {
-        let disc = polera.deal != '0%' ? "(Descuento " + polera.deal + " )" : "";
-        cardsas.push({
-          title: polera.name + "  $" + polera.priceDeal + disc,
-          image_url: polera.image[0],
-          subtitle: polera.categoria,
+      var poleras1 = await getProducts(sender, map1);
+      var card1 = [];
+      poleras1.forEach((polera1) => {
+        let disc = polera1.deal != '0%' ? "(Descuento " + polera1.deal + " )" : "";
+        card1.push({
+          title: polera1.name + "  $" + polera1.priceDeal + disc,
+          image_url: polera1.image[0],
+          subtitle: polera1.categoria,
           buttons: [
             {
               type: "postback",
@@ -300,9 +303,11 @@ async function handleDialogFlowAction(
           ],
         });
       });
-      await sendGenericMessage(sender, cardsas);
+      await sendGenericMessage(sender, card1);
       await sendTextMessage(sender, '¿Te gustaría comprar este producto?');
       break;
+
+    
 
     case "precio.action": //{precio_poleras} ¿Cual polera le interesa?
 
