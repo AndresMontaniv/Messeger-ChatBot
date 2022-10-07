@@ -4,6 +4,8 @@ const axios = require('axios');
 const uuid = require("uuid");
 const dialogflow = require('./dialogFlowController');
 const { structProtoToJson } = require("../helpers/structFunctions");
+const { createClient, editClient } = require("../controllers/clientController");
+const { createVisit, editVisit, getCurrentVisit } = require("../controllers/visitController");
 
 //mongodb models
 
@@ -14,10 +16,9 @@ const Deal = require('../models/deal');
 const Category = require('../models/category');
 const Image = require('../models/image');
 const Discount = require('../models/discount');
-const { Query } = require('mongoose');
+const Query = require('../models/query');
 
 
-//const intentF = require('./intentController');
 
 
 
@@ -127,38 +128,21 @@ async function receivedMessage(event) {
 
 async function saveUserData(facebookId) {
   const clientDoc = await Client.findOne({ facebookId });
-  let poloCat = await Category.findOne({ name: 'POLO' });
-  let allP = await getProducts(facebookId, { category: poloCat });
-  let allPF = await getProductsFromDeal({ category: poloCat });
-  console.log('allp==>  ', allP);
-  console.log('allpf==>  ', allPF);
   if (clientDoc) {
-    let mapa = {};
-    if (!clientDoc.phone) {
-      mapa.phone = '75684788';
-    }
-    if (!clientDoc.email) {
-      mapa.email = 'afafa@gmail.com';
-    }
-    if (!clientDoc.isClient) {
-      mapa.isClient = false;
-    }
-    await editClient(facebookId, mapa);
-    await createVisit(facebookId);
     return;
   }
   let userData = await getUserData(facebookId);
   if (userData.first_name == null || userData.last_name == null
     || userData.first_name == "" || userData.last_name == "") return;
-  let client = new Client({
-    firstName: userData.first_name,
-    lastName: userData.last_name,
-    facebookId,
-    profilePic: userData.profile_pic
-  });
-
-  await createVisit(facebookId);
+  await createClient(
+    userData.first_name,
+    userData.last_name,
+    userData.profile_pic,
+    facebookId
+  );
 }
+
+
 
 
 
@@ -177,13 +161,6 @@ async function receivedPostback(event) {
       break;
   }
 
-  // console.log(
-  //   "Received postback for user %d and page %d with payload '%s' " + "at %d",
-  //   senderId,
-  //   recipientID,
-  //   payload,
-  //   timeOfPostback
-  // );
 }
 
 function handleMessageAttachments(messageAttachments, senderId) {
@@ -289,41 +266,45 @@ async function handleDialogFlowAction(
       await sendTextMessage(sender, '¿Cuál de las poleras le interesa?');
       break;
 
-    case "poleraCategoria.action" : //Las poleras {categoria_polera} que tenemos disponibles son las siguientes: {lista_polera_categoria} (lista de poleras de la categoriaPolera) ¿Cuál de las poleras le interesa?
-    //prueba
-    
-    break;
-
-    case "poleraEspecifica.action" : //La polera {polera_especifica} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
-                                     
-    break;
-
-    case "precio.action" : //{precio_poleras} ¿Cual polera le interesa?
-      let poleras1 = await productosTodos();
-      let cards1 = [];
-      // console.log(poleras);
-      poleras1.forEach((polera1) => {
-        cards1.push({
-          title: polera1.name + " $" + polera1.price,
-          image_url: polera1.image[0],
-          subtitle: polera1.description,
+    case "poleraEspecifica.action": //La polera {polera_especifica} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
+      let paramss = parameters.fields;
+      var size = paramss.talla.stringValue;
+      size = size[0].toUpperCase() + size.substring(1);
+      let cat = paramss.categoriaPolera.stringValue.toUpperCase();
+      var color = paramss.color.stringValue;
+      color = color[0].toUpperCase() + color.substring(1);
+      let map = {};
+      if (category) {
+        map.category = cat;
+        map.name = '/.*' + color + '.*/';
+      }
+      var polerasas = await getProducts(sender, mapa);
+      var cardsas = [];
+      polerasas.forEach((polera) => {
+        let disc = polera.deal != '0%' ? "(Descuento " + polera.deal + " )" : "";
+        cardsas.push({
+          title: polera.name + "  $" + polera.priceDeal + disc,
+          image_url: polera.image[0],
+          subtitle: polera.categoria,
           buttons: [
-        /*    {
+            {
               type: "postback",
-              title: "Hacer compra",
-              payload: "hacer_compra",
+              title: "Me gusta",
+              payload: "me_gusta",
             },
             {
               type: "postback",
-              title: "Ver más helados",
-              payload: "ver_mas_helados",
-            }, */
+              title: "No me gusta",
+              payload: "no_me_gusta",
+            },
           ],
         });
       });
-      sendGenericMessage(sender, cards1);
-      
-    break;
+      await sendGenericMessage(sender, cardsas);
+      await sendTextMessage(sender, '¿Te gustaría comprar este producto?');
+      break;
+
+    case "precio.action": //{precio_poleras} ¿Cual polera le interesa?
 
 
       break;
@@ -779,54 +760,8 @@ function isDefined(obj) {
 
 
 //todos los productos existentes
-async function productosTodos(){
-  ofertasR = await ofertasF(); //oferta disponible
-  ofert = ofertasR[0];
-  var dcto1 = String(ofert.discount) + '%';
-  var dcto = 1 - (ofert.discount / 100) ;
-  const dataDB = await Product.find(); //todos los productos
-  var productosOf = [];
-  
-  for(var i = 0; i < dataDB.length; i++){
-    prod = dataDB[i];
-    const descuento = await Discount.findOne({deal: ofert._id, product: prod._id});
-    imagenes = await imagenesF(prod._id);
-    var nameCat = await categoriaNombreF(prod.category);
-    let query = new Query({ visit, product: prod._id });
-    try {
-      await query.save();
-      console.log('new query', query);
-    } catch (err) {
-      console.log(err);
-    }
-    if (descuento) {
-      let prodDcto = prod.price * dcto;
-      productosOf.push({
-        "name" : prod.name,
-        "description" : prod.description,
-        "deal": dcto1,
-        "price" : prod.price,
-        "priceDeal" : prodDcto,
-        "categoria" : nameCat,
-        "image" : imagenes,
-      });
-    }else{
-      productosOf.push({
-        "name" : prod.name,
-        "description" : prod.description,
-        "deal": '0%',
-        "price": prod.price,
-        "priceDeal": prod.price,
-        "categoria": nameCat,
-        "image": imagenes,
-      });
-    }
-  }
-
-  return productosOf;
-}
-
-async function getProductsFromDeal(req = {}) {
+async function getProducts(facebookId, req = {}) {
+  let visit = await getCurrentVisit(facebookId);
   let ofertasR = await ofertasF();
   let ofert = ofertasR[0];
   var dcto1 = String(ofert.discount) + '%';
@@ -839,6 +774,66 @@ async function getProductsFromDeal(req = {}) {
     const descuento = await Discount.findOne({ deal: ofert._id, product: prod._id });
     let imagenes = await imagenesF(prod._id);
     var nameCat = await categoriaNombreF(prod.category);
+    if (visit) {
+      let query = new Query({ visit, product: prod._id });
+      try {
+        await query.save();
+        console.log('new query', query);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    if (descuento) {
+      let prodDcto = prod.price * dcto;
+      productosOf.push({
+        "name": prod.name,
+        "description": prod.description,
+        "deal": dcto1,
+        "price": prod.price,
+        "priceDeal": prodDcto,
+        "categoria": nameCat,
+        "image": imagenes,
+      });
+    } else {
+      productosOf.push({
+        "name": prod.name,
+        "description": prod.description,
+        "deal": '0%',
+        "price": prod.price,
+        "priceDeal": prod.price,
+        "categoria": nameCat,
+        "image": imagenes,
+      });
+    }
+  }
+
+  return productosOf;
+}
+
+async function getProductsFromDeal(facebookId, req = {}) {
+  let visit = await getCurrentVisit(facebookId);
+  let ofertasR = await ofertasF();
+  let ofert = ofertasR[0];
+  var dcto1 = String(ofert.discount) + '%';
+  var dcto = 1 - (ofert.discount / 100);
+  const dataDB = await Product.find(req); //todos los productos
+  var productosOf = [];
+
+  for (var i = 0; i < dataDB.length; i++) {
+    prod = dataDB[i];
+    const descuento = await Discount.findOne({ deal: ofert._id, product: prod._id });
+    let imagenes = await imagenesF(prod._id);
+    var nameCat = await categoriaNombreF(prod.category);
+    if (visit) {
+      let query = new Query({ visit, product: prod._id });
+      try {
+        await query.save();
+        console.log('new query', query);
+      } catch (err) {
+        console.log(err);
+      }
+    }
     if (descuento) {
       let prodDcto = prod.price * dcto;
       productosOf.push({
@@ -857,28 +852,26 @@ async function getProductsFromDeal(req = {}) {
 }
 
 
-// buscar en la base de datos mongoose las poleras
 async function productosF() {
   const dataDB = await Product.find();
   var productos = [];
-  
-  for(var i = 0; i < dataDB.length; i++){
+
+  for (var i = 0; i < dataDB.length; i++) {
     prod = dataDB[i];
     var nameCat = await categoriaNombreF(prod.category);
     imagenes = await imagenesF(prod._id);
-      productos.push({
-        "name" : prod.name,
-        "description" : prod.description,
-        "price" : prod.price,
-        "categoria" : nameCat,
-        "image" : imagenes,
-      });
+    productos.push({
+      "name": prod.name,
+      "description": prod.description,
+      "price": prod.price,
+      "categoria": nameCat,
+      "image": imagenes,
+    });
   }
 
   return productos;
 }
 
-//productos de cierta categoria
 async function productosCategoryF(categoryP) {
   const dataDB = await Product.find().limit(10);
   return dataDB;
@@ -892,8 +885,7 @@ async function categoriasF() {
 
 //categoria especifica
 async function categoriaNombreF(categoriaP) {
-  const dataDB = await Category.find({_id: categoriaP});
-  //console.log("categoria", dataDB[0]);
+  const dataDB = await Category.find({ _id: categoriaP });
   var cat = dataDB[0];
   var nameCat = cat.name;
   return nameCat;
@@ -901,23 +893,22 @@ async function categoriaNombreF(categoriaP) {
 
 //todas las categorias
 async function categoriasF(nameC) {
-  const dataDB = await Category.find({name: nameC});
+  const dataDB = await Category.find({ name: nameC });
   return dataDB;
 }
 
 
 async function ofertasF() {
-  const dataDB = await Deal.find().sort({$natural:-1}).limit(1);
+  const dataDB = await Deal.find().sort({ $natural: -1 }).limit(1);
   return dataDB;
 }
 
 
 async function imagenesF(id_prod) {
-  const dataDB = await Image.find( {product: id_prod});
- // let imagenes = '';
+  const dataDB = await Image.find({ product: id_prod });
   let imagenes = [];
   dataDB.forEach((imagen) => {
-      imagenes.push(imagen.url);
+    imagenes.push(imagen.url);
   });
 
   return imagenes;
