@@ -113,7 +113,7 @@ async function receivedMessage(event) {
   }
 
   saveUserData(senderId);
-
+  getProductsLike(senderId);
 
   if (messageText) {
     //send message to api.ai
@@ -330,7 +330,6 @@ async function handleDialogFlowAction(
       if (email) {
         mapx.email = email;
       }
-      console.log('mapx==>', mapx);
       await editVisit(sender, mapx);
       handleMessages(messages, sender);
       break;
@@ -344,7 +343,6 @@ async function handleDialogFlowAction(
 }
 
 async function handleMessage(message, sender) {
-  console.log('handelMessage');
   switch (message.message) {
     case "text": //text
       for (const text of message.text.text) {
@@ -778,7 +776,6 @@ async function getProducts(facebookId, req = {}) {
       let query = new Query({ visit, product: prod._id });
       try {
         await query.save();
-        console.log('new query', query);
       } catch (err) {
         console.log(err);
       }
@@ -842,6 +839,72 @@ async function getProductsFromDeal(facebookId, req = {}) {
         "deal": dcto1,
         "price": prod.price,
         "priceDeal": prodDcto,
+        "categoria": nameCat,
+        "image": imagenes,
+      });
+    }
+  }
+
+  return productosOf;
+}
+
+
+async function getProductsLike(facebookId, texts = []) {
+  let visit = await getCurrentVisit(facebookId);
+  let ofertasR = await ofertasF();
+  let ofert = ofertasR[0];
+  var dcto1 = String(ofert.discount) + '%';
+  var dcto = 1 - (ofert.discount / 100);
+  let orArray = [];
+  texts.forEach(text => {
+    text = '.*' + text + '.*';
+    orArray.push({ name: text });
+  });
+
+
+  console.log(orArray);
+
+
+  const dataDB = await Product.find({
+    $or: [
+      { name: '.*negro.*' },
+      { name: '.*rojo.*' }
+    ]
+  }); //todos los productos
+  var productosOf = [];
+
+  for (var i = 0; i < dataDB.length; i++) {
+    prod = dataDB[i];
+    const descuento = await Discount.findOne({ deal: ofert._id, product: prod._id });
+    let imagenes = await imagenesF(prod._id);
+    var nameCat = await categoriaNombreF(prod.category);
+    // if (visit) {
+    //   let query = new Query({ visit, product: prod._id });
+    //   try {
+    //     await query.save();
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // }
+
+    if (descuento) {
+      let prodDcto = prod.price * dcto;
+      productosOf.push({
+        "name": prod.name,
+        "description": prod.description,
+        "deal": dcto1,
+        "price": prod.price,
+        "priceDeal": prodDcto,
+        "categoria": nameCat,
+        "image": imagenes,
+      });
+    } else {
+      productosOf.push({
+        "name": prod.name,
+        "description": prod.description,
+        "deal": '0%',
+        "price": prod.price,
+        "priceDeal": prod.price,
         "categoria": nameCat,
         "image": imagenes,
       });
