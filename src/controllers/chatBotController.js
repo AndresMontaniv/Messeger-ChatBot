@@ -812,27 +812,29 @@ async function getProducts(facebookId, req = {}) {
       }
     }
 
-    if (descuento) {
-      let prodDcto = prod.price * dcto;
-      productosOf.push({
-        "name": prod.name,
-        "description": prod.description,
-        "deal": dcto1,
-        "price": prod.price,
-        "priceDeal": prodDcto,
-        "categoria": nameCat,
-        "image": imagenes,
-      });
-    } else {
-      productosOf.push({
-        "name": prod.name,
-        "description": prod.description,
-        "deal": '0%',
-        "price": prod.price,
-        "priceDeal": prod.price,
-        "categoria": nameCat,
-        "image": imagenes,
-      });
+    if(prod.price > 100){
+      if (descuento) {
+        let prodDcto = prod.price * dcto;
+        productosOf.push({
+          "name": prod.name,
+          "description": prod.description,
+          "deal": dcto1,
+          "price": prod.price,
+          "priceDeal": prodDcto,
+          "categoria": nameCat,
+          "image": imagenes,
+        });
+      } else {
+        productosOf.push({
+          "name": prod.name,
+          "description": prod.description,
+          "deal": '0%',
+          "price": prod.price,
+          "priceDeal": prod.price,
+          "categoria": nameCat,
+          "image": imagenes,
+        });
+      }
     }
   }
 
