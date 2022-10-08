@@ -192,6 +192,7 @@ async function handleDialogFlowAction(
       break;
 
 
+
     case "oferta.action":  //Los productos que tenemos en oferta son: {productos_oferta} ¿Cuál le interesa?
       var polerasx = await getProductsFromDeal(sender);
       var cardsx = [];
@@ -219,11 +220,42 @@ async function handleDialogFlowAction(
       await sendTextMessage(sender, 'Estos son los productos con descuentos');
       break;
 
-    case "ofertaCategoria.action": //[x] (si o no) Tenemos en oferta. ¿Cuál polera le interesa?
 
+    case "ofertaCategoria.action": //[x] (si o no) Tenemos en oferta. ¿Cuál polera le interesa?
+    let paramsOC = parameters.fields.categoriapolera.stringValue.toUpperCase();
+    let categoryOC = await categoryOC.findOne({ name: paramsOC });
+    let mapaOC = {};
+    if (categoryOC) {
+      mapaOC.categoryOC = categoryOC;
+    }
+    let polerasOC = await getProductsFromDeal(sender, mapaOC);
+    let cardsOC = [];
+    polerasOC.forEach((poleraOC) => {
+      let disc = poleraOC.deal != '0%' ? "(Descuento " + poleraOC.deal + " )" : "";
+      cardsOC.push({
+        title: poleraOC.name + "  $" + poleraOC.priceDeal + disc,
+        image_url: poleraOC.image[0],
+        subtitle: poleraOC.categoria,
+        buttons: [
+          {
+            type: "postback",
+            title: "Me gusta",
+            payload: "me_gusta",
+          },
+          {
+            type: "postback",
+            title: "No me gusta",
+            payload: "no_me_gusta",
+          },
+        ],
+      });
+    });
+    await sendGenericMessage(sender, cardsOC);
+    await sendTextMessage(sender, '¿Cuál de las poleras le interesa?');
       break;
 
     case "ofertaEspecifica.action":  //La polera en oferta {polera_especifica_oferta} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
+      
 
       break;
 
@@ -231,8 +263,8 @@ async function handleDialogFlowAction(
       sendCategories(sender);
       break;
 
-    case "poleraCategoria.action": //Las poleras {categoria_polera} que tenemos disponibles son las siguientes: {lista_polera_categoria} (lista de poleras de la categoriaPolera) ¿Cuál de las poleras le interesa?
 
+    case "poleraCategoria.action": //Las poleras {categoria_polera} que tenemos disponibles son las siguientes: {lista_polera_categoria} (lista de poleras de la categoriaPolera) ¿Cuál de las poleras le interesa?
       let params = parameters.fields.categoriapolera.stringValue.toUpperCase();
       let category = await Category.findOne({ name: params });
       let mapa = {};
@@ -266,25 +298,17 @@ async function handleDialogFlowAction(
       break;
 
     case "poleraEspecifica.action": //La polera {polera_especifica} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
-      let paramss = parameters.fields;
-      var size = paramss.talla.stringValue;
-      size = size[0].toUpperCase() + size.substring(1);
-      let cat = paramss.categoriaPolera.stringValue.toUpperCase();
-      var color = paramss.color.stringValue;
-      color = color[0].toUpperCase() + color.substring(1);
-      let map = {};
-      if (category) {
-        map.category = cat;
-        map.name = '/.*' + color + '.*/';
-      }
-      var polerasas = await getProducts(sender, mapa);
-      var cardsas = [];
-      polerasas.forEach((polera) => {
-        let disc = polera.deal != '0%' ? "(Descuento " + polera.deal + " )" : "";
-        cardsas.push({
-          title: polera.name + "  $" + polera.priceDeal + disc,
-          image_url: polera.image[0],
-          subtitle: polera.categoria,
+      const size1 = parameters.fields.talla.stringValue;
+      const cat1 = parameters.fields.categoriaPolera.stringValue;
+      const color1 = parameters.fields.color.stringValue;
+      var poleras1 = await getProductsEsp(sender, color1, size1, cat1.toUpperCase());
+      var card1 = [];
+      poleras1.forEach((polera1) => {
+        let disc = polera1.deal != '0%' ? "(Descuento " + polera1.deal + " )" : "";
+        card1.push({
+          title: polera1.name + "  $" + polera1.priceDeal + disc,
+          image_url: polera1.image[0],
+          subtitle: polera1.categoria,
           buttons: [
             {
               type: "postback",
@@ -299,13 +323,13 @@ async function handleDialogFlowAction(
           ],
         });
       });
-      await sendGenericMessage(sender, cardsas);
+      await sendGenericMessage(sender, card1);
       await sendTextMessage(sender, '¿Te gustaría comprar este producto?');
       break;
+      
 
     case "precio.action": //{precio_poleras} ¿Cual polera le interesa?
-
-
+    sendCategories(sender);
       break;
 
     case "puntuacion.action": //Gracias por tu valoración, nos ayuda a seguir mejorando. ¡Que tenga un buen dia!
@@ -975,6 +999,73 @@ async function imagenesF(id_prod) {
   });
 
   return imagenes;
+}
+
+async function getProductsEsp(facebookId, colorP, tallaP, catName) {
+  var busq = '';
+  if(colorP && tallaP){
+    busq = colorP + ' Talla ' + tallaP ;
+  }else{
+    if (colorP){
+      busq = colorP;
+    }
+    if(tallaP){
+      busq = tallaP;
+    }
+  }
+
+  let visit1 = await getCurrentVisit(facebookId);
+  let categoriaPE = await Category.find({name: catName}).limit(1);
+  let ofertasR1 = await ofertasF();
+  let ofert1 = ofertasR1[0];
+  var dcto12 = String(ofert1.discount) + '%'; // $text: { $search: "java coffee shop" }
+  var dcto1 = 1 - (ofert1.discount / 100);
+  let categoriaPEE = categoriaPE[0];
+
+  const dataDB = await Product.find({category:categoriaPEE._id, $text:{$search: `"\"`+`${busq}`+`\""`}}); //db.content.find({$text:{$search:"dog"}})
+  var productosOf = [];
+  console.log("***************************************************: , productos");
+  console.log(dataDB);
+  for (var i = 0; i < dataDB.length; i++) {
+    prod = dataDB[i];
+    const descuento = await Discount.findOne({ deal: ofert1._id, product: prod._id });
+    let imagenes = await imagenesF(prod._id);
+    var nameCat = await categoriaNombreF(prod.category);
+    if (visit1) {
+      let query = new Query({ visit1, product: prod._id });
+      try {
+        await query.save();
+        console.log('new query', query);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    if (descuento) {
+      let prodDcto = prod.price * dcto1;
+      productosOf.push({
+        "name": prod.name,
+        "description": prod.description,
+        "deal": dcto12,
+        "price": prod.price,
+        "priceDeal": prodDcto,
+        "categoria": nameCat,
+        "image": imagenes,
+      });
+    } else {
+      productosOf.push({
+        "name": prod.name,
+        "description": prod.description,
+        "deal": '0%',
+        "price": prod.price,
+        "priceDeal": prod.price,
+        "categoria": nameCat,
+        "image": imagenes,
+      });
+    }
+  }
+
+  return productosOf;
 }
 
 
