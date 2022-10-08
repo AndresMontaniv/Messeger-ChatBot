@@ -113,7 +113,7 @@ async function receivedMessage(event) {
   }
 
   saveUserData(senderId);
-  getProductsLike(senderId);
+  getProductsLike(senderId, ['negro', 'rojo']);
 
   if (messageText) {
     //send message to api.ai
