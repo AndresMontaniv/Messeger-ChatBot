@@ -223,11 +223,40 @@ async function handleDialogFlowAction(
 
 
     case "ofertaCategoria.action": //[x] (si o no) Tenemos en oferta. ¿Cuál polera le interesa?
-
+    let paramsOC = parameters.fields.categoriapolera.stringValue.toUpperCase();
+    let categoryOC = await categoryOC.findOne({ name: paramsOC });
+    let mapaOC = {};
+    if (categoryOC) {
+      mapaOC.categoryOC = categoryOC;
+    }
+    let polerasOC = await getProductsFromDeal(sender, mapaOC);
+    let cardsOC = [];
+    polerasOC.forEach((poleraOC) => {
+      let disc = poleraOC.deal != '0%' ? "(Descuento " + poleraOC.deal + " )" : "";
+      cardsOC.push({
+        title: poleraOC.name + "  $" + poleraOC.priceDeal + disc,
+        image_url: poleraOC.image[0],
+        subtitle: poleraOC.categoria,
+        buttons: [
+          {
+            type: "postback",
+            title: "Me gusta",
+            payload: "me_gusta",
+          },
+          {
+            type: "postback",
+            title: "No me gusta",
+            payload: "no_me_gusta",
+          },
+        ],
+      });
+    });
+    await sendGenericMessage(sender, cardsOC);
+    await sendTextMessage(sender, '¿Cuál de las poleras le interesa?');
       break;
 
     case "ofertaEspecifica.action":  //La polera en oferta {polera_especifica_oferta} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
-
+      
 
       break;
 
@@ -270,12 +299,9 @@ async function handleDialogFlowAction(
       break;
 
     case "poleraEspecifica.action": //La polera {polera_especifica} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
-     // let paramss1 = parameters.fields;
-      
       const size1 = parameters.fields.talla.stringValue;
       const cat1 = parameters.fields.categoriaPolera.stringValue;
       const color1 = parameters.fields.color.stringValue;
-     // let category1 = await Category.findOne({ name: cat1 });
       var poleras1 = await getProductsEsp(sender, color1, size1, cat1.toUpperCase());
       var card1 = [];
       poleras1.forEach((polera1) => {
@@ -302,7 +328,6 @@ async function handleDialogFlowAction(
       await sendTextMessage(sender, '¿Te gustaría comprar este producto?');
       break;
       
-
 
     case "precio.action": //{precio_poleras} ¿Cual polera le interesa?
     sendCategories(sender);
@@ -925,7 +950,6 @@ async function getProductsEsp(facebookId, colorP, tallaP, catName) {
       busq = tallaP;
     }
   }
-  var busq1 = ` /${busq}/ `
 
   let visit1 = await getCurrentVisit(facebookId);
   let categoriaPE = await Category.find({name: catName}).limit(1);
@@ -934,9 +958,6 @@ async function getProductsEsp(facebookId, colorP, tallaP, catName) {
   var dcto12 = String(ofert1.discount) + '%'; // $text: { $search: "java coffee shop" }
   var dcto1 = 1 - (ofert1.discount / 100);
   let categoriaPEE = categoriaPE[0];
-  console.log("*******************************busqueda********************: ", busq1);
-  console.log("*******************************color********************: ", colorP);
-  console.log("*******************************talla********************: ", tallaP);
 
   const dataDB = await Product.find({category:categoriaPEE._id, $text:{$search: `"\"`+`${busq}`+`\""`}}); //db.content.find({$text:{$search:"dog"}})
   var productosOf = [];
