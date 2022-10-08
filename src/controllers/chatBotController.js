@@ -910,7 +910,7 @@ async function getProductsLike(facebookId, texts = []) {
       });
     }
   }
-  console.log('productos test===>', productos);
+  console.log('productos test===>', productosOf);
   return productosOf;
 }
 
