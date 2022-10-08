@@ -310,6 +310,7 @@ async function handleDialogFlowAction(
 
     case "puntuacion.action": //Gracias por tu valoración, nos ayuda a seguir mejorando. ¡Que tenga un buen dia!
       var score = parameters.fields.puntuacion.stringValue;
+      console.log('params==>', parameters.fields);
       console.log('score==>', score);
       await editVisit(sender, { score, isClosed: true });
       handleMessages(messages, sender);
