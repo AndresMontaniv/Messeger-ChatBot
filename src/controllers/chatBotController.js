@@ -922,7 +922,7 @@ async function productosF() {
   for (var i = 0; i < dataDB.length; i++) {
     prod = dataDB[i];
     var nameCat = await categoriaNombreF(prod.category);
-    imagenes = await imagenesF(prod._id);
+    var imagenes = await imagenesF(prod._id);
     productos.push({
       "name": prod.name,
       "description": prod.description,
@@ -931,7 +931,7 @@ async function productosF() {
       "image": imagenes,
     });
   }
-
+  console.log('productos test===>', productos);
   return productos;
 }
 
