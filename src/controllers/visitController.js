@@ -36,6 +36,7 @@ const editVisit = async (facebookId, req) => {
         if (!client) {
             return;
         }
+        console.log('req===>', req);
         const currentVisit = await Visit.findOneAndUpdate(
             {
                 client: client,
