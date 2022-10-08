@@ -124,7 +124,7 @@ async function receivedMessage(event) {
 }
 
 
-
+//last v
 async function saveUserData(facebookId) {
   const clientDoc = await Client.findOne({ facebookId });
   if (clientDoc) {
@@ -222,40 +222,40 @@ async function handleDialogFlowAction(
 
 
     case "ofertaCategoria.action": //[x] (si o no) Tenemos en oferta. ¿Cuál polera le interesa?
-    let paramsOC = parameters.fields.categoriapolera.stringValue.toUpperCase();
-    let categoryOC = await categoryOC.findOne({ name: paramsOC });
-    let mapaOC = {};
-    if (categoryOC) {
-      mapaOC.categoryOC = categoryOC;
-    }
-    let polerasOC = await getProductsFromDeal(sender, mapaOC);
-    let cardsOC = [];
-    polerasOC.forEach((poleraOC) => {
-      let disc = poleraOC.deal != '0%' ? "(Descuento " + poleraOC.deal + " )" : "";
-      cardsOC.push({
-        title: poleraOC.name + "  $" + poleraOC.priceDeal + disc,
-        image_url: poleraOC.image[0],
-        subtitle: poleraOC.categoria,
-        buttons: [
-          {
-            type: "postback",
-            title: "Me gusta",
-            payload: "me_gusta",
-          },
-          {
-            type: "postback",
-            title: "No me gusta",
-            payload: "no_me_gusta",
-          },
-        ],
+      let paramsOC = parameters.fields.categoriapolera.stringValue.toUpperCase();
+      let categoryOC = await categoryOC.findOne({ name: paramsOC });
+      let mapaOC = {};
+      if (categoryOC) {
+        mapaOC.categoryOC = categoryOC;
+      }
+      let polerasOC = await getProductsFromDeal(sender, mapaOC);
+      let cardsOC = [];
+      polerasOC.forEach((poleraOC) => {
+        let disc = poleraOC.deal != '0%' ? "(Descuento " + poleraOC.deal + " )" : "";
+        cardsOC.push({
+          title: poleraOC.name + "  $" + poleraOC.priceDeal + disc,
+          image_url: poleraOC.image[0],
+          subtitle: poleraOC.categoria,
+          buttons: [
+            {
+              type: "postback",
+              title: "Me gusta",
+              payload: "me_gusta",
+            },
+            {
+              type: "postback",
+              title: "No me gusta",
+              payload: "no_me_gusta",
+            },
+          ],
+        });
       });
-    });
-    await sendGenericMessage(sender, cardsOC);
-    await sendTextMessage(sender, '¿Cuál de las poleras le interesa?');
+      await sendGenericMessage(sender, cardsOC);
+      await sendTextMessage(sender, '¿Cuál de las poleras le interesa?');
       break;
 
     case "ofertaEspecifica.action":  //La polera en oferta {polera_especifica_oferta} (mostrar informacion - precio de dicha polera) ¿Te gustaría comprar este producto?
-      
+
 
       break;
 
@@ -326,10 +326,10 @@ async function handleDialogFlowAction(
       await sendGenericMessage(sender, card1);
       await sendTextMessage(sender, '¿Te gustaría comprar este producto?');
       break;
-      
+
 
     case "precio.action": //{precio_poleras} ¿Cual polera le interesa?
-    sendCategories(sender);
+      sendCategories(sender);
       break;
 
     case "puntuacion.action": //Gracias por tu valoración, nos ayuda a seguir mejorando. ¡Que tenga un buen dia!
@@ -1003,26 +1003,26 @@ async function imagenesF(id_prod) {
 
 async function getProductsEsp(facebookId, colorP, tallaP, catName) {
   var busq = '';
-  if(colorP && tallaP){
-    busq = colorP + ' Talla ' + tallaP ;
-  }else{
-    if (colorP){
+  if (colorP && tallaP) {
+    busq = colorP + ' Talla ' + tallaP;
+  } else {
+    if (colorP) {
       busq = colorP;
     }
-    if(tallaP){
+    if (tallaP) {
       busq = tallaP;
     }
   }
 
   let visit1 = await getCurrentVisit(facebookId);
-  let categoriaPE = await Category.find({name: catName}).limit(1);
+  let categoriaPE = await Category.find({ name: catName }).limit(1);
   let ofertasR1 = await ofertasF();
   let ofert1 = ofertasR1[0];
   var dcto12 = String(ofert1.discount) + '%'; // $text: { $search: "java coffee shop" }
   var dcto1 = 1 - (ofert1.discount / 100);
   let categoriaPEE = categoriaPE[0];
 
-  const dataDB = await Product.find({category:categoriaPEE._id, $text:{$search: `"\"`+`${busq}`+`\""`}}); //db.content.find({$text:{$search:"dog"}})
+  const dataDB = await Product.find({ category: categoriaPEE._id, $text: { $search: `"\"` + `${busq}` + `\""` } }); //db.content.find({$text:{$search:"dog"}})
   var productosOf = [];
   console.log("***************************************************: , productos");
   console.log(dataDB);
