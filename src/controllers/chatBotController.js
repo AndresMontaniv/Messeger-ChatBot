@@ -302,93 +302,10 @@ async function handleDialogFlowAction(
       await sendTextMessage(sender, '¿Te gustaría comprar este producto?');
       break;
       
-      async function getProductsEsp(facebookId, colorP, tallaP, catName) {
-        var busq = '';
-        if(colorP && tallaP){
-          busq = colorP + ' talla ' + tallaP ;
-        }else{
-          if (colorP){
-            busq = colorP;
-          }
-          if(tallaP){
-            busq = tallaP;
-          }
-        }
-        var busq1 = ` /${busq}/ `
 
-        let visit1 = await getCurrentVisit(facebookId);
-        let categoriaPE = await Category.find({name: catName}).limit(1);
-        let ofertasR1 = await ofertasF();
-        let ofert1 = ofertasR1[0];
-        var dcto12 = String(ofert1.discount) + '%';
-        var dcto1 = 1 - (ofert1.discount / 100);
-        let categoriaPEE = categoriaPE[0];
-        console.log("*******************************busqueda********************: ", busq1);
-        console.log("*******************************color********************: ", colorP);
-        console.log("*******************************talla********************: ", tallaP);
-
-        const dataDB = await Product.find({category:categoriaPEE._id, $text:{$search: ` /${busq}/ `}}); //db.content.find({$text:{$search:"dog"}})
-        var productosOf = [];
-        console.log("***************************************************: , productos");
-        console.log(dataDB);
-        for (var i = 0; i < dataDB.length; i++) {
-          prod = dataDB[i];
-          const descuento = await Discount.findOne({ deal: ofert1._id, product: prod._id });
-          let imagenes = await imagenesF(prod._id);
-          var nameCat = await categoriaNombreF(prod.category);
-          if (visit1) {
-            let query = new Query({ visit1, product: prod._id });
-            try {
-              await query.save();
-              console.log('new query', query);
-            } catch (err) {
-              console.log(err);
-            }
-          }
-      
-          if (descuento) {
-            let prodDcto = prod.price * dcto1;
-            productosOf.push({
-              "name": prod.name,
-              "description": prod.description,
-              "deal": dcto12,
-              "price": prod.price,
-              "priceDeal": prodDcto,
-              "categoria": nameCat,
-              "image": imagenes,
-            });
-          } else {
-            productosOf.push({
-              "name": prod.name,
-              "description": prod.description,
-              "deal": '0%',
-              "price": prod.price,
-              "priceDeal": prod.price,
-              "categoria": nameCat,
-              "image": imagenes,
-            });
-          }
-        }
-      
-        return productosOf;
-      }
-
-
-
-
-
-
-
-
-
-
-
-
-    
 
     case "precio.action": //{precio_poleras} ¿Cual polera le interesa?
-
-
+    sendCategories(sender);
       break;
 
     case "puntuacion.action": //Gracias por tu valoración, nos ayuda a seguir mejorando. ¡Que tenga un buen dia!
@@ -994,6 +911,77 @@ async function imagenesF(id_prod) {
   });
 
   return imagenes;
+}
+
+async function getProductsEsp(facebookId, colorP, tallaP, catName) {
+  var busq = '';
+  if(colorP && tallaP){
+    busq = colorP + ' Talla ' + tallaP ;
+  }else{
+    if (colorP){
+      busq = colorP;
+    }
+    if(tallaP){
+      busq = tallaP;
+    }
+  }
+  var busq1 = ` /${busq}/ `
+
+  let visit1 = await getCurrentVisit(facebookId);
+  let categoriaPE = await Category.find({name: catName}).limit(1);
+  let ofertasR1 = await ofertasF();
+  let ofert1 = ofertasR1[0];
+  var dcto12 = String(ofert1.discount) + '%'; // $text: { $search: "java coffee shop" }
+  var dcto1 = 1 - (ofert1.discount / 100);
+  let categoriaPEE = categoriaPE[0];
+  console.log("*******************************busqueda********************: ", busq1);
+  console.log("*******************************color********************: ", colorP);
+  console.log("*******************************talla********************: ", tallaP);
+
+  const dataDB = await Product.find({category:categoriaPEE._id, $text:{$search: `"\"`+`${busq}`+`\""`}}); //db.content.find({$text:{$search:"dog"}})
+  var productosOf = [];
+  console.log("***************************************************: , productos");
+  console.log(dataDB);
+  for (var i = 0; i < dataDB.length; i++) {
+    prod = dataDB[i];
+    const descuento = await Discount.findOne({ deal: ofert1._id, product: prod._id });
+    let imagenes = await imagenesF(prod._id);
+    var nameCat = await categoriaNombreF(prod.category);
+    if (visit1) {
+      let query = new Query({ visit1, product: prod._id });
+      try {
+        await query.save();
+        console.log('new query', query);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    if (descuento) {
+      let prodDcto = prod.price * dcto1;
+      productosOf.push({
+        "name": prod.name,
+        "description": prod.description,
+        "deal": dcto12,
+        "price": prod.price,
+        "priceDeal": prodDcto,
+        "categoria": nameCat,
+        "image": imagenes,
+      });
+    } else {
+      productosOf.push({
+        "name": prod.name,
+        "description": prod.description,
+        "deal": '0%',
+        "price": prod.price,
+        "priceDeal": prod.price,
+        "categoria": nameCat,
+        "image": imagenes,
+      });
+    }
+  }
+
+  return productosOf;
 }
 
 
