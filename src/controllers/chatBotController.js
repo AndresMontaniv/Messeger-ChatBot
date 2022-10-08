@@ -867,8 +867,8 @@ async function getProductsLike(facebookId, texts = []) {
 
   const dataDB = await Product.find({
     $or: [
-      { name: '.*negro.*' },
-      { name: '.*rojo.*' }
+      { name: /.*negro.*/ },
+      { name: /.*rojo.*/ }
     ]
   }); //todos los productos
   var productosOf = [];
