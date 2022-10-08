@@ -910,7 +910,7 @@ async function getProductsLike(facebookId, texts = []) {
       });
     }
   }
-
+  console.log('productos test===>', productos);
   return productosOf;
 }
 
@@ -931,7 +931,7 @@ async function productosF() {
       "image": imagenes,
     });
   }
-  console.log('productos test===>', productos);
+
   return productos;
 }
 
