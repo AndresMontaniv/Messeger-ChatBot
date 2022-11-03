@@ -30,6 +30,7 @@ router.post('/signup', isNotLoggedIn, async (req, res) => {
     console.log(req.body);
     const { name, email, password } = req.body;
 
+    
     if (name.length <= 0) {
         errors.push({ text: 'Name Field is Empty' });
     }
@@ -39,6 +40,7 @@ router.post('/signup', isNotLoggedIn, async (req, res) => {
     if (password.length < 4) {
         errors.push({ text: 'Passwords must be at least 4 characters.' });
     }
+    
 
     if (errors.length > 0) {
         return res.render('auth/signup', {
@@ -63,7 +65,7 @@ router.post('/signup', isNotLoggedIn, async (req, res) => {
     newUser.password = await newUser.encryptPassword(password);
     await newUser.save();
     req.flash('success', 'User Created');
-    res.redirect('/signin');
+    res.redirect('/home');
 });
 
 router.get('/home', isLoggedIn, (req, res) => {
@@ -72,7 +74,7 @@ router.get('/home', isLoggedIn, (req, res) => {
 
 router.get('/signout', isLoggedIn, (req, res) => {
     req.logOut();
-    res.redirect('/signin');
+    res.redirect('/');
 });
 
 
