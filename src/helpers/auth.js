@@ -8,7 +8,6 @@ module.exports = {
 
     isNotLoggedIn(req, res, next) {
         if (!req.isAuthenticated()) {
-            console.log('not');
             return next();
         }
         return res.redirect('/home');

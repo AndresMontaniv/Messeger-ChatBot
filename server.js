@@ -8,6 +8,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const Handlebars = require('handlebars');
 const { dbConnection } = require('./src/database/config');
 
 
@@ -22,27 +23,29 @@ dbConnection();
 
 // settings
 app.set('port', process.env.PORT || 5000);
+
+const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
+
 app.set('views', path.join(__dirname, 'src/views'));
 app.engine('.hbs', exphbs.engine({
     defaultLayout: 'main',
     layoutsDir: path.join(app.get('views'), 'layouts'),
     partialsDir: path.join(app.get('views'), 'partials'),
     extname: '.hbs',
-    helpers: require('./src/helpers/handlebars')
+    helpers: require('./src/helpers/handlebars'),
+    handlebars: allowInsecurePrototypeAccess(Handlebars)
 }));
 app.set('view engine', '.hbs');
 
 //Middlewares
-app.use(morgan("dev"));
-app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride('_method'));
 app.use(session({
     secret: 'mysecretapp',
     resave: true,
     saveUninitialized: true,
 }));
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
@@ -53,7 +56,7 @@ require('./src/helpers/passport');
 app.use((req, res, next) => {
     app.locals.success = req.flash('success');
     app.locals.message = req.flash('message');
-    app.locals.user = req.user || null;
+    app.locals.user = req.user;
     next();
 });
 
@@ -65,6 +68,7 @@ app.use((req, res, next) => {
 app.use(require('./src/routes'));
 app.use(require('./src/routes/auth'));
 app.use('/api', require('./src/routes/api'));
+app.use('/clients', require('./src/routes/clients'));
 
 //Routes
 app.use(express.static(path.join(__dirname, 'src/public')));
