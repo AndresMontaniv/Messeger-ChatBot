@@ -5,7 +5,11 @@
         <img class="h-9" src="/img/logo.png" alt="logo">
     </a>
     <!-- end logo -->
-    <h1>{{user.name}}</h1>
+
+            {{#if user}}
+                <p>{{user.name}}</p>
+                
+            {{/if}}
 
     <!-- login -->
     <div class="flex-initial"> 
