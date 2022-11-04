@@ -1,7 +1,7 @@
 <!-- component -->
 <nav class=" w-full flex relative justify-between items-center mx-auto px-8 h-14 shadow ">
     <!-- logo -->
-    <a class="text-2xl font-bold font-heading" href="/dashboard">
+    <a class="text-2xl font-bold font-heading" href="clients/dashboard">
         <img class="h-9" src="/img/logo.png" alt="logo">
     </a>
     <!-- end logo -->
@@ -17,12 +17,27 @@
     <!-- logout -->
     <div class="flex-initial"> 
       <div class="flex justify-end items-center relative">
-        <a class="text-2xl font-bold font-heading" href="/signout">
-            <img class="h-9" src="/img/logout.png" alt="logo">
-        </a>
+
+
+
+        <div class="grid grid-cols-2">
+            <div class="flex justify-center items center">
+                {{#if user}}
+                    <p>{{user.name}}</p>
+                {{/if}}
+                <a class="text-2xl font-bold font-heading" href="/signout">
+                    <img class="h-9" src="/img/logout.png" alt="logo">
+                </a>
+            </div>
+
+        </div>
+
+
+        
       </div>
     </div>
     <!-- end logout -->
+    
 </nav>
 
 
