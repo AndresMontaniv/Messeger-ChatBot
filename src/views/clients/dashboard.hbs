@@ -1,17 +1,20 @@
 <!-- component -->
 <nav class=" w-full flex relative justify-between items-center mx-auto px-8 h-14 shadow ">
     <!-- logo -->
-    <a class="text-2xl font-bold font-heading" href="/home">
+    <a class="text-2xl font-bold font-heading" href="/dashboard">
         <img class="h-9" src="/img/logo.png" alt="logo">
     </a>
     <!-- end logo -->
 
-            {{#if user}}
-                <p>{{user.name}}</p>
-                
-            {{/if}}
-
-    <!-- login -->
+    <div class="flex-initial"> 
+      <div class="flex justify-end items-center relative">
+        {{#if user}}
+            <p>{{user.name}}</p>
+        {{/if}}
+      </div>
+    </div>
+           
+    <!-- logout -->
     <div class="flex-initial"> 
       <div class="flex justify-end items-center relative">
         <a class="text-2xl font-bold font-heading" href="/signout">
@@ -19,7 +22,7 @@
         </a>
       </div>
     </div>
-    <!-- end login -->
+    <!-- end logout -->
 </nav>
 
 

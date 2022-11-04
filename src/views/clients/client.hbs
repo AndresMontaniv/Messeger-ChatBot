@@ -1,4 +1,140 @@
-<div class="container p-4 my-5 whitebox">
-    <h1>Aqui van el ver client</h1>
+<!-- component -->
+<nav class=" w-full flex relative justify-between items-center mx-auto px-8 h-14 shadow ">
+    <!-- logo -->
+    <a class="text-2xl font-bold font-heading" href="/dashboard">
+        <img class="h-9" src="/img/logo.png" alt="logo">
+    </a>
+    <!-- end logo -->
 
+    <div class="flex-initial"> 
+      <div class="flex justify-end items-center relative">
+        {{#if user}}
+            <p>{{user.name}}</p>
+        {{/if}}
+      </div>
+    </div>
+           
+    <!-- logout -->
+    <div class="flex-initial"> 
+      <div class="flex justify-end items-center relative">
+        <a class="text-2xl font-bold font-heading" href="/signout">
+            <img class="h-9" src="/img/logout.png" alt="logo">
+        </a>
+      </div>
+    </div>
+    <!-- end logout -->
+</nav>
+
+
+
+
+<div class="flex items-center justify-center px-6 my-8">
+	<!-- Row -->
+	<div class="w-full xl:w-3/4 lg:w-11/12 flex">
+		<!-- Col -->
+		
+		<div class="w-full h-auto bg-purple-500 hidden lg:block lg:w-5/12 bg-cover rounded-l-lg " >
+		
+			<div class="mx-15 mt-20 ">
+				<label class="block mb-6 p-2 text-2xl  text-center font-bold text-white">
+					PEDRO PICAPIEDRA
+				</label>
+
+				<div class="flex items-center justify-center">
+					<img class="img-fluid lg:w-3/5 flex rounded-xl content-center" src="/images/default-profile.png " >
+				</div>
+				
+			</div>
+
+		</div>
+		<!-- Col -->
+		<div class="w-full lg:w-7/12 bg-white p-1 rounded-lg lg:rounded-l-none">
+			<h3 class="pt-2 text-2xl text-center">CLIENTE</h3>
+			<form class="px-8 pt-1 pb-2 mb-2 bg-white rounded">
+
+				<div class="mb-3">
+					<label class="block mb-0 text-sm font-bold text-gray-700" for="facebook">
+						Facebook
+					</label>
+					<a href="https://www.facebook.com/profile.php?id=100008061335713">
+						<p class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+						id="facebook">
+						https://www.facebook.com/profile.php?id=100008061335713
+						</p>
+					</a>
+				</div>
+
+				<div class="mb-3">
+					<label class="block mb-0 text-sm font-bold text-gray-700" for="email">
+						Email
+					</label>
+					<p class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+						id="email">
+						correo@gmail.com
+					</p>
+				</div>
+
+				<div class="mb-3">
+					<label class="block mb-0 text-sm font-bold text-gray-700" for="celular">
+						Celular
+					</label>
+					<p class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+						id="celular">
+						78654321
+					</p>
+				</div>
+
+				<div class="mb-3">
+					<label class="block mb-0 text-sm font-bold text-gray-700" for="nVeces">
+						Cantidad de pedidos
+					</label>
+					<p class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+						id="nVeces">
+						10
+					</p>
+				</div>
+
+				<div class="mb-3">
+					<label class="block mb-0 text-sm font-bold text-gray-700" for="fecha">
+						Último pedido
+					</label>
+					<p class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+						id="fecha">
+						10/10/2022
+					</p>
+				</div>
+
+				<div class="mb-0">
+					<label class="block mb-0 text-sm font-bold text-gray-700" for="pedido">
+						Detalle de pedido
+					</label>
+					<div class="flex flex-col rounded-xl border-gray-300 hover:border-gray-500 overflow-hidden shadow-xl min-wv-3 max-wv-3 min-hv-3 max-hv-3 border-1" id="pedido">	
+						<div class="flex flex-col bg-whiteflex-grow bg-white">
+							<div class="min-hv-4 overflow-y-auto flex-grow p-1 " style="max-height:calc(22vh - 56px)">
+								<!--for each-->
+									<div class="flex-1 min-w-0 m-2 border-b border-gray-200">
+										<p class="text-sm font-medium text-gray-900 truncate dark:text-black">
+											prod1
+										</p>
+									</div>
+                                    <div class="flex-1 min-w-0 m-2 border-b border-gray-200">
+										<p class="text-sm font-medium text-gray-900 truncate dark:text-black">
+											prod2
+										</p>
+									</div>
+                                    <div class="flex-1 min-w-0 m-2 border-b border-gray-200">
+										<p class="text-sm font-medium text-gray-900 truncate dark:text-black">
+											prod3
+										</p>
+									</div>
+							
+										
+								
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
 </div>
