@@ -324,7 +324,7 @@ async function handleDialogFlowAction(
         });
       });
       await sendGenericMessage(sender, card1);
-      await sendTextMessage(sender, '¿Te gustaría comprar este producto?');
+      await sendTextMessage(sender, '¿Te interesaria comprar alguna de estas poleras?');
       break;
 
 
