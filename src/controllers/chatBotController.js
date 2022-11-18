@@ -279,7 +279,7 @@ async function handleDialogFlowAction(
           title: polera.name + "  $" + polera.priceDeal + disc,
           image_url: polera.image[0],
           subtitle: polera.categoria,
-          buttons: [
+        /*  buttons: [
             {
               type: "postback",
               title: "Me gusta",
@@ -290,7 +290,7 @@ async function handleDialogFlowAction(
               title: "No me gusta",
               payload: "no_me_gusta",
             },
-          ],
+          ], */
         });
       });
       await sendGenericMessage(sender, cards);
