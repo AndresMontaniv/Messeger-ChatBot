@@ -16,7 +16,11 @@ router.get('/dashboard', isLoggedIn, async (req, res) => {
     var profPic = "";
     resp.forEach(async e => {
         if (!e.isClient) {
-            if(!e.profilePic){profPic = e.profilePic}else{profPic = "/img/default-profile.png"}
+            if(e.profilePic){
+                profPic = e.profilePic
+            }else{
+                profPic = "/img/default-profile.png"
+            }
 
             prosp.push({
                 id: e.id,
