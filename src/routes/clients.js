@@ -13,13 +13,15 @@ router.get('/dashboard', isLoggedIn, async (req, res) => {
     var prospC = [];
     var clients = [];
     var clientsF = [];
+    var profPic = "";
     resp.forEach(async e => {
         if (!e.isClient) {
+            if(!e.profilePic){profPic = e.profilePic}else{profPic = "/img/default-profile.png"}
 
             prosp.push({
                 id: e.id,
                 name: e.firstName + ' ' + e.lastName,
-                profilePic: e.profilePic,
+                profilePic: profPic, //e.profilePic,
             });
             var contacted = await Contact.find({ client: e });
             if (contacted.length > 0) {
