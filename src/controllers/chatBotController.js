@@ -812,7 +812,7 @@ async function getProducts(facebookId, req = {}) {
       }
     }
 
-    if(prod.price > 100){
+   // if(prod.price > 100){
       if (descuento) {
         let prodDcto = prod.price * dcto;
         productosOf.push({
@@ -835,7 +835,7 @@ async function getProducts(facebookId, req = {}) {
           "image": imagenes,
         });
       }
-    }
+ //   }
   }
 
   return productosOf;
