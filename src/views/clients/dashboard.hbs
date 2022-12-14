@@ -147,3 +147,85 @@
 
    
   </div>
+<div class="container p-4 my-5 whitebox">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Image</th>
+                <th scope="col">Name</th>
+                <th scope="col">Show</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each prosp }}
+            <tr>
+                <td>{{id}}</td>
+                <td><a href="{{profilePic}}" class="btn btn-primary">Foto</a></td>
+                <td>{{name}}</td>
+                <td><a href="/clients/show/frecuent/{{id}}" class="btn btn-primary">Show</a></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+<div class="container p-4 my-5 whitebox">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Image</th>
+                <th scope="col">Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each prospC }}
+            <tr>
+                <td>{{id}}</td>
+                <td><a href="{{profilePic}}" class="btn btn-primary">Foto</a></td>
+                <td>{{name}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+<div class="container p-4 my-5 whitebox">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Image</th>
+                <th scope="col">Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each clients }}
+            <tr>
+                <td>{{id}}</td>
+                <td><a href="{{profilePic}}" class="btn btn-primary">Foto</a></td>
+                <td>{{name}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+<div class="container p-4 my-5 whitebox">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Image</th>
+                <th scope="col">Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each clientsF }}
+            <tr>
+                <td>{{id}}</td>
+                <td><a href="{{profilePic}}" class="btn btn-primary">Foto</a></td>
+                <td>{{name}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

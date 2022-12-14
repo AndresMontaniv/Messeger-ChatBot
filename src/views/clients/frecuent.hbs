@@ -122,3 +122,21 @@
 		</div>
 	</div>
 </div>
+
+<div class="container ">
+    <h3>Info</h3>
+    <br>
+    <p><b>id:</b> {{client.id}}</p>
+    <p><b>name:</b> {{client.name}}</p>
+    <p><b>profilePic:</b> {{client.profilePic}}</p>
+    <p><b>facebookId:</b> {{client.facebookId}}</p>
+    <p><b>email:</b> {{client.email}}</p>
+    <p><b>phone:</b> {{client.phone}}</p>
+    {{#if client.lastContact}}
+    <p><b>ultimo contacto:</b> {{timeago client.lastContact}}</p>
+    {{else}}
+    <p><b>ultimo contacto:</b> No ha tenido contacto</p>
+    {{/if}}
+    <p><b>Frecuencia de compra:</b> {{client.numOrders}}</p>
+    <p><b>Monto promedio:</b> {{client.avgTotal}}</p>
+</div>
