@@ -2,3 +2,61 @@
     <h1>Aqui van el ver client</h1>
 
 </div>
+
+<div class="container ">
+    <h3>Info</h3>
+    <br>
+    <p><b>id:</b> {{client.id}}</p>
+    <p><b>name:</b> {{client.name}}</p>
+    <p><b>profilePic:</b> {{client.profilePic}}</p>
+    <p><b>facebookId:</b> {{client.facebookId}}</p>
+    <p><b>email:</b> {{client.email}}</p>
+    <p><b>phone:</b> {{client.phone}}</p>
+    <p><b>Cantidad de pedidos:</b> {{client.numOrders}}</p>
+    {{#if client.lastOrder}}
+    <p><b>ultimo pedido:</b> {{timeago client.lastOrderDate}}</p>
+    <p><b>Detalle ultimo pedido:</b></p>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-5">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Item</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each client.details}}
+                        <tr>
+                            <td>{{product.name}}</td>
+                            <td>{{product.price}}</td>
+                            <td>{{cant}}</td>
+                            <td>{{multiply cant product.price}}</td>
+                        </tr>
+                        {{/each}}
+                        <tr>
+                            <td colspan="3"><b>Subtotal</b></td>
+                            <td><b>600</b></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><b>Descuento</b></td>
+                            <td><b>-100</b></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><b>Total</b></td>
+                            <td><b>500</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {{else}}
+    <p><b>ultimo pedido:</b> Sin pedidos hasta ahora</p>
+    {{/if}}
+
+</div>
