@@ -1,4 +1,6 @@
+require('dotenv').config();
 const { Router, response } = require('express');
+const request = require('request');
 const { isLoggedIn } = require('../helpers/auth');
 const { timeago } = require('../helpers/handlebars');
 const Deal = require('../models/deal');
@@ -12,7 +14,7 @@ router.get('/menu', async (req, res) => {
 
     var deals = await Deal.find();
 
-    res.render('deals/menu', {deals});
+    res.render('deals/menu', { deals });
 });
 
 router.get('/create', async (req, res) => {
@@ -21,8 +23,8 @@ router.get('/create', async (req, res) => {
 
 router.post('/create', async (req, res) => {
     var prom = req.body;
-    var mI =   parseInt(prom.mIni) - 1;
-    var mF =   parseInt(prom.mFin) - 1;
+    var mI = parseInt(prom.mIni) - 1;
+    var mF = parseInt(prom.mFin) - 1;
     var aI = parseInt(prom.aIni);
     var aF = parseInt(prom.aFin);
     var dI = parseInt(prom.dIni);
@@ -30,30 +32,49 @@ router.post('/create', async (req, res) => {
     var name = prom.name;
     var dcto = prom.dcto;
 
-    
+
     const deal = new Deal({
         name: name,
-        from: new Date(aI,mI,dI),
-        to: new Date(aF,mF,dF),
+        from: new Date(aI, mI, dI),
+        to: new Date(aF, mF, dF),
         discount: dcto,
     });
-    
+
     console.log(deal)
     await deal.save();
 
     const id = deal._id;
 
+    const pageId = process.env.PAGE_ID;
+    const debugToken = process.env.DEBUG_TOKEN;
+
+    if (id != null) {
+        request({
+            uri: "https://graph.facebook.com/100633766169633/feed?message",
+            qs: {
+                access_token: debugToken,
+                message: "Hola desde BackEnd"
+            },
+            method: "POST",
+        }, (err, res, body) => {
+            if (!err) {
+                console.log('message sent!')
+            } else {
+                console.error("Unable to send message:" + err);
+            }
+        });
+    }
+
     res.redirect("/deals/products?idDeal=" + id);
 
-   // res.render('deals/products', );
+    // res.render('deals/products', );
 });
 
 //mandar el id de la promocion creada
 
 router.get('/products', async (req, res) => {
-   // console.log("ga") 
-    const {idDeal}=req.query
-   // console.log(idDeal)
+    const { idDeal } = req.query
+    console.log(idDeal)
     var resDB = await Product.find();
     var products = [];
 
@@ -70,7 +91,7 @@ router.get('/products', async (req, res) => {
     }
 
 
-    res.render('deals/products', {products, idDeal});
+    res.render('deals/products', { products, idDeal });
 });
 
 router.get('/list/:id', isLoggedIn, async (req, res) => {
@@ -81,7 +102,7 @@ router.get('/list/:id', isLoggedIn, async (req, res) => {
         res.redirect('/clients/dashboard');
     }
 
-    const descuentoDB = await Discount.find({ deal: id});
+    const descuentoDB = await Discount.find({ deal: id });
     var products = [];
 
     for (var i = 0; i < descuentoDB.length; i++) {
@@ -92,13 +113,13 @@ router.get('/list/:id', isLoggedIn, async (req, res) => {
             "id": prod._id,
             "name": prod.name,
             "price": prod.price,
-            "discount": prod.price - (e.discount/100)*prod.price,
+            "discount": prod.price - (e.discount / 100) * prod.price,
             "image": imagen.url,
         });
 
     }
 
-    res.render('deals/list', {products});
+    res.render('deals/list', { products });
 });
 
 

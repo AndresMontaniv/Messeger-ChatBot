@@ -2,7 +2,7 @@ require('dotenv').config();
 const request = require('request');
 const axios = require('axios');
 const uuid = require("uuid");
-const {io}=require('socket.io-client');
+const { io } = require('socket.io-client');
 const dialogflow = require('./dialogFlowController');
 const { structProtoToJson } = require("../helpers/structFunctions");
 const { createClient, editClient } = require("../controllers/clientController");
@@ -140,12 +140,12 @@ async function saveUserData(facebookId) {
     facebookId
   );
   /* REFRESCAR VENTANAS ACTIVAS */
-  const url= process.env.URL_SERVER
+  const url = process.env.URL_SERVER
   try {
     const socket = io(url);
     socket.emit('new-user');
-    socket.disconnect()
-  }catch(e){
+    // socket.disconnect()
+  } catch (e) {
     console.log(e)
   }
 }
@@ -211,18 +211,18 @@ async function handleDialogFlowAction(
           title: polera.name + "  $" + polera.priceDeal + disc,
           image_url: polera.image[0],
           subtitle: polera.categoria,
-        /*  buttons: [
-            {
-              type: "postback",
-              title: "Me gusta",
-              payload: "me_gusta",
-            },
-            {
-              type: "postback",
-              title: "No me gusta",
-              payload: "no_me_gusta",
-            },
-          ],*/
+          /*  buttons: [
+              {
+                type: "postback",
+                title: "Me gusta",
+                payload: "me_gusta",
+              },
+              {
+                type: "postback",
+                title: "No me gusta",
+                payload: "no_me_gusta",
+              },
+            ],*/
         });
       });
       await sendGenericMessage(sender, cardsx);
@@ -245,18 +245,18 @@ async function handleDialogFlowAction(
           title: poleraOC.name + "  $" + poleraOC.priceDeal + disc,
           image_url: poleraOC.image[0],
           subtitle: poleraOC.categoria,
-        /*  buttons: [
-            {
-              type: "postback",
-              title: "Me gusta",
-              payload: "me_gusta",
-            },
-            {
-              type: "postback",
-              title: "No me gusta",
-              payload: "no_me_gusta",
-            },
-          ],*/
+          /*  buttons: [
+              {
+                type: "postback",
+                title: "Me gusta",
+                payload: "me_gusta",
+              },
+              {
+                type: "postback",
+                title: "No me gusta",
+                payload: "no_me_gusta",
+              },
+            ],*/
         });
       });
       await sendGenericMessage(sender, cardsOC);
@@ -288,18 +288,18 @@ async function handleDialogFlowAction(
           title: polera.name + "  $" + polera.priceDeal + disc,
           image_url: polera.image[0],
           subtitle: polera.categoria,
-        /*  buttons: [
-            {
-              type: "postback",
-              title: "Me gusta",
-              payload: "me_gusta",
-            },
-            {
-              type: "postback",
-              title: "No me gusta",
-              payload: "no_me_gusta",
-            },
-          ], */
+          /*  buttons: [
+              {
+                type: "postback",
+                title: "Me gusta",
+                payload: "me_gusta",
+              },
+              {
+                type: "postback",
+                title: "No me gusta",
+                payload: "no_me_gusta",
+              },
+            ], */
         });
       });
       await sendGenericMessage(sender, cards);
@@ -318,18 +318,13 @@ async function handleDialogFlowAction(
           title: polera1.name + "  $" + polera1.priceDeal + disc,
           image_url: polera1.image[0],
           subtitle: polera1.categoria,
-         /* buttons: [
+          buttons: [
             {
               type: "postback",
-              title: "Me gusta",
+              title: "Añadir " + polera1.id,
               payload: "me_gusta",
-            },
-            {
-              type: "postback",
-              title: "No me gusta",
-              payload: "no_me_gusta",
-            },
-          ],*/
+            }
+          ],
         });
       });
       await sendGenericMessage(sender, card1);
@@ -340,6 +335,7 @@ async function handleDialogFlowAction(
     case "precio.action": //{precio_poleras} ¿Cual polera le interesa?
       sendCategories(sender);
       break;
+
 
     case "puntuacion.action": //Gracias por tu valoración, nos ayuda a seguir mejorando. ¡Que tenga un buen dia!
       var score = parameters.fields.puntuacion.numberValue;
@@ -375,26 +371,26 @@ async function handleDialogFlowAction(
       break;
 
 
-      case "add.action": //¿Cuántas unidades quiere?
-        handleMessages(messages, sender);
+    case "add.action": //¿Cuántas unidades quiere?
+      handleMessages(messages, sender);
       break;
 
-      case "fin_pedido.action": //Gracias por confiar en nosotros. Tu pedido está siendo procesado. ¿Podrías proporcionarnos los siguientes datos, por favor? Nombre, correo y celular.
+    case "fin_pedido.action": //Gracias por confiar en nosotros. Tu pedido está siendo procesado. ¿Podrías proporcionarnos los siguientes datos, por favor? Nombre, correo y celular.
       //poner en la bd estado finalizado o cerrado  
       handleMessages(messages, sender);
       break;
 
-      case "addPedido.action": //-Finalizar pedido -Ver pedido
+    case "addPedido.action": //-Finalizar pedido -Ver pedido
       //verificar en la bd si ya hay una orden de pedido, sino crear una y anadir producto y cantidad
-        handleMessages(messages, sender);
+      handleMessages(messages, sender);
       break;
 
-      case "verPedido.action": //{lista_pedido}, ¿Podemos ayudarte en algo más? -poleras -descuentos o Finalizar pedido
-        //listar el pedido
-        handleMessages(messages, sender);
+    case "verPedido.action": //{lista_pedido}, ¿Podemos ayudarte en algo más? -poleras -descuentos o Finalizar pedido
+      //listar el pedido
+      handleMessages(messages, sender);
       break;
 
-     
+
 
 
     default:
@@ -677,18 +673,18 @@ function handleMessagex(sender_psid, received_message) {
             "title": "Is this the right picture?",
             "subtitle": "Tap a button to answer.",
             "image_url": attachment_url,
-          /*  "buttons": [
-              {
-                "type": "postback",
-                "title": "Yes!",
-                "payload": "yes",
-              },
-              {
-                "type": "postback",
-                "title": "No!",
-                "payload": "no",
-              }
-            ],*/
+            /*  "buttons": [
+                {
+                  "type": "postback",
+                  "title": "Yes!",
+                  "payload": "yes",
+                },
+                {
+                  "type": "postback",
+                  "title": "No!",
+                  "payload": "no",
+                }
+              ],*/
           }]
         }
       }
@@ -844,30 +840,30 @@ async function getProducts(facebookId, req = {}) {
       }
     }
 
-   // if(prod.price > 100){
-      if (descuento) {
-        let prodDcto = prod.price * dcto;
-        productosOf.push({
-          "name": prod.name,
-          "description": prod.description,
-          "deal": dcto1,
-          "price": prod.price,
-          "priceDeal": prodDcto,
-          "categoria": nameCat,
-          "image": imagenes,
-        });
-      } else {
-        productosOf.push({
-          "name": prod.name,
-          "description": prod.description,
-          "deal": '0%',
-          "price": prod.price,
-          "priceDeal": prod.price,
-          "categoria": nameCat,
-          "image": imagenes,
-        });
-      }
- //   }
+    // if(prod.price > 100){
+    if (descuento) {
+      let prodDcto = prod.price * dcto;
+      productosOf.push({
+        "name": prod.name,
+        "description": prod.description,
+        "deal": dcto1,
+        "price": prod.price,
+        "priceDeal": prodDcto,
+        "categoria": nameCat,
+        "image": imagenes,
+      });
+    } else {
+      productosOf.push({
+        "name": prod.name,
+        "description": prod.description,
+        "deal": '0%',
+        "price": prod.price,
+        "priceDeal": prod.price,
+        "categoria": nameCat,
+        "image": imagenes,
+      });
+    }
+    //   }
   }
 
   return productosOf;
@@ -1085,6 +1081,7 @@ async function getProductsEsp(facebookId, colorP, tallaP, catName) {
     if (descuento) {
       let prodDcto = prod.price * dcto1;
       productosOf.push({
+        "id": prod._id,
         "name": prod.name,
         "description": prod.description,
         "deal": dcto12,
@@ -1095,6 +1092,7 @@ async function getProductsEsp(facebookId, colorP, tallaP, catName) {
       });
     } else {
       productosOf.push({
+        "id": prod._id,
         "name": prod.name,
         "description": prod.description,
         "deal": '0%',
