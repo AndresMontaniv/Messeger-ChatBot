@@ -12,11 +12,13 @@ const router = Router();
 router.get('/dashboard', isLoggedIn, async (req, res) => {
 
     var resp = await Client.find();
-    var clients = [];
+   // var clients = [];
     var prosp = [];
     var prospC = [];
     var clients = [];
     var clientsF = [];
+
+    //var contacted = await Contact.find();
    
     resp.forEach(async e => {
         if (!e.isClient) {
@@ -35,6 +37,7 @@ router.get('/dashboard', isLoggedIn, async (req, res) => {
                     profilePic: e.profilePic,
                 });
             }
+          //   console.log(prospC);
 
         } else {
             clients.push({
@@ -51,9 +54,10 @@ router.get('/dashboard', isLoggedIn, async (req, res) => {
                 });
             }
         }
+      //  console.log(pContac);
 
     });
-
+    console.log(clients);
     res.render('clients/dashboard', { prosp, prospC, clients, clientsF });
 });
 
