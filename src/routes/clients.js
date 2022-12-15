@@ -170,5 +170,23 @@ router.get('/show/frecuent/:id', isLoggedIn, async (req, res) => {
 });
 
 
+router.get('/contacto/:id', isLoggedIn, async (req, res) => {
+    const { id } = req.params;
+    var e = await Client.findById(id);
+    if (e == null) {
+        res.redirect('/clients/dashboard');
+    }
+    var client = {
+        id: e.id,
+        name: e.firstName + ' ' + e.lastName,
+        profilePic: e.profilePic,
+        email: e.email,
+
+    }
+
+    res.render('clients/contacto', { client});
+});
+
+
 
 module.exports = router;

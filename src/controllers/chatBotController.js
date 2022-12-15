@@ -2,6 +2,7 @@ require('dotenv').config();
 const request = require('request');
 const axios = require('axios');
 const uuid = require("uuid");
+const {io}=require('socket.io-client');
 const dialogflow = require('./dialogFlowController');
 const { structProtoToJson } = require("../helpers/structFunctions");
 const { createClient, editClient } = require("../controllers/clientController");
@@ -138,7 +139,15 @@ async function saveUserData(facebookId) {
     userData.profile_pic,
     facebookId
   );
-  // emit*(gdfgdf);
+  /* REFRESCAR VENTANAS ACTIVAS */
+  const url= process.env.URL_SERVER
+  try {
+    const socket = io(url);
+    socket.emit('new-user');
+    socket.disconnect()
+  }catch(e){
+    console.log(e)
+  }
 }
 
 
@@ -365,6 +374,28 @@ async function handleDialogFlowAction(
       await editVisit(sender, mapx);
       handleMessages(messages, sender);
       break;
+
+
+      case "add.action": //¿Cuántas unidades quiere?
+        handleMessages(messages, sender);
+      break;
+
+      case "fin_pedido.action": //Gracias por confiar en nosotros. Tu pedido está siendo procesado. ¿Podrías proporcionarnos los siguientes datos, por favor? Nombre, correo y celular.
+      //poner en la bd estado finalizado o cerrado  
+      handleMessages(messages, sender);
+      break;
+
+      case "addPedido.action": //-Finalizar pedido -Ver pedido
+      //verificar en la bd si ya hay una orden de pedido, sino crear una y anadir producto y cantidad
+        handleMessages(messages, sender);
+      break;
+
+      case "verPedido.action": //{lista_pedido}, ¿Podemos ayudarte en algo más? -poleras -descuentos o Finalizar pedido
+        //listar el pedido
+        handleMessages(messages, sender);
+      break;
+
+     
 
 
     default:

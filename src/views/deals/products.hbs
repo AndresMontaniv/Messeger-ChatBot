@@ -1,0 +1,70 @@
+<!-- component -->
+<nav class=" w-full flex relative justify-between items-center mx-auto px-8 h-14 shadow ">
+    <!-- logo -->
+    <a class="text-2xl font-bold font-heading" href="/clients/dashboard">
+        <img class="h-9" src="/img/logo.png" alt="logo">
+    </a>
+    <!-- end logo -->
+
+    <a href="/clients/dashboard">Ir al dashboard</a>
+
+    <!-- logout -->
+    <div class="flex-initial"> 
+      <div class="flex justify-end items-center relative">
+        <div class="grid grid-cols-2">
+            <div class="flex justify-center items-center">
+                {{#if user}}
+                    <p>{{user.name}}</p>
+                {{/if}}
+            </div>
+            <div class="flex justify-end items-center">
+                <a class="text-2xl font-bold font-heading" href="/signout">
+                    <img class="h-8" src="/img/logout.png" alt="logo">
+                </a>
+            </div>
+        </div>
+      </div>
+    </div>
+    <!-- end logout -->
+</nav>
+
+
+
+
+<div class="flex items-end justify-end">
+        <div class="lg:ml-40 ml-10 space-x-8 mt-3 mx-6 mb-0" >
+            <a href="#">  
+                <button class="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
+                    Siguiente 
+                </button>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- component -->
+
+        <div class="container px-6 py-8 mx-auto items-center justify-center">
+            <div class="lg:flex lg:-mx-2 items-center justify-center ">
+                <div class="mt-6 lg:mt-0 lg:px-2 lg:w-4/5  ">
+
+                
+
+                    <div class="grid grid-cols-1 gap-8 mt-8  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
+                        {{#each products }}
+                            <div class="flex flex-col items-center justify-center w-full max-w-lg mx-auto p-3 bg-white">
+                                <img class="object-cover w-full rounded-md h-72 xl:h-80" src="{{image}}" alt="T-Shirt">
+                                <h4 class="mt-2 text-lg font-medium text-gray-700 dark:text-gray-700">{{name}}</h4>
+                                <p class="text-blue-500">{{price}}</p>
+                                <button class="flex items-center justify-center w-full px-2 py-2 mt-4 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-gray-800 rounded-md hover:bg-gray-700 focus:outline-none focus:bg-gray-700">
+                                    <span class="mx-1">Añadir</span>
+                                </button>
+                            </div>
+                        {{/each}}
+
+                    </div>
+                </div>
+            </div>
+        </div>

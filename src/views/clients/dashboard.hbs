@@ -6,6 +6,8 @@
     </a>
     <!-- end logo -->
 
+    <a href="/deals/menu">Ir a las promociones</a>
+
     <!-- logout -->
     <div class="flex-initial"> 
       <div class="flex justify-end items-center relative">
@@ -33,6 +35,7 @@
 <!-- Create By Joker Banny -->
 
 <div class="md:px-0 md:grid md:grid-cols-2 lg:grid-cols-4 gap-4 space-y-4 md:space-y-0 m-14">
+    <button onclick="get()">new user</button>
     <div class="max-w-sm bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg ">
         <h3 class="mb-3 text-xl font-bold text-indigo-800 text-center">PROSPECTO</h3>
         <!--
@@ -147,3 +150,30 @@
 
    
 </div>
+<script src="../socket.io/socket.io.js"></script>
+<script>
+    const b=true
+    let socket=io();
+
+    socket.on('connect', () => {
+        console.log('socket connected')
+    })
+
+    socket.on('user-connected', () => {
+        console.log('new user connected');
+        location.reload()
+    })
+
+    async function get() {
+        console.log("GET")
+
+        fetch('/api/test', {
+            method: 'GET',
+        })
+        .then(response => response.json())
+        .then(data => {console.log(data)})
+    }
+    
+</script>
+
+
