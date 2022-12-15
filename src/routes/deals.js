@@ -48,7 +48,7 @@ router.post('/create', async (req, res) => {
     const pageId = process.env.PAGE_ID;
     const debugToken = process.env.DEBUG_TOKEN;
 
-    var msg = "Hola amigos, le tenemos la nueva promo " + deal.name + " !!.\n Valida desde " + deal.from.toLocaleDateString("es-Es") + " hasta " + deal.to.toLocaleDateString("es-Es") + ".\n Ven y aprovecha este " + deal.discount + "% .\n Te esperamos!!";
+    var msg = "Hola amigos, le tenemos la nueva promo " + deal.name + " !!!.\n Valida desde " + deal.from.toLocaleDateString("es-Es") + " hasta " + deal.to.toLocaleDateString("es-Es") + ".\n Ven y aprovecha este " + deal.discount + "% .\n Te esperamos!!";
 
     if (id != null) {
         request({
