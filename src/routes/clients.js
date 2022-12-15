@@ -10,6 +10,7 @@ const { helpers } = require('handlebars');
 const router = Router();
 
 router.get('/dashboard', isLoggedIn, async (req, res) => {
+
     var resp = await Client.find();
     var clients = [];
     var prosp = [];

@@ -113,7 +113,6 @@ async function receivedMessage(event) {
   }
 
   saveUserData(senderId);
-
   if (messageText) {
     //send message to api.ai
     console.log("se recibio este mensaje: ", messageText);
@@ -139,6 +138,7 @@ async function saveUserData(facebookId) {
     userData.profile_pic,
     facebookId
   );
+  // emit*(gdfgdf);
 }
 
 
@@ -474,6 +474,7 @@ async function sendToDialogFlow(senderId, messageText) {
 }
 
 function handleDialogFlowResponse(sender, response) {
+  console.log("AQUIIIII====> = ", response);
   let responseText = response.fulfillmentMessages.fulfillmentText;
 
   let messages = response.fulfillmentMessages;
@@ -1078,5 +1079,6 @@ async function getProductsEsp(facebookId, colorP, tallaP, catName) {
 
 module.exports = {
   postWebHook,
-  getWebHook
+  getWebHook,
+  sendToDialogFlow,
 }
