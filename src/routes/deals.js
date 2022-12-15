@@ -1,5 +1,5 @@
-const { Router, response } = require('express');
 require('dotenv').config();
+const { Router, response } = require('express');
 const request = require('request');
 const { isLoggedIn } = require('../helpers/auth');
 const { timeago } = require('../helpers/handlebars');
