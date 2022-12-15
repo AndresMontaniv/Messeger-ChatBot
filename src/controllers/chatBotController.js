@@ -202,7 +202,7 @@ async function handleDialogFlowAction(
           title: polera.name + "  $" + polera.priceDeal + disc,
           image_url: polera.image[0],
           subtitle: polera.categoria,
-          buttons: [
+        /*  buttons: [
             {
               type: "postback",
               title: "Me gusta",
@@ -213,7 +213,7 @@ async function handleDialogFlowAction(
               title: "No me gusta",
               payload: "no_me_gusta",
             },
-          ],
+          ],*/
         });
       });
       await sendGenericMessage(sender, cardsx);
@@ -236,7 +236,7 @@ async function handleDialogFlowAction(
           title: poleraOC.name + "  $" + poleraOC.priceDeal + disc,
           image_url: poleraOC.image[0],
           subtitle: poleraOC.categoria,
-          buttons: [
+        /*  buttons: [
             {
               type: "postback",
               title: "Me gusta",
@@ -247,7 +247,7 @@ async function handleDialogFlowAction(
               title: "No me gusta",
               payload: "no_me_gusta",
             },
-          ],
+          ],*/
         });
       });
       await sendGenericMessage(sender, cardsOC);
@@ -279,7 +279,7 @@ async function handleDialogFlowAction(
           title: polera.name + "  $" + polera.priceDeal + disc,
           image_url: polera.image[0],
           subtitle: polera.categoria,
-          buttons: [
+        /*  buttons: [
             {
               type: "postback",
               title: "Me gusta",
@@ -290,7 +290,7 @@ async function handleDialogFlowAction(
               title: "No me gusta",
               payload: "no_me_gusta",
             },
-          ],
+          ], */
         });
       });
       await sendGenericMessage(sender, cards);
@@ -309,7 +309,7 @@ async function handleDialogFlowAction(
           title: polera1.name + "  $" + polera1.priceDeal + disc,
           image_url: polera1.image[0],
           subtitle: polera1.categoria,
-          buttons: [
+         /* buttons: [
             {
               type: "postback",
               title: "Me gusta",
@@ -320,11 +320,11 @@ async function handleDialogFlowAction(
               title: "No me gusta",
               payload: "no_me_gusta",
             },
-          ],
+          ],*/
         });
       });
       await sendGenericMessage(sender, card1);
-      await sendTextMessage(sender, '¿Te gustaría comprar este producto?');
+      await sendTextMessage(sender, '¿Te interesaria comprar alguna de estas poleras?');
       break;
 
 
@@ -646,7 +646,7 @@ function handleMessagex(sender_psid, received_message) {
             "title": "Is this the right picture?",
             "subtitle": "Tap a button to answer.",
             "image_url": attachment_url,
-            "buttons": [
+          /*  "buttons": [
               {
                 "type": "postback",
                 "title": "Yes!",
@@ -657,7 +657,7 @@ function handleMessagex(sender_psid, received_message) {
                 "title": "No!",
                 "payload": "no",
               }
-            ],
+            ],*/
           }]
         }
       }
@@ -813,28 +813,30 @@ async function getProducts(facebookId, req = {}) {
       }
     }
 
-    if (descuento) {
-      let prodDcto = prod.price * dcto;
-      productosOf.push({
-        "name": prod.name,
-        "description": prod.description,
-        "deal": dcto1,
-        "price": prod.price,
-        "priceDeal": prodDcto,
-        "categoria": nameCat,
-        "image": imagenes,
-      });
-    } else {
-      productosOf.push({
-        "name": prod.name,
-        "description": prod.description,
-        "deal": '0%',
-        "price": prod.price,
-        "priceDeal": prod.price,
-        "categoria": nameCat,
-        "image": imagenes,
-      });
-    }
+   // if(prod.price > 100){
+      if (descuento) {
+        let prodDcto = prod.price * dcto;
+        productosOf.push({
+          "name": prod.name,
+          "description": prod.description,
+          "deal": dcto1,
+          "price": prod.price,
+          "priceDeal": prodDcto,
+          "categoria": nameCat,
+          "image": imagenes,
+        });
+      } else {
+        productosOf.push({
+          "name": prod.name,
+          "description": prod.description,
+          "deal": '0%',
+          "price": prod.price,
+          "priceDeal": prod.price,
+          "categoria": nameCat,
+          "image": imagenes,
+        });
+      }
+ //   }
   }
 
   return productosOf;

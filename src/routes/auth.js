@@ -72,7 +72,7 @@ router.get('/home', isLoggedIn, (req, res) => {
 
 router.get('/signout', isLoggedIn, (req, res) => {
     req.logOut();
-    res.redirect('/signin');
+    res.redirect('/');
 });
 
 

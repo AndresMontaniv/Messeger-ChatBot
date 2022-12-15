@@ -1,11 +1,141 @@
-<div class="container p-4 my-5 whitebox">
-    <div class="row text-center ">
-        <div class="col mx-auto ">
-            <div class="row ">
-                <div class="col">
-                    <h3 class="display-4">Welcome {{user.name}}</h3>
-                </div>
-            </div>
-        </div>
+<!-- component -->
+<nav class=" w-full flex relative justify-between items-center mx-auto px-8 h-14 shadow ">
+    <!-- logo -->
+    <a class="text-2xl font-bold font-heading" href="/home">
+        <img class="h-9" src="/img/logo.png" alt="logo">
+    </a>
+    <!-- end logo -->
+
+            {{#if user}}
+                <p>{{user.name}}</p>
+                
+            {{/if}}
+
+    <!-- login -->
+    <div class="flex-initial"> 
+      <div class="flex justify-end items-center relative">
+        <a class="text-2xl font-bold font-heading" href="/signout">
+            <img class="h-9" src="/img/logout.png" alt="logo">
+        </a>
+      </div>
     </div>
-</div>
+    <!-- end login -->
+</nav>
+
+
+
+
+
+<script src="https://unpkg.com/@themesberg/flowbite@latest/dist/flowbite.bundle.js"></script>
+<!-- component -->
+<!-- Create By Joker Banny -->
+
+<div class="md:px-0 md:grid md:grid-cols-2 lg:grid-cols-4 gap-4 space-y-4 md:space-y-0 m-14">
+    <div class="max-w-sm bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg ">
+        <h3 class="mb-3 text-xl font-bold text-indigo-800 text-center">PROSPECTO</h3>
+        <!--
+        <img class="w-full rounded-xl" src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Colors" />
+        -->
+        <div class="flex flex-col rounded-xl border-gray-300 hover:border-gray-500 overflow-hidden shadow-xl min-wv-4 max-wv-9 min-hv-4 max-hv-9 border-1">	
+			<div class="flex flex-col bg-whiteflex-grow bg-white">
+				<div class="min-hv-4 overflow-y-auto flex-grow p-1 " style="max-height:calc(65vh - 56px)">
+                    <!--for each-->
+                    <a href="" class="block px-1 py-1 border-b border-gray-200 w-full hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700 cursor-pointer">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-shrink-0">
+                                <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="Thomas image">
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-gray-900 truncate dark:text-black">
+                                    Thomes Lean
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+				</div>
+			</div>
+		</div>
+    </div>
+
+    <div class="max-w-sm bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg ">
+        <h3 class="mb-3 text-xl font-bold text-indigo-800 text-center">PROSPECTOS CONTACTADOS</h3>
+        <!--
+        <img class="w-full rounded-xl" src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Colors" />
+        -->
+        <div class="flex flex-col rounded-xl border-gray-300 hover:border-gray-500 overflow-hidden shadow-xl min-wv-4 max-wv-9 min-hv-4 max-hv-9 border-1">	
+			<div class="flex flex-col bg-whiteflex-grow bg-white">
+				<div class="min-hv-4 overflow-y-auto flex-grow p-1 " style="max-height:calc(65vh - 56px)">
+                    <!--for each-->
+                    <a href="#" class="block px-1 py-1 border-b border-gray-200 w-full hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700 cursor-pointer">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-shrink-0">
+                                <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="Thomas image">
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-gray-900 truncate dark:text-black">
+                                    Thomes Lean
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                    
+				</div>
+			</div>
+		</div>
+    </div>
+
+    <div class="max-w-sm bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg ">
+        <h3 class="mb-3 text-xl font-bold text-indigo-800 text-center">CLIENTES</h3>
+        <!--
+        <img class="w-full rounded-xl" src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Colors" />
+        -->
+        <div class="flex flex-col rounded-xl border-gray-300 hover:border-gray-500 overflow-hidden shadow-xl min-wv-4 max-wv-9 min-hv-4 max-hv-9 border-1">	
+			<div class="flex flex-col bg-whiteflex-grow bg-white">
+				<div class="min-hv-4 overflow-y-auto flex-grow p-1 " style="max-height:calc(65vh - 56px)">
+                    <!--for each-->
+                    <a href="#" class="block px-1 py-1 border-b border-gray-200 w-full hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700 cursor-pointer">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-shrink-0">
+                                <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="Thomas image">
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-gray-900 truncate dark:text-black">
+                                    Thomes Lean
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                    
+				</div>
+			</div>
+		</div>
+    </div>
+
+    <div class="max-w-sm bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg ">
+        <h3 class="mb-3 text-xl font-bold text-indigo-800 text-center">CLIENTES RECURRENTES</h3>
+        <!--
+        <img class="w-full rounded-xl" src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Colors" />
+        -->
+        <div class="flex flex-col rounded-xl border-gray-300 hover:border-gray-500 overflow-hidden shadow-xl min-wv-4 max-wv-9 min-hv-4 max-hv-9 border-1">	
+			<div class="flex flex-col bg-whiteflex-grow bg-white">
+				<div class="min-hv-4 overflow-y-auto flex-grow p-1 " style="max-height:calc(65vh - 56px)">
+                    <!--for each-->
+                    <a href="#" class="block px-1 py-1 border-b border-gray-200 w-full hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700 cursor-pointer">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-shrink-0">
+                                <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="Thomas image">
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-gray-900 truncate dark:text-black">
+                                    Thomes Lean
+                                </p>
+                            </div>
+                        </div>
+                    </a>  
+				</div>
+			</div>
+		</div>
+    </div>
+
+   
+  </div>

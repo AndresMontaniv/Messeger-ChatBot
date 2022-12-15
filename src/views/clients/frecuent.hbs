@@ -1,22 +1,129 @@
-<div class="container p-4 my-5 whitebox">
-    <h1>Aqui van el ver client frecuente</h1>
+<!-- component -->
+<nav class=" w-full flex relative justify-between items-center mx-auto px-8 h-14 shadow ">
+    <!-- logo -->
+    <a class="text-2xl font-bold font-heading" href="/clients/dashboard">
+        <img class="h-9" src="/img/logo.png" alt="logo">
+    </a>
+    <!-- end logo -->
 
-</div>
+    <a href="/clients/dashboard">Ir al dashboard</a>
 
-<div class="container ">
-    <h3>Info</h3>
-    <br>
-    <p><b>id:</b> {{client.id}}</p>
-    <p><b>name:</b> {{client.name}}</p>
-    <p><b>profilePic:</b> {{client.profilePic}}</p>
-    <p><b>facebookId:</b> {{client.facebookId}}</p>
-    <p><b>email:</b> {{client.email}}</p>
-    <p><b>phone:</b> {{client.phone}}</p>
-    {{#if client.lastContact}}
-    <p><b>ultimo contacto:</b> {{timeago client.lastContact}}</p>
-    {{else}}
-    <p><b>ultimo contacto:</b> No ha tenido contacto</p>
-    {{/if}}
-    <p><b>Frecuencia de compra:</b> {{client.numOrders}}</p>
-    <p><b>Monto promedio:</b> {{client.avgTotal}}</p>
+    <!-- logout -->
+    <div class="flex-initial"> 
+      <div class="flex justify-end items-center relative">
+        <div class="grid grid-cols-2">
+            <div class="flex justify-center items-center">
+                {{#if user}}
+                    <p>{{user.name}}</p>
+                {{/if}}
+            </div>
+            <div class="flex justify-end items-center">
+                <a class="text-2xl font-bold font-heading" href="/signout">
+                    <img class="h-8" src="/img/logout.png" alt="logo">
+                </a>
+            </div>
+        </div>
+      </div>
+    </div>
+    <!-- end logout -->
+</nav>
+
+
+
+
+<div class="flex items-center justify-center px-6 my-8">
+	<!-- Row -->
+	<div class="w-full xl:w-3/4 lg:w-11/12 flex">
+		<!-- Col -->
+		
+		<div class="w-full h-auto bg-purple-500 hidden lg:block lg:w-5/12 bg-cover rounded-l-lg " >
+		
+			<div class="mx-15 mt-20 ">
+				<label class="block mb-6 p-2 text-sm  text-center text-white">
+					id: {{client.id}}
+				</label>
+				<label class="block mb-6 p-2 text-2xl  text-center font-bold text-white">
+					{{client.name}}
+				</label>
+
+				<div class="flex items-center justify-center">
+					<img class="img-fluid lg:w-3/5 flex rounded-xl content-center" src="{{client.profilePic}}" >
+				</div>
+				
+			</div>
+
+		</div>
+		<!-- Col -->
+		<div class="w-full lg:w-7/12 bg-white p-1 rounded-lg lg:rounded-l-none">
+			<h3 class="pt-4 text-2xl text-center">CLIENTE RECURRENTE</h3>
+			<form class="px-8 pt-3 pb-3 mb-1 bg-white rounded">
+				
+
+				<div class="mb-3">
+					<label class="block mb-0 text-sm font-bold text-gray-700" for="facebook">
+						Facebook
+					</label>
+					<p class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+						id="facebook">
+						{{client.facebookId}}
+					</p>
+				</div>
+
+				<div class="mb-3">
+					<label class="block mb-0 text-sm font-bold text-gray-700" for="email">
+						Email
+					</label>
+					<p class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+						id="email">
+						{{client.email}}
+					</p>
+				</div>
+
+				<div class="mb-3">
+					<label class="block mb-0 text-sm font-bold text-gray-700" for="celular">
+						Celular
+					</label>
+					<p class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+						id="celular">
+						{{client.phone}}
+					</p>
+				</div>
+
+
+
+
+				<div class="mb-3">
+					<label class="block mb-0 text-sm font-bold text-gray-700" for="fecha">
+						Último contacto
+					</label>
+						<p class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+							id="fecha">
+							{{timeago client.lastContact}}
+						</p>
+				</div>
+
+
+                <div class="mb-3">
+					<label class="block mb-0 text-sm font-bold text-gray-700" for="frecuencia">
+						Frecuencia de compra
+					</label>
+					<p class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+						id="frecuencia">
+						{{client.numOrders}}
+					</p>
+				</div>
+
+                <div class="mb-3">
+					<label class="block mb-0 text-sm font-bold text-gray-700" for="mPromedio">
+						Monto promedio
+					</label>
+					<p class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+						id="mPromedio">
+						{{client.avgTotal}} Bs.
+					</p>
+				</div>
+
+			</form>
+		</div>
+	</div>
 </div>

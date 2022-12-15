@@ -17,8 +17,10 @@ router.get('/dashboard', isLoggedIn, async (req, res) => {
     var prospC = [];
     var clients = [];
     var clientsF = [];
+   
     resp.forEach(async e => {
         if (!e.isClient) {
+        
 
             prosp.push({
                 id: e.id,
