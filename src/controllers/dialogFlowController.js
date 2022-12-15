@@ -13,7 +13,6 @@ const credentials = {
     private_key: GOOGLE_PRIVATE_KEY,
 };
 
-console.log("GOOGLE @@@@@@@@2", credentials);
 
 const sessionClient = new dialogflow.SessionsClient({
     projectId: GOOGLE_PROJECT_ID,
