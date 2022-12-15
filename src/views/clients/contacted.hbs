@@ -30,7 +30,6 @@
 
 
 
-
 <div class="flex items-center justify-center px-6 my-8">
 	<!-- Row -->
 	<div class="w-full xl:w-3/4 lg:w-11/12 flex">
@@ -39,12 +38,16 @@
 		<div class="w-full h-auto bg-purple-500 hidden lg:block lg:w-5/12 bg-cover rounded-l-lg " >
 		
 			<div class="mx-15 mt-20 ">
+				<label class="block mb-6 p-2 text-sm  text-center text-white">
+					id: {{client.id}}
+				</label>
+
 				<label class="block mb-3 p-2 text-2xl  text-center font-bold text-white">
-					PEDRO PICAPIEDRA
+					{{client.name}}
 				</label>
 
 				<div class="flex items-center justify-center">
-					<img class="img-fluid lg:w-3/5 flex rounded-xl content-center" src="/img/default-profile.png" >
+					<img class="img-fluid lg:w-3/5 flex rounded-xl content-center" src="{{client.profilePic}}" >
 				</div>
 			</div>
 
@@ -59,10 +62,10 @@
 					<label class="block mb-0 text-sm font-bold text-gray-700" for="facebook">
 						Facebook
 					</label>
-					<a href="https://www.facebook.com/profile.php?id=100008061335713">
+					<a href="https://www.facebook.com/profile.php?id={{client.facebookId}}">
 						<p class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
 						id="facebook">
-						https://www.facebook.com/profile.php?id=100008061335713
+						https://www.facebook.com/profile.php?id={{client.facebookId}}
 						</p>
 					</a>
 				</div>
@@ -73,7 +76,7 @@
 					</label>
 					<p class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
 						id="email">
-						correo@gmail.com
+						{{client.email}}
 					</p>
 				</div>
 
@@ -83,7 +86,7 @@
 					</label>
 					<p class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
 						id="celular">
-						78654321
+						{{client.phone}}
 					</p>
 				</div>
 
@@ -93,7 +96,7 @@
 					</label>
 					<p class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
 						id="nVeces">
-						10
+						{{client.contacts}}
 					</p>
 				</div>
 
@@ -103,7 +106,7 @@
 					</label>
 					<p class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
 						id="fecha">
-						10/10/2022
+						{{timeago client.lastContacted}}
 					</p>
 				</div>
 
@@ -117,7 +120,7 @@
 								<!--for each-->
 									<div class="flex-1 min-w-0 m-2 border-b border-gray-200">
 										<p class="text-sm font-medium text-gray-900 truncate dark:text-black">
-											Sin Observaciones
+											{{client.notes}}
 										</p>
 									</div>
 							
@@ -130,20 +133,3 @@
 			</form>
 		</div>
 	</div>
-<div class="container p-4 my-5 whitebox">
-    <h1>Aqui van el ver Contactado</h1>
-
-</div>
-<div class="container ">
-    <h3>Info</h3>
-    <br>
-    <p><b>id:</b> {{client.id}}</p>
-    <p><b>name:</b> {{client.name}}</p>
-    <p><b>profilePic:</b> {{client.profilePic}}</p>
-    <p><b>facebookId:</b> {{client.facebookId}}</p>
-    <p><b>email:</b> {{client.email}}</p>
-    <p><b>phone:</b> {{client.phone}}</p>
-    <p><b>Veces Contactado:</b> {{client.contacts}}</p>
-    <p><b>ultimo contact:</b> {{timeago client.lastContacted}}</p>
-    <p><b>Observaciones:</b> {{client.notes}}</p>
-</div>
