@@ -16,15 +16,15 @@ router.get('/dashboard', isLoggedIn, async (req, res) => {
     var prospC = [];
     var clients = [];
     var clientsF = [];
-    var profPic = "https://scontent-iad3-1.xx.fbcdn.net/v/t1.30497-1/84628273_176159830277856_972693363922829312_n.jpg?stp=dst-jpg_p720x720&_nc_cat=1&ccb=1-7&_nc_sid=12b3be&_nc_ohc=pOsqjSNZYG0AX-SEqvB&_nc_ht=scontent-iad3-1.xx&edm=AP4hL3IEAAAA&oh=00_AT_eOyQMiPuURfekIvTgBbRokrPl-6NUD4Gx28b4g9i_yw&oe=63669A99";
+   
     resp.forEach(async e => {
         if (!e.isClient) {
-            if(e.profilePic != profPic){profPic = e.profilePic}else{profPic = "/img/default-profile.png"}
+        
 
             prosp.push({
                 id: e.id,
                 name: e.firstName + ' ' + e.lastName,
-                profilePic: profPic,//e.profilePic,
+                profilePic: e.profilePic,
             });
             var contacted = await Contact.find({ client: e });
             if (contacted.length > 0) {
