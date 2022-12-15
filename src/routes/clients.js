@@ -12,7 +12,6 @@ const router = Router();
 router.get('/dashboard', isLoggedIn, async (req, res) => {
 
     var resp = await Client.find();
-<<<<<<< HEAD
    // var clients = [];
     var prosp = [];
     var prospC = [];
@@ -21,15 +20,9 @@ router.get('/dashboard', isLoggedIn, async (req, res) => {
 
     //var contacted = await Contact.find();
    
-=======
-    let prosp = [];
-    let prospC = [];
-    let clients = [];
-    let clientsF = [];
-
->>>>>>> 2650fe119f9a3457b07a5905cbb1558d5383844b
     resp.forEach(async e => {
         if (!e.isClient) {
+        
 
             prosp.push({
                 id: e.id,
@@ -43,9 +36,7 @@ router.get('/dashboard', isLoggedIn, async (req, res) => {
                     name: e.firstName + ' ' + e.lastName,
                     profilePic: e.profilePic,
                 });
-
             }
-          //   console.log(prospC);
 
         } else {
             clients.push({
@@ -65,14 +56,7 @@ router.get('/dashboard', isLoggedIn, async (req, res) => {
       //  console.log(pContac);
 
     });
-<<<<<<< HEAD
     console.log(clients);
-=======
-    console.log('prospecto=>', prosp);
-    console.log('contacted=>', prospC);
-    console.log('cliente=>', clients);
-    console.log('frecuente=>', clientsF);
->>>>>>> 2650fe119f9a3457b07a5905cbb1558d5383844b
     res.render('clients/dashboard', { prosp, prospC, clients, clientsF });
 });
 
@@ -203,7 +187,6 @@ router.get('/contacto/:id', isLoggedIn, async (req, res) => {
 
     }
 
-<<<<<<< HEAD
     res.render('clients/contacto', {client});
 });
 
@@ -224,9 +207,6 @@ router.post('/contacto', async (req, res) => {
 
 
     res.redirect('/clients/dashboard');
-=======
-    res.render('clients/contacto', { client });
->>>>>>> 2650fe119f9a3457b07a5905cbb1558d5383844b
 });
 
 
