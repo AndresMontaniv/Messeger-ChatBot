@@ -48,12 +48,14 @@ router.post('/create', async (req, res) => {
     const pageId = process.env.PAGE_ID;
     const debugToken = process.env.DEBUG_TOKEN;
 
+    var msg = "Hola amigos, le tenemos la nueva promo " + deal.name + " !!.\n Valida desde " + deal.from.toLocaleDateString("es-Es") + " hasta " + deal.to.toLocaleDateString("es-Es") + ".\n Ven y aprovecha este " + deal.discount + "% .\n Te esperamos!!";
+
     if (id != null) {
         request({
-            uri: "https://graph.facebook.com/100633766169633/feed?message",
+            uri: "https://graph.facebook.com/100633766169633/feed",
             qs: {
                 access_token: debugToken,
-                message: "Hola desde BackEnd"
+                message: msg
             },
             method: "POST",
         }, (err, res, body) => {
