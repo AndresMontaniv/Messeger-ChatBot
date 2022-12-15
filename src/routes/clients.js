@@ -27,7 +27,7 @@ router.get('/dashboard', isLoggedIn, async (req, res) => {
                 name: e.firstName + ' ' + e.lastName,
                 profilePic: e.profilePic,
             });
-            var contacted = await Contact.find({ client: e });
+            var contacted = await Contact.find({ client: e.id });
             if (contacted.length > 0) {
                 prospC.push({
                     id: e.id,
@@ -184,7 +184,26 @@ router.get('/contacto/:id', isLoggedIn, async (req, res) => {
 
     }
 
-    res.render('clients/contacto', { client});
+    res.render('clients/contacto', {client});
+});
+
+
+router.post('/contacto', async (req, res) => {
+    var prom = req.body;
+  
+    var descripcion = prom.desc;
+    var id = prom.id;
+
+    console.log(descripcion, id);
+    const contact = new Contact({
+        notes: descripcion,
+        client: id,
+    });
+    
+    await contact.save();
+
+
+    res.redirect('/clients/dashboard');
 });
 
 

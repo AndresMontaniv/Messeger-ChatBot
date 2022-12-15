@@ -51,10 +51,10 @@
 				
 			</div>
 		</div>
-		<!-- Col -->
+		<!-- Col --> 
 		<div class="w-full lg:w-7/12 bg-white p-1 rounded-lg lg:rounded-l-none">
 			<h3 class="pt-4 text-2xl text-center">CONTACTANDO</h3>
-			<form class="px-8 pt-3 pb-3 mb-3 bg-white rounded">
+			<form class="px-8 pt-3 pb-3 mb-3 bg-white rounded" action="/clients/contacto" method="POST">
 				
 
 				<div class="mb-5">
@@ -64,13 +64,19 @@
 					>
 					Descripcion
 					</label>
-					<textarea
-					rows="5"
+					<input
+					type="text"
 					name="desc"
 					id="desc"
 					placeholder="Escribir la descripcion"
-					class="w-full resize-none rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-					></textarea>
+					class="w-full rounded-md border border-[#e0e0e0] bg-white py-6 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+					/>
+					<textarea
+					rows="1"
+					name="id"
+					id="id"
+					class="w-full resize-none rounded-md bg-white py-3 px-6 text-base font-medium text-white outline-none"
+					>{{client.id}}</textarea>
 				</div>
 
 				<button

@@ -51,9 +51,9 @@ router.post('/create', async (req, res) => {
 //mandar el id de la promocion creada
 
 router.get('/products', async (req, res) => {
-    console.log("ga") 
+   // console.log("ga") 
     const {idDeal}=req.query
-    console.log(idDeal)
+   // console.log(idDeal)
     var resDB = await Product.find();
     var products = [];
 
