@@ -12,15 +12,13 @@ const router = Router();
 router.get('/dashboard', isLoggedIn, async (req, res) => {
 
     var resp = await Client.find();
-    var clients = [];
-    var prosp = [];
-    var prospC = [];
-    var clients = [];
-    var clientsF = [];
-   
+    let prosp = [];
+    let prospC = [];
+    let clients = [];
+    let clientsF = [];
+
     resp.forEach(async e => {
         if (!e.isClient) {
-        
 
             prosp.push({
                 id: e.id,
@@ -34,6 +32,7 @@ router.get('/dashboard', isLoggedIn, async (req, res) => {
                     name: e.firstName + ' ' + e.lastName,
                     profilePic: e.profilePic,
                 });
+
             }
 
         } else {
@@ -53,7 +52,10 @@ router.get('/dashboard', isLoggedIn, async (req, res) => {
         }
 
     });
-
+    console.log('prospecto=>', prosp);
+    console.log('contacted=>', prospC);
+    console.log('cliente=>', clients);
+    console.log('frecuente=>', clientsF);
     res.render('clients/dashboard', { prosp, prospC, clients, clientsF });
 });
 
@@ -184,7 +186,7 @@ router.get('/contacto/:id', isLoggedIn, async (req, res) => {
 
     }
 
-    res.render('clients/contacto', { client});
+    res.render('clients/contacto', { client });
 });
 
 
