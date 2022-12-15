@@ -202,18 +202,18 @@ async function handleDialogFlowAction(
           title: polera.name + "  $" + polera.priceDeal + disc,
           image_url: polera.image[0],
           subtitle: polera.categoria,
-        /*  buttons: [
-            {
-              type: "postback",
-              title: "Me gusta",
-              payload: "me_gusta",
-            },
-            {
-              type: "postback",
-              title: "No me gusta",
-              payload: "no_me_gusta",
-            },
-          ],*/
+          /*  buttons: [
+              {
+                type: "postback",
+                title: "Me gusta",
+                payload: "me_gusta",
+              },
+              {
+                type: "postback",
+                title: "No me gusta",
+                payload: "no_me_gusta",
+              },
+            ],*/
         });
       });
       await sendGenericMessage(sender, cardsx);
@@ -236,18 +236,18 @@ async function handleDialogFlowAction(
           title: poleraOC.name + "  $" + poleraOC.priceDeal + disc,
           image_url: poleraOC.image[0],
           subtitle: poleraOC.categoria,
-        /*  buttons: [
-            {
-              type: "postback",
-              title: "Me gusta",
-              payload: "me_gusta",
-            },
-            {
-              type: "postback",
-              title: "No me gusta",
-              payload: "no_me_gusta",
-            },
-          ],*/
+          /*  buttons: [
+              {
+                type: "postback",
+                title: "Me gusta",
+                payload: "me_gusta",
+              },
+              {
+                type: "postback",
+                title: "No me gusta",
+                payload: "no_me_gusta",
+              },
+            ],*/
         });
       });
       await sendGenericMessage(sender, cardsOC);
@@ -279,18 +279,18 @@ async function handleDialogFlowAction(
           title: polera.name + "  $" + polera.priceDeal + disc,
           image_url: polera.image[0],
           subtitle: polera.categoria,
-        /*  buttons: [
-            {
-              type: "postback",
-              title: "Me gusta",
-              payload: "me_gusta",
-            },
-            {
-              type: "postback",
-              title: "No me gusta",
-              payload: "no_me_gusta",
-            },
-          ], */
+          /*  buttons: [
+              {
+                type: "postback",
+                title: "Me gusta",
+                payload: "me_gusta",
+              },
+              {
+                type: "postback",
+                title: "No me gusta",
+                payload: "no_me_gusta",
+              },
+            ], */
         });
       });
       await sendGenericMessage(sender, cards);
@@ -309,18 +309,18 @@ async function handleDialogFlowAction(
           title: polera1.name + "  $" + polera1.priceDeal + disc,
           image_url: polera1.image[0],
           subtitle: polera1.categoria,
-         /* buttons: [
-            {
-              type: "postback",
-              title: "Me gusta",
-              payload: "me_gusta",
-            },
-            {
-              type: "postback",
-              title: "No me gusta",
-              payload: "no_me_gusta",
-            },
-          ],*/
+          /* buttons: [
+             {
+               type: "postback",
+               title: "Me gusta",
+               payload: "me_gusta",
+             },
+             {
+               type: "postback",
+               title: "No me gusta",
+               payload: "no_me_gusta",
+             },
+           ],*/
         });
       });
       await sendGenericMessage(sender, card1);
@@ -331,6 +331,7 @@ async function handleDialogFlowAction(
     case "precio.action": //{precio_poleras} ¿Cual polera le interesa?
       sendCategories(sender);
       break;
+
 
     case "puntuacion.action": //Gracias por tu valoración, nos ayuda a seguir mejorando. ¡Que tenga un buen dia!
       var score = parameters.fields.puntuacion.numberValue;
@@ -646,18 +647,18 @@ function handleMessagex(sender_psid, received_message) {
             "title": "Is this the right picture?",
             "subtitle": "Tap a button to answer.",
             "image_url": attachment_url,
-          /*  "buttons": [
-              {
-                "type": "postback",
-                "title": "Yes!",
-                "payload": "yes",
-              },
-              {
-                "type": "postback",
-                "title": "No!",
-                "payload": "no",
-              }
-            ],*/
+            /*  "buttons": [
+                {
+                  "type": "postback",
+                  "title": "Yes!",
+                  "payload": "yes",
+                },
+                {
+                  "type": "postback",
+                  "title": "No!",
+                  "payload": "no",
+                }
+              ],*/
           }]
         }
       }
@@ -813,30 +814,30 @@ async function getProducts(facebookId, req = {}) {
       }
     }
 
-   // if(prod.price > 100){
-      if (descuento) {
-        let prodDcto = prod.price * dcto;
-        productosOf.push({
-          "name": prod.name,
-          "description": prod.description,
-          "deal": dcto1,
-          "price": prod.price,
-          "priceDeal": prodDcto,
-          "categoria": nameCat,
-          "image": imagenes,
-        });
-      } else {
-        productosOf.push({
-          "name": prod.name,
-          "description": prod.description,
-          "deal": '0%',
-          "price": prod.price,
-          "priceDeal": prod.price,
-          "categoria": nameCat,
-          "image": imagenes,
-        });
-      }
- //   }
+    // if(prod.price > 100){
+    if (descuento) {
+      let prodDcto = prod.price * dcto;
+      productosOf.push({
+        "name": prod.name,
+        "description": prod.description,
+        "deal": dcto1,
+        "price": prod.price,
+        "priceDeal": prodDcto,
+        "categoria": nameCat,
+        "image": imagenes,
+      });
+    } else {
+      productosOf.push({
+        "name": prod.name,
+        "description": prod.description,
+        "deal": '0%',
+        "price": prod.price,
+        "priceDeal": prod.price,
+        "categoria": nameCat,
+        "image": imagenes,
+      });
+    }
+    //   }
   }
 
   return productosOf;
