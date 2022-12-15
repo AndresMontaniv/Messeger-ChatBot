@@ -10,7 +10,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const Handlebars = require('handlebars');
 const { dbConnection } = require('./src/database/config');
-
+const { socketController } = require('./src/sockets/controller');
 
 const app = express();
 require('dotenv').config();
@@ -23,6 +23,9 @@ dbConnection();
 
 // settings
 app.set('port', process.env.PORT || 5000);
+/* SOCKET SERVER */
+const server = require('http').createServer( app );
+let io     = require('socket.io')( server );
 
 const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
 
@@ -75,8 +78,9 @@ app.use('/deals', require('./src/routes/deals'));
 app.use(express.static(path.join(__dirname, 'src/public')));
 
 
-
+/* Start socket */
+io.on('connection', ( socket ) => socketController(socket, io ) )
 //Start Server
-app.listen(app.get('port'), () => {
+server.listen(app.get('port'), () => {
     console.log('Server Listening on port ', app.get('port'));
 });

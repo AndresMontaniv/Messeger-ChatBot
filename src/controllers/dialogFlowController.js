@@ -13,6 +13,7 @@ const credentials = {
     private_key: GOOGLE_PRIVATE_KEY,
 };
 
+
 const sessionClient = new dialogflow.SessionsClient({
     projectId: GOOGLE_PROJECT_ID,
     credentials,
@@ -38,8 +39,9 @@ async function sendToDialogFlow(msg, session, source, params) {
                 },
             },
         };
-        // console.log("request MAP = ", request);
+        console.log("request MAP====>>>>>>>>>> = ", request);
         const responses = await sessionClient.detectIntent(request);
+        console.log("PELUUUUUUU = ", responses);
         const result = responses[0].queryResult;
         console.log("INTENT EMPAREJADO: ", result.intent.displayName);
         let defaultResponses = [];

@@ -2,6 +2,7 @@ require('dotenv').config();
 const request = require('request');
 const axios = require('axios');
 const uuid = require("uuid");
+const {io}=require('socket.io-client');
 const dialogflow = require('./dialogFlowController');
 const { structProtoToJson } = require("../helpers/structFunctions");
 const { createClient, editClient } = require("../controllers/clientController");
@@ -113,7 +114,6 @@ async function receivedMessage(event) {
   }
 
   saveUserData(senderId);
-
   if (messageText) {
     //send message to api.ai
     console.log("se recibio este mensaje: ", messageText);
@@ -139,6 +139,15 @@ async function saveUserData(facebookId) {
     userData.profile_pic,
     facebookId
   );
+  /* REFRESCAR VENTANAS ACTIVAS */
+  const url= process.env.URL_SERVER
+  try {
+    const socket = io(url);
+    socket.emit('new-user');
+    socket.disconnect()
+  }catch(e){
+    console.log(e)
+  }
 }
 
 
@@ -496,6 +505,7 @@ async function sendToDialogFlow(senderId, messageText) {
 }
 
 function handleDialogFlowResponse(sender, response) {
+  console.log("AQUIIIII====> = ", response);
   let responseText = response.fulfillmentMessages.fulfillmentText;
 
   let messages = response.fulfillmentMessages;
@@ -1102,5 +1112,6 @@ async function getProductsEsp(facebookId, colorP, tallaP, catName) {
 
 module.exports = {
   postWebHook,
-  getWebHook
+  getWebHook,
+  sendToDialogFlow,
 }
