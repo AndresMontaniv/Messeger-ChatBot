@@ -1,0 +1,123 @@
+<!-- component -->
+<nav class=" w-full flex relative justify-between items-center mx-auto px-8 h-14 shadow ">
+    <!-- logo -->
+    <a class="text-2xl font-bold font-heading" href="/clients/dashboard">
+        <img class="h-9" src="/img/logo.png" alt="logo">
+    </a>
+    <!-- end logo -->
+
+    <a href="/clients/dashboard">Ir al dashboard</a>
+
+    <!-- logout -->
+    <div class="flex-initial"> 
+      <div class="flex justify-end items-center relative">
+        <div class="grid grid-cols-2">
+            <div class="flex justify-center items-center">
+                {{#if user}}
+                    <p>{{user.name}}</p>
+                {{/if}}
+            </div>
+            <div class="flex justify-end items-center">
+                <a class="text-2xl font-bold font-heading" href="/signout">
+                    <img class="h-8" src="/img/logout.png" alt="logo">
+                </a>
+            </div>
+        </div>
+      </div>
+    </div>
+    <!-- end logout -->
+</nav>
+
+
+
+
+<div class="flex items-end justify-end">
+        <div class="lg:ml-40 ml-10 space-x-8 mt-3 mx-6 mb-0" >
+            <a href="/deals/menu">  
+                <button class="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
+                    Confirmar promocion
+                </button>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- component -->
+<script defer src="https://unpkg.com/alpinejs@3.10.2/dist/cdn.min.js"></script>
+
+
+
+        <!-- Table -->
+        <div class="w-full max-w-5xl mt-3 mx-auto bg-white shadow-lg rounded-sm border border-gray-200">
+
+            <div class="overflow-x-auto p-3">
+                <table class="table-auto w-full">
+                    <thead class="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
+                        <tr>
+                            <th class="p-2">
+                                <div class="font-semibold text-left">Imagen</div>
+                            </th>
+                            <th class="p-2">
+                                <div class="font-semibold text-left">Nombre del producto</div>
+                            </th>
+                            <th class="p-2">
+                                <div class="font-semibold text-left">Precio</div>
+                            </th>
+                            <th class="p-2">
+                                <div class="font-semibold text-left">Precio dcto</div>
+                            </th>
+                            <th class="p-2">
+                                <div class="font-semibold text-center">Accion</div>
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="text-sm divide-y divide-gray-100">
+                        <!-- record 1 -->
+                        {{#each products }}
+                            <tr>
+                                <td class="p-2">
+                                    <div class="flex-shrink-0">
+                                        <img class="w-9 h-9 rounded-full" src="{{image}}" >
+                                    </div>
+                                </td>
+                                <td class="p-2">
+                                    <div class="font-medium text-gray-800">
+                                        {{name}}
+                                    </div>
+                                </td>
+                                <td class="p-2">
+                                    <div class="text-left">Bs. {{price}}</div>
+                                </td>
+                                <td class="p-2">
+                                    <div class="text-left font-medium text-green-500">
+                                        Bs. {{discount}}
+                                    </div>
+                                </td>
+                                <td class="p-2">
+                                    <div class="flex justify-center">
+                                        <button>
+                                            <svg class="w-8 h-8 hover:text-blue-600 rounded-full hover:bg-gray-100 p-1"
+                                                fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                </path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        {{/each}}
+                        
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+
+

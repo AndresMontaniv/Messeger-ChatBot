@@ -366,6 +366,28 @@ async function handleDialogFlowAction(
       break;
 
 
+      case "add.action": //¿Cuántas unidades quiere?
+        handleMessages(messages, sender);
+      break;
+
+      case "fin_pedido.action": //Gracias por confiar en nosotros. Tu pedido está siendo procesado. ¿Podrías proporcionarnos los siguientes datos, por favor? Nombre, correo y celular.
+      //poner en la bd estado finalizado o cerrado  
+      handleMessages(messages, sender);
+      break;
+
+      case "addPedido.action": //-Finalizar pedido -Ver pedido
+      //verificar en la bd si ya hay una orden de pedido, sino crear una y anadir producto y cantidad
+        handleMessages(messages, sender);
+      break;
+
+      case "verPedido.action": //{lista_pedido}, ¿Podemos ayudarte en algo más? -poleras -descuentos o Finalizar pedido
+        //listar el pedido
+        handleMessages(messages, sender);
+      break;
+
+     
+
+
     default:
       // break;
       //unhandled action, just send back the text

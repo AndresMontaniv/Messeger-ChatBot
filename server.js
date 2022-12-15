@@ -69,6 +69,7 @@ app.use(require('./src/routes'));
 app.use(require('./src/routes/auth'));
 app.use('/api', require('./src/routes/api'));
 app.use('/clients', require('./src/routes/clients'));
+app.use('/deals', require('./src/routes/deals'));
 
 //Routes
 app.use(express.static(path.join(__dirname, 'src/public')));
