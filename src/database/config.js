@@ -13,5 +13,5 @@ const dbConnection = async () => {
         throw new Error('Error en la DB');
     }
 }
-
+ 
 module.exports = { dbConnection }

@@ -67,20 +67,20 @@
     </div>
 
     <div class="max-w-sm bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg ">
-        <h3 class="mb-3 text-xl font-bold text-indigo-800 text-center">PROSPECTOS CONTACTADOS</h3>
+        <h3 class="mb-3 text-xl font-bold text-indigo-800 text-center">PROSPECTO CONTACTADOS</h3>
         <!--
         <img class="w-full rounded-xl" src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Colors" />
         -->
-        <div
-            class="flex flex-col rounded-xl border-gray-300 hover:border-gray-500 overflow-hidden shadow-xl min-wv-4 max-wv-9 min-hv-4 max-hv-9 border-1">
-            <div class="flex flex-col bg-whiteflex-grow bg-white">
-                <div class="min-hv-4 overflow-y-auto flex-grow p-1 " style="max-height:calc(65vh - 56px)">
-                    {{#each prospCon }}
-                    <a href="/clients/show/contacted/{{id}}"
-                        class="block px-1 py-1 border-b border-gray-200 w-full hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700 cursor-pointer">
-                        <div class="flex items-center space-x-4">
-                            <div class="flex-shrink-0">
-                                <img class="w-8 h-8 rounded-full" src="{{profilePic}}" </div>
+        <div class="flex flex-col rounded-xl border-gray-300 hover:border-gray-500 overflow-hidden shadow-xl min-wv-4 max-wv-9 min-hv-4 max-hv-9 border-1">	
+			<div class="flex flex-col bg-whiteflex-grow bg-white">
+				<div class="min-hv-4 overflow-y-auto flex-grow p-1 " style="max-height:calc(65vh - 56px)">
+
+                    {{#each prospC }}
+                        <a href="/clients/show/contacted/{{id}}" class="block px-1 py-1 border-b border-gray-200 w-full hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700 cursor-pointer">
+                            <div class="flex items-center space-x-4">
+                                <div class="flex-shrink-0">
+                                    <img class="w-8 h-8 rounded-full" src="{{profilePic}}" >
+                                </div>
                                 <div class="flex-1 min-w-0">
                                     <p class="text-sm font-medium text-gray-900 truncate dark:text-black">
                                         {{name}}
@@ -90,9 +90,15 @@
                     </a>
                     {{/each}}
 
+<<<<<<< HEAD
+				</div>
+			</div>
+		</div>
+=======
                 </div>
             </div>
         </div>
+>>>>>>> 2650fe119f9a3457b07a5905cbb1558d5383844b
     </div>
 
     <div class="max-w-sm bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg ">
@@ -100,6 +106,18 @@
         <!--
         <img class="w-full rounded-xl" src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Colors" />
         -->
+<<<<<<< HEAD
+        <div class="flex flex-col rounded-xl border-gray-300 hover:border-gray-500 overflow-hidden shadow-xl min-wv-4 max-wv-9 min-hv-4 max-hv-9 border-1">	
+			<div class="flex flex-col bg-whiteflex-grow bg-white">
+				<div class="min-hv-4 overflow-y-auto flex-grow p-1 " style="max-height:calc(65vh - 56px)">
+
+                    {{#each clients }}
+                        <a href="/clients/show/client/{{id}}" class="block px-1 py-1 border-b border-gray-200 w-full hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700 cursor-pointer">
+                            <div class="flex items-center space-x-4">
+                                <div class="flex-shrink-0">
+                                    <img class="w-8 h-8 rounded-full" src="{{profilePic}}" >
+                                </div>
+=======
         <div
             class="flex flex-col rounded-xl border-gray-300 hover:border-gray-500 overflow-hidden shadow-xl min-wv-4 max-wv-9 min-hv-4 max-hv-9 border-1">
             <div class="flex flex-col bg-whiteflex-grow bg-white">
@@ -110,6 +128,7 @@
                         <div class="flex items-center space-x-4">
                             <div class="flex-shrink-0">
                                 <img class="w-8 h-8 rounded-full" src="{{profilePic}}" </div>
+>>>>>>> 2650fe119f9a3457b07a5905cbb1558d5383844b
                                 <div class="flex-1 min-w-0">
                                     <p class="text-sm font-medium text-gray-900 truncate dark:text-black">
                                         {{name}}
@@ -119,16 +138,34 @@
                     </a>
                     {{/each}}
 
+<<<<<<< HEAD
+				</div>
+			</div>
+		</div>
+=======
                 </div>
             </div>
         </div>
+>>>>>>> 2650fe119f9a3457b07a5905cbb1558d5383844b
     </div>
 
     <div class="max-w-sm bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg ">
-        <h3 class="mb-3 text-xl font-bold text-indigo-800 text-center">CLIENTES RECURRENTES</h3>
+        <h3 class="mb-3 text-xl font-bold text-indigo-800 text-center">CLIENTES FRECUENTES</h3>
         <!--
         <img class="w-full rounded-xl" src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Colors" />
         -->
+<<<<<<< HEAD
+        <div class="flex flex-col rounded-xl border-gray-300 hover:border-gray-500 overflow-hidden shadow-xl min-wv-4 max-wv-9 min-hv-4 max-hv-9 border-1">	
+			<div class="flex flex-col bg-whiteflex-grow bg-white">
+				<div class="min-hv-4 overflow-y-auto flex-grow p-1 " style="max-height:calc(65vh - 56px)">
+
+                    {{#each clientsF }}
+                        <a href="/clients/show/frecuent/{{id}}" class="block px-1 py-1 border-b border-gray-200 w-full hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700 cursor-pointer">
+                            <div class="flex items-center space-x-4">
+                                <div class="flex-shrink-0">
+                                    <img class="w-8 h-8 rounded-full" src="{{profilePic}}" >
+                                </div>
+=======
         <div
             class="flex flex-col rounded-xl border-gray-300 hover:border-gray-500 overflow-hidden shadow-xl min-wv-4 max-wv-9 min-hv-4 max-hv-9 border-1">
             <div class="flex flex-col bg-whiteflex-grow bg-white">
@@ -139,6 +176,7 @@
                         <div class="flex items-center space-x-4">
                             <div class="flex-shrink-0">
                                 <img class="w-8 h-8 rounded-full" src="{{profilePic}}" </div>
+>>>>>>> 2650fe119f9a3457b07a5905cbb1558d5383844b
                                 <div class="flex-1 min-w-0">
                                     <p class="text-sm font-medium text-gray-900 truncate dark:text-black">
                                         {{name}}
@@ -147,9 +185,16 @@
                             </div>
                     </a>
                     {{/each}}
+<<<<<<< HEAD
+
+				</div>
+			</div>
+		</div>
+=======
                 </div>
             </div>
         </div>
+>>>>>>> 2650fe119f9a3457b07a5905cbb1558d5383844b
     </div>
 
 
